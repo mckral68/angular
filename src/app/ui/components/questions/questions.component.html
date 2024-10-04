@@ -1,0 +1,125 @@
+<main class="container-xxl p-0">
+  <div class="d-flex justify-content-between border align-items-center">
+    <span (click)="redirectBack()">
+      <i class="fa-solid fa-angle-left fa-xl ms-2"></i>
+    </span>
+    <p class="m-0 p-2">Soru ve Cevap</p>
+    <span></span>
+  </div>
+  <div class="border bg-white pb-2" *ngFor="let q of questions">
+    <div class="px-2 border-top">
+      <div style="font-size: 14px">
+        <span class="fw-bold">Soru: </span>
+        {{ q.text }}
+      </div>
+      <div>
+        <span class="q-typography">{{
+          q.showUserName
+            ? q.firstName + " " + q.lastName
+            : q.firstName.substring(0, 1) + q.lastName.substring(0, 1)
+        }}</span>
+      </div>
+      <span class="q-typography"
+        >{{ q.createdDate | date : "d/MM/yyyy H:mm" }}
+      </span>
+    </div>
+    <div class="mx-3 border" style="background-color: #f6f6f6">
+      <div class="ms-2 fw-bold">Eylül Modalife</div>
+      <div class="ms-2" style="font-size: 14px">
+        <span class="fw-bold text-danger">Cevap: </span>
+        {{ q.answer }}
+      </div>
+    </div>
+  </div>
+  <div *ngIf="questions.length > 0 && !isQuestionLast" class="w-100 mt-2">
+    <button
+      (click)="getNextQuestions()"
+      class="btn btn-secondary btn-sm float-end"
+    >
+      Daha fazla yükle
+    </button>
+  </div>
+  <div style="height: 200px"></div>
+  <div class="col-md-6 col-xl-4 fixed-bottom mx-auto bg-light">
+    <div class="px-3 my-2">
+      <button
+        type="button"
+        data-bs-toggle="modal"
+        data-bs-target="#askQuestion"
+        class="btn w-100 btn-danger"
+        *ngIf="isAuthenticated"
+      >
+        Satıcıya Sor
+      </button>
+      <button
+        (click)="redirectToLogin()"
+        *ngIf="!isAuthenticated"
+        type="button"
+        class="btn w-100 btn-danger"
+      >
+        Giriş yap ve Soru sor
+      </button>
+    </div>
+  </div>
+  <div
+    class="modal fade"
+    id="askQuestion"
+    tabindex="-1"
+    aria-labelledby="askQuestion"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header border-0">
+          <span></span>
+          <p class="text-center">Satıcıya Sor</p>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body text-center">
+          <form
+            [formGroup]="questionForm"
+            (ngSubmit)="isAuthenticated && addQuestion(questionForm.value)"
+          >
+            <textarea
+              class="form-control"
+              [placeholder]="
+                isAuthenticated
+                  ? 'Sorunuzu buraya yazabilirsiniz.'
+                  : 'Soru sormak için giriş yapmalısınız.'
+              "
+              formControlName="text"
+            ></textarea>
+            <div class="form-check mx-1" *ngIf="isAuthenticated">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                formControlName="showUserName"
+                id="showUserName"
+              />
+              <label class="form-check-label" style="font-size: 13px">
+                Sorularımda ad-soyad bilgimin görünmesine izin veriyorum.
+              </label>
+            </div>
+            <small
+              class="text-danger"
+              *ngIf="
+                questionForm.invalid &&
+                questionForm.get('text').hasError('minlength')
+              "
+            >
+              Minimium
+              {{ questionForm.controls.text.errors.minlength.requiredLength }}
+              karakter
+            </small>
+            <button type="submit" class="btn btn-danger w-100">Gönder</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

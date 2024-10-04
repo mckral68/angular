@@ -1,0 +1,30 @@
+<div class="table-responsive">
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col"></th>
+        <th scope="col">Ad Soyad</th>
+        <th scope="col">Tel No</th>
+        <th scope="col">Telefon Onay</th>
+        <th scope="col">Email</th>
+        <th scope="col">Cinsiyet</th>
+      </tr>
+    </thead>
+    <tbody class="table-group-divider">
+      <tr *ngFor="let u of users; let i = index">
+        <th scope="row">{{ i + 1 }}</th>
+        <td>{{ u.fullName }}</td>
+        <td>{{ u.phone }}</td>
+        <td>
+          <input
+            type="checkbox"
+            class="form-check-input"
+            [checked]="u.phoneConfirmed"
+          />
+        </td>
+        <td>{{ u.email }}</td>
+        <td>{{ u.gender ? "Erkek" : "Kadın" }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

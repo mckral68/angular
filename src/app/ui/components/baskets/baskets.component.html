@@ -1,0 +1,252 @@
+<div *ngIf="basketItems && basketItems.length > 0; else noProduct">
+  <ng-template
+    [ngTemplateOutlet]="basketList"
+    [ngTemplateOutletContext]="basketItems"
+  >
+  </ng-template>
+</div>
+<ng-template #basketList let-basketList="basketItems">
+  <section id="bskt">
+    <div class="bottom-bar-wrapper mx-lg-auto">
+      <div class="me-2">
+        <i
+          class="q-icon q-icon-small icon-arrow-drop-down primary detail-icon icon-active"
+        ></i>
+      </div>
+      <div class="left">
+        <div class="price">Sepet Özeti</div>
+        <div class="price-text fw-bold" *ngIf="discountAmount < 10">
+          {{ this.total }} TL
+        </div>
+        <div
+          class="price-text fw-bold"
+          *ngIf="discountAmount > 10 && isDiscountApplied"
+        >
+          {{ total - discountAmount }} TL
+        </div>
+        <span class="promotion-info free-cargo-promotion">Kargo Bedava</span>
+      </div>
+      <div class="right">
+        <button
+          class="btn btn-md btn-danger"
+          type="button"
+          routerLink="/orders"
+        >
+          Sepeti Onayla
+        </button>
+      </div>
+    </div>
+    <div class="container-xxl p-0">
+      <div class="d-flex justify-content-between align-items-center p-2">
+        <a routerLink="/">
+          <i class="fa-solid fa-xl fa-chevron-left"></i>
+        </a>
+        <h5 class="fw-normal mb-0 text-black text-center">
+          Sepetim
+          <span class="mb-0 text-muted fs-6">
+            ({{ basketItems.length }} Ürün)
+          </span>
+        </h5>
+        <span></span>
+      </div>
+      <div class="row d-flex align-items-center" style="--bs-gutter-x: 0">
+        <div class="col-12 col-md-8 col-lg-7 col-xl-12">
+          <div
+            class="card card-registration card-registration-2"
+            *ngFor="let item of basketItems; let i = index"
+          >
+            <div class="card-header"></div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-lg-12">
+                  <div
+                    class="row mb-4 d-flex justify-content-between align-items-center"
+                  >
+                    <div class="col-5 col-md-2 col-lg-4 col-sm-4">
+                      <a (click)="redirect(item.name, item.productId)">
+                        <img
+                          ngSrc="{{ item.imagePath[0] }}"
+                          class="img-fluid rounded-3"
+                          priority
+                          width="150"
+                          height="200"
+                          alt="{{ item?.name }}"
+                        />
+                      </a>
+                    </div>
+                    <div class="col-7 col-md-3 col-lg-2 text-start">
+                      <h6 class="text-black">{{ item.name }}</h6>
+                      <p>
+                        Renk:
+                        <span class="text-muted">{{ item.color }}</span>
+                      </p>
+                      <p>
+                        Beden: <span class="text-muted">{{ item.size }}</span>
+                      </p>
+                      <h6 class="fs-5 text-danger">{{ item.price }} TL</h6>
+                    </div>
+                    <div class="col-md-6 col-7 mt-3 col-lg-4">
+                      <div class="input-group input-spinner">
+                        <button
+                          *ngIf="item.quantity > 1"
+                          class="btn btn-icon btn-light"
+                          type="button"
+                          (click)="minus(item)"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="22"
+                            height="22"
+                            fill="#999"
+                            viewBox="0 0 24 24"
+                          >
+                            <path d="M19 13H5v-2h14v2z"></path>
+                          </svg>
+                        </button>
+                        <button
+                          *ngIf="item.quantity == 1"
+                          (click)="remove(item.basketItemId, item.productId)"
+                          class="btn btn-outline-info"
+                          data-bs-toggle="modal"
+                          data-bs-target="#removebasketItemModal"
+                        >
+                          <i class="fa-solid fa-trash"></i>
+                        </button>
+                        <input
+                          class="form-control text-center"
+                          [value]="item.quantity"
+                        />
+                        <button
+                          class="btn btn-icon btn-light"
+                          type="button"
+                          (click)="plus(item)"
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="22"
+                            height="22"
+                            fill="#999"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"
+                            ></path>
+                          </svg>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="modal fade"
+              id="removebasketItemModal"
+              tabindex="-1"
+              aria-labelledby="removebasketItemModal"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header border-0">
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div class="modal-body text-center">
+                    <div class="mb-2">
+                      <i class="fa-solid fa-trash-can fa-2xl text-danger"></i>
+                    </div>
+                    Bu Ürünü Silmek İstediğinize Emin Misiniz?
+                  </div>
+                  <div class="modal-footer d-block">
+                    <div class="d-flex flex-column">
+                      <button
+                        type="button"
+                        class="btn"
+                        style="background-color: #f27a1a"
+                        data-bs-dismiss="modal"
+                        (click)="createPrdFavorite()"
+                      >
+                        <span class="text-white fw-bold">
+                          Sil ve Favorilere Ekle
+                        </span>
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-light mt-2"
+                        data-bs-dismiss="modal"
+                        (click)="removeBasketItem()"
+                      >
+                        Sil
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-8 m-3 col-lg-6">
+            <div class="basket_promotion-text ms-2">
+              <span>
+                <i class="fa-solid fa-percent text-danger"></i> İndirim Kodu
+                Giriniz</span
+              >
+            </div>
+            <div class="row">
+              <div class="input-group my-1">
+                <input
+                  type="text"
+                  class="form-control"
+                  [disabled]="isDiscountApplied"
+                  aria-label="indirim kodu"
+                  aria-describedby="indirim kodu"
+                  [(ngModel)]="discountName"
+                  [maxLength]="10"
+                />
+                <button
+                  class="btn text-white"
+                  style="background-color: #f27a1a"
+                  (click)="
+                    !isDiscountApplied
+                      ? applyDiscount(discountName)
+                      : removeDiscount()
+                  "
+                >
+                  {{ isDiscountApplied ? "İndirimi Kaldır" : "İndirim Uygula" }}
+                </button>
+              </div>
+              <span
+                class="text-success"
+                style="font-size: 12px"
+                *ngIf="isDiscountApplied"
+                >İndirim kodu uygulandı</span
+              >
+            </div>
+          </div>
+          <div id="basketBottomMargin" style="height: 80px"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</ng-template>
+
+<ng-template #noProduct>
+  <app-navbar></app-navbar>
+  <div
+    class="container-fluid container-xl"
+    *ngIf="basketItems && basketItems.length < 1"
+  >
+    <div class="row">
+      <div class="col-md-6 col-lg-12">
+        <div class="alert alert-danger text-center">
+          <h3><i class="fa-solid fa-cart-shopping fa-xl"></i></h3>
+          <h4 class="alert-heading">Sepetinizde ürün bulunmamaktadır.</h4>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

@@ -1,0 +1,410 @@
+<div class="container-xxl" id="us-ad">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="d-flex justify-content-between top-item">
+        <a [routerLink]="[prevUrl ? prevUrl : '/hesabim']">
+          <i class="fa-solid fa-chevron-left fa-xl text-center"></i>
+        </a>
+        <p class="toptitle my-auto">Adres Bilgileri</p>
+        <div></div>
+      </div>
+    </div>
+    <div class="col-md-6 mt-2 mt-md-0">
+      <div
+        class="d-flex justify-content-center top-item"
+        (click)="isClick = true"
+        data-bs-toggle="modal"
+        data-bs-target="#addAdres"
+      >
+        <a class="me-2">
+          <i class="fa-solid fa-circle-plus"></i>
+        </a>
+        <p class="my-auto">Yeni Adres Ekle</p>
+        <div></div>
+      </div>
+    </div>
+    <div *ngFor="let item of userAddressDetails; let i = index">
+      <div class="col-md-6">
+        <div class="d-flex p-2 address-header">
+          <p class="toptitle my-auto text-danger me-auto">
+            {{ item?.name }}
+          </p>
+          <p
+            data-bs-toggle="modal"
+            data-bs-target="#addAdres"
+            (click)="getUserAdresInfo(i)"
+            class="my-auto ms-auto text-muted"
+          >
+            Düzenle
+          </p>
+          <div></div>
+        </div>
+      </div>
+      <div class="col-md-6">
+        <div class="m-2 detail">
+          <p class="toptitle my-auto text-dark">
+            <span class="name">
+              {{ item?.firstName }} {{ item?.lastName | uppercase }}
+            </span>
+          </p>
+          <div class="address">
+            {{ item?.addressDetails }}
+          </div>
+          <div class="city">
+            {{ item?.neighbourhood?.name }} / {{ item?.district?.name }} /
+            {{ item?.city?.name }}
+          </div>
+          <div class="phone">{{ item?.phone }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div
+    class="modal fade"
+    id="addAdres"
+    tabindex="-1"
+    aria-labelledby="addAdresLabel"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-fullscreen">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="addAdresLabel">
+            {{ isClick ? "Adres Ekle" : "Adres Güncelle" }}
+          </h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+            (click)="clear()"
+          ></button>
+        </div>
+        <div *ngIf="isClick" class="modal-body">
+          <div class="container-xl">
+            <form
+              [formGroup]="userAddress"
+              (ngSubmit)="addAddress(userAddress.value)"
+            >
+              <div class="row">
+                <div class="col-sm-6 mb-3">
+                  <label for="firstName">Adres Başlığı</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="Name"
+                    name="Name"
+                  />
+                  <div class="invalid-feedback">Geçerli bir ad gereklidir.</div>
+                </div>
+                <div class="col-6 col-sm-6 mb-3">
+                  <label for="firstName">Ad</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder=""
+                    formControlName="firstname"
+                    name="Firstname"
+                  />
+                  <div class="invalid-feedback">Geçerli bir ad gereklidir.</div>
+                </div>
+                <div class="col-6 col-sm-6 mb-3">
+                  <label for="lastName">Soyad</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="Lastname"
+                    name="Lastname"
+                  />
+                  <div class="invalid-feedback">
+                    Geçerli bir soyad gereklidir.
+                  </div>
+                </div>
+                <div class="col-sm-6 mb-3">
+                  <label for="tel">Cep Telefonu</label>
+                  <div class="row">
+                    <div class="col-12">
+                      <input
+                        type="tel"
+                        class="form-control"
+                        placeholder="0(5__) ___ __ __"
+                        inputmode="numeric"
+                        formControlName="Phone"
+                        (keydown.code.Backspace)="
+                          userAddress.get('Phone')?.value?.length >= 3
+                        "
+                        name="Phone"
+                        (focus)="
+                          userAddress.get('Phone')?.value?.length <= 1
+                            ? pc($event)
+                            : ''
+                        "
+                        mask="0(000) 000 00 00"
+                      />
+                      <div class="invalid-feedback">
+                        Lütfen gönderim güncellemeleri için geçerli telefon
+                        numarası girin.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6 col-sm-6 mb-3">
+                  <label for="city">Şehir</label>
+                  <select
+                    class="form-select"
+                    id="city"
+                    formControlName="City"
+                    required
+                    (change)="getDistrict($event)"
+                  >
+                    <option *ngFor="let i of city" value="{{ i?.id }}">
+                      {{ i?.name }}
+                    </option>
+                  </select>
+                  <div class="invalid-feedback">Lütfen bir şehir seçiniz.</div>
+                </div>
+                <div class="col-6 col-sm-6 mb-3">
+                  <label for="district">İlçe</label>
+                  <select
+                    class="form-select"
+                    formControlName="District"
+                    required
+                    (change)="getNeighbourHood($event)"
+                  >
+                    <option *ngFor="let i of districts" value="{{ i?.id }}">
+                      {{ i?.name }}
+                    </option>
+                  </select>
+                  <div class="invalid-feedback">Lütfen ilçe seçiniz</div>
+                </div>
+                <div class="col-12 col-sm-6 mb-3">
+                  <label for="district">Mahalle</label>
+                  <select
+                    class="form-select"
+                    formControlName="NeighbourhoodId"
+                    required
+                  >
+                    <option
+                      *ngFor="let i of neighbourHouds"
+                      value="{{ i?.id }}"
+                    >
+                      {{ i?.name }}
+                    </option>
+                  </select>
+                  <div class="invalid-feedback">Lütfen Mahalle seçiniz</div>
+                </div>
+                <div class="col-sm-6 mb-3">
+                  <label for="street">Sokak</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    formControlName="Street"
+                    name="Street"
+                    id="street"
+                    required
+                  />
+                  <div class="invalid-feedback">
+                    Geçerli bir posta kodu giriniz.
+                  </div>
+                </div>
+                <div class="col-sm-6 mb-3">
+                  <label for="address">Açık Adres</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="AddressDetails"
+                    name="AddressDetails"
+                    placeholder="Cadde, Apartman ve diğer bilgileri giriniz."
+                    required
+                  />
+                  <div class="invalid-feedback">
+                    Lütfen tam adresinizi eksiksiz bir şekilde doldurunuz.
+                  </div>
+                </div>
+              </div>
+              <div class="col-sm-6">
+                <button
+                  class="btn btn-danger w-100"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                >
+                  Ekle
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div *ngIf="!isClick" class="modal-body">
+          <div class="container-xl">
+            <form
+              [formGroup]="userAddress"
+              (ngSubmit)="updateAddress(userAddress.value)"
+            >
+              <div class="row">
+                <div class="col-sm-6 mb-3">
+                  <label for="firstName">Adres Başlığı</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="Name"
+                    name="Name"
+                  />
+                  <div class="invalid-feedback">Geçerli bir ad gereklidir.</div>
+                </div>
+                <div class="col-6 col-sm-6 mb-3">
+                  <label for="firstName">Ad</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    placeholder=""
+                    formControlName="firstname"
+                    name="firstname"
+                  />
+                  <div class="invalid-feedback">Geçerli bir ad gereklidir.</div>
+                </div>
+                <div class="col-6 col-sm-6 mb-3">
+                  <label for="lastName">Soyad</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="Lastname"
+                    name="Lastname"
+                  />
+                  <div class="invalid-feedback">
+                    Geçerli bir soyad gereklidir.
+                  </div>
+                </div>
+                <div class="col-sm-6 mb-3">
+                  <label for="tel">Cep Telefonu</label>
+                  <div class="row">
+                    <div class="col-12">
+                      <input
+                        type="tel"
+                        class="form-control"
+                        placeholder="0(5__) ___ __ __"
+                        mask="0(000) 000 00 00"
+                        maxLength="10"
+                        formControlName="Phone"
+                        name="Phone"
+                      />
+                      <div class="invalid-feedback">
+                        Lütfen gönderim güncellemeleri için geçerli telefon
+                        numarası girin.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-6 col-sm-6 mb-3">
+                  <label for="city">Şehir</label>
+                  <select
+                    class="form-select"
+                    id="city"
+                    formControlName="City"
+                    required
+                    (change)="getDistrict($event)"
+                  >
+                    <option
+                      *ngFor="let i of city"
+                      value="{{ i?.id }}"
+                      [selected]="userAddress.get('City')?.value?.id == i?.id"
+                    >
+                      {{ i?.name }}
+                    </option>
+                  </select>
+                  <div class="invalid-feedback">Lütfen bir şehir seçiniz.</div>
+                </div>
+                <div class="col-6 col-sm-6 mb-3">
+                  <label for="district">İlçe</label>
+                  <select
+                    class="form-select"
+                    formControlName="District"
+                    required
+                    (change)="getNeighbourHood($event)"
+                  >
+                    <option
+                      *ngFor="let i of districts"
+                      value="{{ i?.id }}"
+                      [selected]="
+                        userAddress.get('District')?.value?.id == i?.id
+                      "
+                    >
+                      {{ i?.name }}
+                      <span class="text-muted"> </span>
+                    </option>
+                  </select>
+                  <div class="invalid-feedback">Lütfen bir ilçe seçiniz.</div>
+                </div>
+                <div class="col-12 col-sm-6 mb-3">
+                  <label for="NeighbourhoodId">Mahalle</label>
+                  <select
+                    class="form-select"
+                    formControlName="NeighbourhoodId"
+                    required
+                  >
+                    <option
+                      *ngFor="let i of neighbourHouds"
+                      [value]="i?.id"
+                      [selected]="
+                        userAddress.get('NeighbourhoodId')?.value == i?.id
+                      "
+                    >
+                      {{ i?.name }}
+                    </option>
+                  </select>
+                  <div class="invalid-feedback">Lütfen Mahalle seçiniz</div>
+                </div>
+                <div class="col-sm-6 mb-3">
+                  <label for="street">Sokak</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    formControlName="Street"
+                    name="Street"
+                    id="street"
+                  />
+                  <div class="invalid-feedback">
+                    Geçerli bir posta kodu giriniz.
+                  </div>
+                </div>
+                <div class="col-sm-6 mb-3">
+                  <label for="address">Açık Adres</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    formControlName="AddressDetails"
+                    name="AddressDetails"
+                    placeholder="Cadde, Apartman ve diğer bilgileri giriniz."
+                    required
+                  />
+                  <div class="invalid-feedback">
+                    Lütfen tam adresinizi eksiksiz bir şekilde doldurunuz.
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <button
+                  class="btn btn-danger w-100"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                >
+                  Kaydet
+                </button>
+              </div>
+              <div class="col-md-6">
+                <button
+                  type="button"
+                  (click)="removeAddress(this.userAddress.controls['Id'].value)"
+                  class="btn btn-outline-danger mt-2 w-100"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                >
+                  Adresi Sil
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

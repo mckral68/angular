@@ -1,0 +1,101 @@
+<main id="myOrders" class="container p-0">
+  <div class="border p-2">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="d-flex justify-content-between top-item">
+          <a [routerLink]="['/hesabim']">
+            <i class="fa-solid fa-chevron-left fa-xl text-center"></i>
+          </a>
+          <p class="toptitle my-auto">Siparişlerim</p>
+          <div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="tag-slider-wrapper">
+    <div class="tag-slider">
+      <button
+        *ngFor="let item of buttonSpans; let i = index"
+        class="btn q-secondary"
+        [class]="i == activeBtn ? 'text-danger' : ''"
+      >
+        <span (click)="filterOrder(item.filter)">{{ item.name }}</span>
+      </button>
+    </div>
+  </div>
+  <div class="order-item" *ngFor="let o of orderList; let i = index">
+    <div class="card mb-2">
+      <div class="card-header" style="background-color: white">
+        <p class="card-title">{{ o.createdDate | date : "d/MM/yyyy H:mm"  }}</p>
+        <p class="card-subtitle">
+          Toplam: <span class="text-danger">{{ o.totalPrice }} TL</span>
+          <span
+            (click)="redirectTo(o.orderNumber)"
+            class="text-danger float-end"
+            >Detaylar <i class="fa-solid fa-angle-right"></i
+          ></span>
+        </p>
+      </div>
+      <div class="card-body">
+        <p class="card-text">
+          <i class="fa-solid fa-check" *ngIf="o.transactStatus !== 4"></i>
+          <i class="fa-solid fa-close" *ngIf="o.transactStatus == 4"></i>
+          <span style="color: #0bc15c">
+            {{
+              o.transactStatus == 0
+                ? "Sipariş Alındı"
+                : o.transactStatus == 1
+                ? "Sipariş Hazırlanıyor"
+                : o.transactStatus == 2
+                ? "Kargoya Verildi"
+                : o.transactStatus == 3
+                ? "Teslim Edildi"
+                : o.transactStatus == 4
+                ? "İptal Edildi"
+                : "İade Edildi"
+            }}
+          </span>
+        </p>
+        <img
+          ngSrc="{{ o.imagePath[0] }}"
+          (click)="redirect(o.productName[0], o.productId[0])"
+          width="100"
+          height="120"
+          class="img-fluid"
+          priority
+          alt="{{ o.imagePath }}"
+        />
+      </div>
+      <div class="card-footer">
+        {{ o.amount }} ürün
+        {{
+          o.transactStatus == 0
+            ? "siparişi alındı"
+            : o.transactStatus == 1
+            ? "hazırlanıyor"
+            : o.transactStatus == 2
+            ? "kargoya verildi"
+            : o.transactStatus == 3
+            ? "teslim edildi"
+            : o.transactStatus == 4
+            ? "iptal edildi"
+            : "iade edildi"
+        }}
+      </div>
+    </div>
+  </div>
+  <div *ngIf="orderList && orderList.length < 1">
+    <div class="container-xxl">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="alert alert-dark text-center text-dark">
+            <h1 class="d-flex flex-column">
+              <i class="fa-regular fa-face-frown"></i> Sipariş bulunamadı.
+            </h1>
+            <p class="fw-bold fs-5">Seçilen kriterde bir sipariş bulamadık!</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

@@ -1,0 +1,14 @@
+#role-component :host {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+#role-component .role-create {
+  margin: 5px 5px 5px;
+}
+#role-component .btn {
+  margin: 5px 5px 5px;
+}
+#role-component table {
+  width: 100%;
+}

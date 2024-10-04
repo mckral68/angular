@@ -1,0 +1,42 @@
+.toptitle {
+  font-weight: 700;
+  color: #333;
+}
+#myOrders *,
+#myOrders :after,
+#myOrders :before {
+  box-sizing: border-box;
+}
+#myOrders .q-secondary {
+  height: 40px;
+  white-space: nowrap;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 6px;
+  background-color: #fff;
+  color: darkblue;
+  border: 1px solid #f27a1a;
+}
+#myOrders .tag-slider-wrapper {
+  padding-top: 15px;
+  padding-bottom: 5px;
+  border-top: 1px solid #e6e6e6;
+}
+#myOrders .tag-slider::-webkit-scrollbar {
+  display: none;
+}
+#myOrders .tag-slider {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  overflow-x: scroll;
+  width: 100%;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  gap: 10px;
+  padding: 0 10px;
+}
+#myOrders .order-item .card-header p {
+  font-weight: 600;
+  font-size: 14px;
+}

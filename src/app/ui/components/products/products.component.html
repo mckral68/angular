@@ -1,0 +1,204 @@
+<main id="home-prd" class="p-0">
+  <section class="container-fluid">
+    <nav class="navigation__wrapper sticky" *ngIf="isMobil">
+      <ul class="navigation">
+        <li
+          *ngFor="let c of categories; let i = index"
+          [class]="{ active: i == catIndex }"
+          (click)="categoryActive(c.id, c.name)"
+        >
+          {{ c.name }}
+        </li>
+      </ul>
+    </nav>
+    <div class="circled-slider" *ngIf="isMobil">
+      <div class="wrapper">
+        <a href="/sr?fl=encoksatanurunlererkek"
+          ><div class="item-wrapper">
+            <img
+              src="https://cdn.dsmcdn.com/mnresize/85/-/assets/t/y/creative/ds/Automation/BrandBoutique/2020/3/25/coksatanlar.jpg"
+              alt="Sen de al!"
+              class="item-image"
+              placeholder="https://cdn.dsmcdn.com/mweb/production/circledsliderplaceholder.svg"
+              ratio="0.1"
+            />
+            <div class="item-text"><!-- -->Sen de al!<!-- --></div>
+          </div></a
+        ><a href="/erkek-t-shirt-x-g2-c73"
+          ><div class="item-wrapper">
+            <img
+              src="https://cdn.dsmcdn.com/mnresize/85/-/assets/t/y/creative/ds/Automation/BrandBoutique/2020/3/26/mweb_erkek_tshirt_gorsel.jpg"
+              alt="T-shirt"
+              class="item-image"
+              placeholder="https://cdn.dsmcdn.com/mweb/production/circledsliderplaceholder.svg"
+              ratio="0.1"
+            />
+            <div class="item-text"><!-- -->T-shirt<!-- --></div>
+          </div></a
+        ><a href="/erkek-ayakkabi-x-g2-c114"
+          ><div class="item-wrapper">
+            <img
+              src="https://cdn.dsmcdn.com/mnresize/85/-/assets/t/y/creative/ds/Automation/BrandBoutique/2020/3/26/mweb_erkek_sporayakkabi_gorsel.jpg"
+              alt="Ayakkabı"
+              class="item-image"
+              placeholder="https://cdn.dsmcdn.com/mweb/production/circledsliderplaceholder.svg"
+              ratio="0.1"
+            />
+            <div class="item-text"><!-- -->Ayakkabı<!-- --></div>
+          </div></a
+        ><a href="/erkek-saat-x-g2-c34"
+          ><div class="item-wrapper">
+            <img
+              src="https://cdn.dsmcdn.com/mnresize/85/-/assets/t/y/creative/ds/Automation/BrandBoutique/2020/3/26/mweb_erkek_saat_gorsel.jpg"
+              alt="Saat"
+              class="item-image"
+              placeholder="https://cdn.dsmcdn.com/mweb/production/circledsliderplaceholder.svg"
+              ratio="0.1"
+            />
+            <div class="item-text"><!-- -->Saat<!-- --></div>
+          </div></a
+        ><a href="/erkek-pantolon-x-g2-c70"
+          ><div class="item-wrapper">
+            <img
+              src="https://cdn.dsmcdn.com/mnresize/85/-/assets/t/y/creative/ds/Automation/BrandBoutique/2020/3/26/mweb_erkek_pantolon_gorsel.jpg"
+              alt="Pantolon"
+              class="item-image"
+              placeholder="https://cdn.dsmcdn.com/mweb/production/circledsliderplaceholder.svg"
+              ratio="0.1"
+            />
+            <div class="item-text"><!-- -->Pantolon<!-- --></div>
+          </div></a
+        ><a href="/erkek-gomlek-x-g2-c75"
+          ><div class="item-wrapper">
+            <img
+              src="https://cdn.dsmcdn.com/mnresize/85/-/assets/t/y/creative/ds/Automation/BrandBoutique/2020/3/26/mweb_erkek_gomlek_gorsel.jpg"
+              alt="Gömlek"
+              class="item-image"
+              placeholder="https://cdn.dsmcdn.com/mweb/production/circledsliderplaceholder.svg"
+              ratio="0.1"
+            />
+            <div class="item-text"><!-- -->Gömlek<!-- --></div>
+          </div></a
+        ><a href="/sr?fl=encoksatanelektronik"
+          ><div class="item-wrapper">
+            <img
+              src="https://cdn.dsmcdn.com/mnresize/85/-/assets/t/y/creative/ds/Automation/BrandBoutique/2020/3/26/mweb_elektronik.jpg"
+              alt="Elektronik"
+              class="item-image"
+              placeholder="https://cdn.dsmcdn.com/mweb/production/circledsliderplaceholder.svg"
+              ratio="0.1"
+              data-src="https://cdn.dsmcdn.com/mnresize/85/-/assets/t/y/creative/ds/Automation/BrandBoutique/2020/3/26/mweb_elektronik.jpg"
+            />
+            <div class="item-text"><!-- -->Elektronik<!-- --></div>
+          </div></a
+        ><a href="/erkek-parfum-ve-deodorant-x-g2-c103717"
+          ><div class="item-wrapper">
+            <img
+              src="https://cdn.dsmcdn.com/mnresize/85/-/assets/t/y/creative/ds/Automation/BrandBoutique/2020/3/26/mweb_erkek_parfum.jpg"
+              alt="Parfüm"
+              class="item-image"
+              placeholder="https://cdn.dsmcdn.com/mweb/production/circledsliderplaceholder.svg"
+              ratio="0.1"
+              data-src="https://cdn.dsmcdn.com/mnresize/85/-/assets/t/y/creative/ds/Automation/BrandBoutique/2020/3/26/mweb_erkek_parfum.jpg"
+            />
+            <div class="item-text"><!-- -->Parfüm<!-- --></div>
+          </div></a
+        ><a href="/cocuk-x-g3"
+          ><div class="item-wrapper">
+            <img
+              src="https://cdn.dsmcdn.com/mnresize/85/-/assets/t/y/creative/ds/Automation/BrandBoutique/2020/3/25/oyuncak_cocuk.jpg"
+              alt="Çocuk"
+              class="item-image"
+              placeholder="https://cdn.dsmcdn.com/mweb/production/circledsliderplaceholder.svg"
+              ratio="0.1"
+              data-src="https://cdn.dsmcdn.com/mnresize/85/-/assets/t/y/creative/ds/Automation/BrandBoutique/2020/3/25/oyuncak_cocuk.jpg"
+            />
+            <div class="item-text"><!-- -->Çocuk<!-- --></div>
+          </div></a
+        ><a href="/ev-dekorasyon-x-c95"
+          ><div class="item-wrapper">
+            <img
+              src="https://cdn.dsmcdn.com/mnresize/85/-/assets/t/y/creative/ds/Automation/BrandBoutique/2020/3/26/mweb_Dekorasyon.jpg"
+              alt="Dekorasyon"
+              class="item-image"
+              placeholder="https://cdn.dsmcdn.com/mweb/production/circledsliderplaceholder.svg"
+              ratio="0.1"
+              data-src="https://cdn.dsmcdn.com/mnresize/85/-/assets/t/y/creative/ds/Automation/BrandBoutique/2020/3/26/mweb_Dekorasyon.jpg"
+            />
+            <div class="item-text"><!-- -->Dekorasyon<!-- --></div>
+          </div></a
+        ><a href="/magaza/ucuzavar-m-105053?sst=0"
+          ><div class="item-wrapper">
+            <img
+              src="https://cdn.dsmcdn.com/marketing/datascience/automation/2023/1/26/Avon_202301262152.png"
+              alt="AVON"
+              class="item-image"
+              placeholder="https://cdn.dsmcdn.com/mweb/production/circledsliderplaceholder.svg"
+              ratio="0.1"
+              data-src="https://cdn.dsmcdn.com/marketing/datascience/automation/2023/1/26/Avon_202301262152.png"
+            />
+            <div class="item-text"><!-- -->AVON<!-- --></div>
+          </div></a
+        ><a href="/erkek-x-g2?fl=favoriler_erkek"
+          ><div class="item-wrapper">
+            <img
+              src="https://cdn.dsmcdn.com/mnresize/85/-/assets/t/y/Creative/ds/Automation/Widget/2020/3/26/Like_202003261139.jpg"
+              alt="Favoriler Erkek"
+              class="item-image"
+              placeholder="https://cdn.dsmcdn.com/mweb/production/circledsliderplaceholder.svg"
+              ratio="0.1"
+              data-src="https://cdn.dsmcdn.com/mnresize/85/-/assets/t/y/Creative/ds/Automation/Widget/2020/3/26/Like_202003261139.jpg"
+            />
+            <div class="item-text"><!-- -->Favoriler Erkek<!-- --></div>
+          </div></a
+        >
+      </div>
+    </div>
+    <div
+      class="search-results row"
+      infiniteScroll
+      [infiniteScrollDistance]="1"
+      [infiniteScrollUpDistance]="1.5"
+      [infiniteScrollThrottle]="100"
+      (scrolled)="onScrollDown()"
+    >
+      <div
+        class="col-md-6 col-lg-3 col-xl-2 gx-lg-4"
+        *ngFor="let p of products; let i = index"
+      >
+        <div id="product-home">
+          <div (click)="redirect(p)" style="background: white">
+            <img
+              ngSrc="{{ p.imagePath[0] }}"
+              class="img-fluid rounded shadow-lg"
+              [class]="preloadImg ? 'opacity-1' : 'opacity-0'"
+              [title]="p?.name"
+              width="150"
+              height="250"
+              priority
+              [alt]="p?.name"
+            />
+          </div>
+        </div>
+        <div class="mb-4"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<section *ngIf="!products || products.length == 0">
+  <div>
+    <div class="container-xxl">
+      <div class="row">
+        <div class="col-md-8">
+          <div class="alert alert-secondary text-center text-dark">
+            <h1><i class="fa-regular fa-face-frown"></i> Ürün bulunamadı.</h1>
+            <p class="fw-bold fs-5">
+              Ne yazık ki aradığınız kriterlere uygun ürün bulamadık!
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

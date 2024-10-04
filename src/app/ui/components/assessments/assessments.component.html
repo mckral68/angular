@@ -1,0 +1,219 @@
+<main class="container-xxl bg-light" id="product-review">
+  <div class="mb-2">
+    <div class="d-flex justify-content-between align-items-center">
+      <a [routerLink]="['/hesabim']">
+        <i class="fa-solid fa-chevron-left"></i>
+      </a>
+      <span style="color: #333; font-weight: 600">Değerlendirmelerim</span>
+      <span></span>
+    </div>
+  </div>
+  <section style="background-color: #fafafa">
+    <div id="tag-slider" class="d-flex justify-content-between">
+      <a
+        class="btn"
+        [class]="{
+          'border-info': clicked != 2,
+          'border-danger': clicked == 2
+        }"
+        ><span
+          [class]="{
+            'text-muted': clicked != 2,
+            'text-danger': clicked == 2
+          }"
+          (click)="approvedComment(2)"
+          >Değerlendir ({{ reviewableComments?.length }})</span
+        >
+      </a>
+      <a
+        class="btn"
+        [class]="{
+          'border-info': clicked != 1,
+          'border-danger': clicked == 1
+        }"
+        ><span
+          (click)="approvedComment(1)"
+          [class]="{
+            'text-muted': clicked != 1,
+            'text-danger': clicked == 1
+          }"
+          >Onaylanan ({{ approvedComments?.length }})</span
+        >
+      </a>
+      <a
+        class="btn"
+        [class]="{
+          'border-info': clicked != 0,
+          'border-danger': clicked == 0
+        }"
+        ><span
+          [class]="{
+            'text-muted': clicked != 0,
+            'text-danger': clicked == 0
+          }"
+          (click)="approvedComment(0)"
+          >Reddedilen ({{ rejectComments?.length }})</span
+        >
+      </a>
+    </div>
+  </section>
+  <ng-template
+    [ngTemplateOutlet]="myReview?.length > 0 ? showComments : noComments"
+  ></ng-template>
+  <ng-template #showComments>
+    <div
+      id="prdReview"
+      *ngFor="let mc of myReview; let i = index"
+      class="bg-white"
+    >
+      <div class="container-fluid border border-opacity-50 mb-2">
+        <div class="row">
+          <div class="col-5">
+            <img
+              alt="{{ mc.name }}"
+              (click)="redirectTo(mc)"
+              ngSrc="{{ mc.path[0] }}"
+              class="img-fluid"
+              priority
+              width="140"
+              height="200"
+              sizes="(max-width: 768px) 50vw, 25vw"
+            />
+          </div>
+          <div class="col-7">
+            <div
+              class="h-100 flex-column d-flex align-items-start justify-content-start"
+            >
+              <div
+                class="product-title w-100 d-flex justify-content-between"
+                (mouseleave)="inside = false"
+              >
+                <span class="prdName">{{ mc.name }}</span>
+                <div *ngIf="clicked != 2">
+                  <div class="text-center">
+                    <a (click)="menuListOpen(mc.id)">
+                      <i class="fa-solid fa-ellipsis-vertical"></i>
+                    </a>
+                  </div>
+                  <div
+                    class="d-flex flex-column justify-content-between text-end"
+                  >
+                    <div class="position-relative">
+                      <ul
+                        class="menu-list"
+                        [class]="
+                          i == menuNumber && inside ? 'menu-list-open' : ''
+                        "
+                      >
+                        <li
+                          (click)="goComment(mc.name, mc.id)"
+                          class="text-start"
+                        >
+                          <span><i class="fa-solid fa-pen-to-square"></i></span>
+                          Düzenle
+                        </li>
+
+                        <li
+                          class="text-start mt-1"
+                          data-bs-toggle="modal"
+                          data-bs-target="#removeDiscount"
+                        >
+                          <span><i class="fa-solid fa-trash-can"></i></span> Sil
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="d-flex justify-content-start"
+                style="font-size: 12px"
+                *ngIf="clicked == 0 || clicked == 1"
+              >
+                <span class="me-2 fw-bold">{{ mc.rankScore }}</span>
+                <div class="rating-wrap">
+                  <ng-template #t let-fill="fill">
+                    <i class="bi bi-star-fill px-1">
+                      <i
+                        *ngIf="fill > 0"
+                        class="bi bi-star-fill filled px-1"
+                        [style.width.%]="fill"
+                      ></i>
+                    </i>
+                  </ng-template>
+                  <ngb-rating
+                    id="assessment-rating"
+                    [(rate)]="mc.rankScore"
+                    [starTemplate]="t"
+                    [readonly]="true"
+                    [max]="5"
+                  ></ngb-rating>
+                </div>
+              </div>
+              <div
+                class="comment-content"
+                [style.display]="clicked == 2 ? 'none' : 'block'"
+              >
+                <p>{{ mc.content }}</p>
+              </div>
+              <div
+                class="modal fade"
+                id="removeDiscount"
+                tabindex="-1"
+                aria-labelledby="removeDiscount"
+                aria-hidden="true"
+              >
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content">
+                    <div class="modal-header border-0">
+                      <button
+                        type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"
+                        aria-label="Close"
+                      ></button>
+                    </div>
+                    <div class="modal-body text-center">
+                      <div class="mb-2">
+                        <i class="fa-solid fa-trash-can fa-2xl text-danger"></i>
+                      </div>
+                      Bu Yorumunuzu Silmek İstediğinize Emin Misiniz?
+                    </div>
+                    <div class="modal-footer d-block">
+                      <div class="d-flex flex-column">
+                        <button
+                          type="button"
+                          class="btn"
+                          style="background-color: #f27a1a"
+                          data-bs-dismiss="modal"
+                        >
+                          <span class="text-white fw-bold"> Hayır </span>
+                        </button>
+                        <button
+                          type="button"
+                          class="btn btn-light mt-2"
+                          data-bs-dismiss="modal"
+                          (click)="remove(mc.id)"
+                        >
+                          Evet
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button
+                (click)="redirect(mc.name, mc.prdId)"
+                class="btn btn-outline-danger mt-auto"
+                *ngIf="clicked == 2"
+              >
+                Ürünü Değerlendir
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template #noComments></ng-template>
+</main>

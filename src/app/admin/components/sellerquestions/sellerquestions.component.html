@@ -1,0 +1,131 @@
+<div class="container-xxl">
+  <div class="row" id="sellerAsk">
+    <div class="col-md-8">
+      <table class="table table-responsive mt-2 table-striped">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Ad-Soyad</th>
+            <th scope="col">Destek No</th>
+            <th scope="col">Konu</th>
+            <th scope="col">Sohbet İçeriği</th>
+            <th scope="col">İşlemler</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let q of questions; let i = index">
+            <th scope="row">{{ i + 1 }}</th>
+            <td>{{ q.fullName }}</td>
+            <td>{{ q.orderNumber }}</td>
+            <td>{{ q.name }}</td>
+            <td>
+              <button
+                class="btn btn-sm btn-success"
+                data-bs-toggle="modal"
+                data-bs-target="#messageDetails"
+                (click)="passAnswer(q.id)"
+              >
+                Mesaj içeriği
+              </button>
+            </td>
+            <div
+              class="modal fade"
+              id="messageDetails"
+              tabindex="-1"
+              aria-labelledby="messageDetails"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                  <div class="modal-header border-0">
+                    <h5 class="modal-title ms-auto">Sohbet İçeriği</h5>
+                    <button
+                      type="button"
+                      class="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    ></button>
+                  </div>
+                  <div
+                    class="modal-body"
+                    style="overflow-y: scroll; max-height: 500px; padding: 0"
+                  >
+                    <table class="table table-striped">
+                      <thead>
+                        <tr>
+                          <th scope="col">#</th>
+                          <th scope="col">Gönderen</th>
+                          <th scope="col">Mesajlar</th>
+                          <th scope="col">Tarih</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let m of q.messages; let i = index">
+                          <th scope="row">{{ i + 1 }}</th>
+                          <td>
+                            <span class="fw-bold">
+                              {{ m.owner ? "Siz" : " Müşteri" }}
+                            </span>
+                          </td>
+                          <td>{{ m.text }}</td>
+                          <td>
+                            <span style="font-size: 12px; color: blue">
+                              {{
+                                m.createdDate | date : "d/MM/yyyy H:mm" 
+                              }}</span
+                            >
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                    <form
+                      [formGroup]="answerForm"
+                      (ngSubmit)="
+                        updMode == false
+                          ? createAnswer(answerForm.value)
+                          : updateAnswer(answerForm.value)
+                      "
+                    >
+                      <div class="mb-3" formGroupName="message">
+                        <textarea
+                          type="text"
+                          placeholder="Mesajınızı buraya yazabilirsiniz."
+                          class="form-control"
+                          id="text"
+                          formControlName="text"
+                        ></textarea>
+                      </div>
+                      <div class="w-100 text-end">
+                        <button
+                          type="submit"
+                          class="btn"
+                          data-bs-dismiss="modal"
+                          [class]="{
+                            'btn-danger': updMode,
+                            'btn-primary': !updMode
+                          }"
+                        >
+                          {{ updMode ? "Cevabı Güncelle" : "Mesaj Gönder" }}
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                  <div class="modal-footer w-100">
+                    <button
+                      type="button"
+                      style="background-color: #f27a1a; color: #fff"
+                      class="btn btn-light mx-auto w-50"
+                      data-bs-dismiss="modal"
+                    >
+                      Sohbeti Sil
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,176 @@
+<div class="container">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/admin']"><i class="fa-solid fa-house"></i> </a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page">
+        Ürün Özellikleri
+      </li>
+    </ol>
+  </nav>
+  @if (!editMode) {
+  <ng-container #name [ngTemplateOutlet]="modal"></ng-container>
+  }
+  <div class="d-flex mb-2 text-center">
+    <a
+      class="btn btn-primary btn-sm me-1"
+      data-bs-toggle="modal"
+      data-bs-target="#editAttribute"
+      (click)="changeMode(false)"
+      ><i class="fa-solid fa-plus" title="Yeni Ekle"></i> Yeni Ekle</a
+    >
+    <div class="dropdown">
+      <button
+        class="btn btn-secondary dropdown-toggle"
+        type="button"
+        data-bs-toggle="dropdown"
+        aria-expanded="false"
+      >
+        Seçilenlere Uygula
+      </button>
+      <ul class="dropdown-menu">
+        <li>
+          <a class="dropdown-item" (click)="activeState()"
+            >Seçilenleri Durumunu Değiştir</a
+          >
+        </li>
+        <li><a class="dropdown-item" href="#">Seçilenleri sil </a></li>
+      </ul>
+    </div>
+    <a class="btn btn-danger btn-sm ms-1"
+      ><i class="fa-solid fa-trash"></i> Tümünü Sil
+    </a>
+  </div>
+  <table class="table table-striped table-hover table-bordered">
+    <thead>
+      <tr>
+        <th class="text-center" style="width: 10%" scope="col">
+          <input
+            class="form-check-input p-2"
+            type="checkbox"
+            id="flexCheckDefault"
+            (click)="checkAll()"
+          />
+        </th>
+        <th style="width: 40%" scope="col">Özellik</th>
+        <th style="width: 10%" scope="col">Durum</th>
+        <th class="text-center" style="width: 40%" scope="col">İşlem</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (a of attributes; track $index) {
+      <tr>
+        <th class="text-center">
+          <input
+            class="form-check-input p-2"
+            type="checkbox"
+            id="checkAttribute"
+            [checked]="isSelected"
+            #box
+            (click)="checkList(+a.id, box.checked)"
+          />
+        </th>
+        <td>{{ a.name }}</td>
+        <td>
+          <div class="form-check form-switch">
+            <input
+              class="form-check-input"
+              [checked]="a.status"
+              type="checkbox"
+              role="switch"
+              (change)="changeStatus(a)"
+              id="flexSwitchCheckDefault"
+            />
+          </div>
+        </td>
+        <td class="text-center">
+          <a [routerLink]="a.id" class="btn btn-danger btn-sm me-1"
+            ><i class="fa fa-eye" title="Seçenek Ekle"></i> Seçenek Ekle</a
+          >
+          <a
+            (mouseenter)="[changeMode(true, a.name, a.id)]"
+            class="btn btn-secondary btn-sm"
+            data-bs-toggle="modal"
+            data-bs-target="#editAttribute"
+            ><i class="fas fa-edit"></i>
+          </a>
+          <a
+            class="btn btn-success btn-sm ms-1"
+            appDelete
+            controller="variation"
+            [id]="a.id"
+            action="RemoveAttribute"
+            (callback)="getAllAttributes()"
+          >
+          </a>
+        </td>
+      </tr>
+      <ng-container
+        [ngTemplateOutlet]="modal"
+        [ngTemplateOutletContext]="{ attribute: a }"
+      >
+      </ng-container>
+      }@empty { @if(!editMode){
+      <ng-container [ngTemplateOutlet]="modal"></ng-container>
+      }
+      <p>Veri bulunamadı</p>
+      }
+    </tbody>
+  </table>
+</div>
+<ng-template #modal let-attribute="attribute">
+  <div
+    class="modal fade"
+    id="editAttribute"
+    tabindex="-1"
+    aria-labelledby="editAttributeValue"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="editAttributeValue">
+            Özellik Değeri {{ editMode ? "Düzenle" : "Ekle" }}
+          </h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div class="input-group mb-3">
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="value"
+              aria-label="Attribute Value"
+              aria-describedby="basic-addon1"
+            />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Kapat
+          </button>
+          <button
+            (click)="addValue(attribute)"
+            type="button"
+            class="btn btn-primary"
+            data-bs-dismiss="modal"
+          >
+            {{ editMode ? "Güncelle" : "Ekle" }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<router-outlet> </router-outlet>

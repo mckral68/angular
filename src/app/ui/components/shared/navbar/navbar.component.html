@@ -1,0 +1,414 @@
+<ng-template [ngTemplateOutlet]="isMobil ? mobil : masaustu"></ng-template>
+<ng-template #mobil>
+  <nav class="navbar bg-light sticky-top" id="home-navbar">
+    <div class="container-fluid">
+      <div>
+        <div class="d-flex">
+          <button
+            *ngIf="isSearch"
+            class="navbar-toggler d-grid"
+            type="button"
+            data-bs-toggle="offcanvas"
+            data-bs-target="#offcanvasNavbar"
+            aria-controls="offcanvasNavbar"
+          >
+            <span class="navbar-toggler-icon"></span>
+            <span class="fw-bold" style="font-size: 0.7rem">Menü</span>
+          </button>
+          <a class="btn" *ngIf="!isSearch" routerLink="/">
+            <i class="fa-solid fa-xl fa-chevron-left"></i>
+          </a>
+          <a class="btn btn-link d-block" routerLink="/" (click)="getHome()"
+            ><span class="fw-bold">Eylül Modalife</span></a
+          >
+        </div>
+      </div>
+      <div class="d-flex me-3">
+        <a class="nav-link" (click)="redirect()" title="Hesabim"
+          ><i class="fa-regular fa-user"></i
+        ></a>
+        <a
+          class="nav-link"
+          [routerLink]="[isAuthenticated ? '/hesabim/favorilerim' : '/giris']"
+          [queryParams]="{ returnUrl: 'hesabim/favorilerim' }"
+          title="Favorilerim"
+          ><i class="fa-regular fa-heart"></i
+        ></a>
+        <a class="nav-link" title="sepetim" routerLink="/sepetim">
+          <span class="font-icon">
+            <i class="fa-solid fa-cart-shopping" id="cartIcon"></i>
+            <span class="badge-count">{{ basketCount }}</span>
+          </span>
+        </a>
+      </div>
+      <form *ngIf="isSearchHide" class="input-group w-75 mx-auto" role="search">
+        <input
+          class="form-control"
+          type="search"
+          placeholder="Ürün veya kategori ara..."
+          title="ürün arama"
+          (input)="onKey($event)"
+          [matAutocomplete]="auto"
+        />
+        <button aria-label="ürün ara" class="btn btn-danger" type="submit">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+        <mat-autocomplete
+          autoActiveFirstOption
+          #auto="matAutocomplete"
+          (optionSelected)="onLey($event.option.value)"
+        >
+          <mat-option
+            *ngFor="let p of filteredPrd"
+            [value]="p.name"
+            (click)="redirectTo(p.name, p.id)"
+          >
+            <span
+              [routerLink]="p.name.toLowerCase().replaceAll(' ', '-').trim()"
+              [queryParams]="{ p: p.id }"
+            >
+              {{ p?.name }}
+            </span>
+          </mat-option>
+        </mat-autocomplete>
+      </form>
+      <div
+        class="offcanvas offcanvas-start"
+        tabindex="-1"
+        id="offcanvasNavbar"
+        aria-labelledby="eylulmodalife"
+      >
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="eylulmodalife">Eylül Modalife</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="offcanvas"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="offcanvas-body">
+          <ul class="bd-links-nav list-unstyled mb-0 pb-3 pb-md-2 pe-lg-2">
+            <li class="bd-links-group py-2 accordion accordion-flush">
+              <strong
+                class="bd-links-heading d-flex w-100 align-items-center fw-semibold"
+                ><a
+                  href="#"
+                  class="nav-link accordion-button collapsed"
+                  data-bs-toggle="collapse"
+                  data-bs-target="#kadınKat"
+                >
+                  KADIN
+                </a>
+              </strong>
+              <hr />
+              <div
+                id="kadınKat"
+                class="accordion-collapse collapse"
+                aria-labelledby="flush-headingTwo"
+                data-bs-parent="#accordionFlushExample"
+              >
+                <div class="accordion-body">
+                  <li class="bd-links-group">
+                    <strong
+                      class="bd-links-heading mx-auto d-flex w-100 align-items-center fw-semibold"
+                    >
+                      <a
+                        href="#"
+                        class="nav-link accordion-button collapsed text-center"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#ustgiyim"
+                      >
+                        {{ "Üst Giyim" | titlecase }}
+                      </a>
+                    </strong>
+                    <div id="ustgiyim" class="accordion-collapse collapse">
+                      <div class="accordion-body" *ngFor="let ag of ustGiyim">
+                        <li class="bd-links-group">
+                          <strong
+                            class="bd-links-heading d-flex w-100 align-items-center fw-semibold"
+                          >
+                            <a href="#" class="nav-link">
+                              {{ ag | titlecase }}
+                            </a>
+                          </strong>
+                        </li>
+                      </div>
+                    </div>
+                  </li>
+                </div>
+                <div class="accordion-body">
+                  <li class="bd-links-group">
+                    <strong
+                      class="bd-links-heading mx-auto d-flex w-100 align-items-center fw-semibold"
+                    >
+                      <a
+                        href="#"
+                        class="nav-link accordion-button collapsed text-center"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#altgiyim"
+                      >
+                        Alt Giyim
+                      </a>
+                    </strong>
+                    <div id="altgiyim" class="accordion-collapse collapse">
+                      <div class="accordion-body" *ngFor="let ag of altGiyim">
+                        <li class="bd-links-group">
+                          <strong
+                            class="bd-links-heading d-flex w-100 align-items-center fw-semibold"
+                          >
+                            <a href="#" class="nav-link">
+                              {{ ag }}
+                            </a>
+                          </strong>
+                        </li>
+                      </div>
+                    </div>
+                  </li>
+                </div>
+                <div class="accordion-body">
+                  <li class="bd-links-group">
+                    <strong
+                      class="bd-links-heading mx-auto d-flex w-100 align-items-center fw-semibold"
+                    >
+                      <a
+                        href="#"
+                        class="nav-link accordion-button collapsed text-center"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#disgiyim"
+                      >
+                        {{ "Dış Giyim" | titlecase }}
+                      </a>
+                    </strong>
+                    <div id="disgiyim" class="accordion-collapse collapse">
+                      <div class="accordion-body" *ngFor="let ag of disGiyim">
+                        <li class="bd-links-group">
+                          <strong
+                            class="bd-links-heading d-flex w-100 align-items-center fw-semibold"
+                          >
+                            <a [routerLink]="['/', ag]" class="nav-link">
+                              {{ ag | titlecase }}
+                            </a>
+                          </strong>
+                        </li>
+                      </div>
+                    </div>
+                  </li>
+                </div>
+                <div class="accordion-body">
+                  <li class="bd-links-group">
+                    <strong
+                      class="bd-links-heading d-flex w-100 align-items-center fw-semibold"
+                    >
+                      <a href="#" class="nav-link">
+                        {{ "İç Giyim" | titlecase }}
+                      </a>
+                    </strong>
+                  </li>
+                </div>
+                <div class="accordion-body">
+                  <li class="bd-links-group">
+                    <strong
+                      class="bd-links-heading d-flex w-100 align-items-center fw-semibold"
+                    >
+                      <a href="#" class="nav-link">
+                        Kozmetik & Kişisel Bakım
+                      </a>
+                    </strong>
+                  </li>
+                </div>
+                <div class="accordion-body">
+                  <li class="bd-links-group">
+                    <strong
+                      class="bd-links-heading d-flex w-100 align-items-center fw-semibold"
+                    >
+                      <a href="#" class="nav-link"> Aksesuar </a>
+                    </strong>
+                  </li>
+                </div>
+              </div>
+            </li>
+            <li class="bd-links-group py-2">
+              <strong
+                class="bd-links-heading d-flex w-100 align-items-center fw-semibold"
+                ><a href="#" class="nav-link"> ERKEK </a>
+              </strong>
+              <hr />
+            </li>
+            <li class="bd-links-group py-2">
+              <strong
+                class="bd-links-heading d-flex w-100 align-items-center fw-semibold"
+                ><a href="#" class="nav-link"> ÇOCUK </a>
+              </strong>
+              <hr />
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+</ng-template>
+
+<ng-template #masaustu>
+  <header>
+    <section class="top-bar" id="home-navbar">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-2 col-sm-4 col-4">
+            <a routerLink="/" class="navbar-brand">Eylül Modalife</a>
+          </div>
+          <div
+            class="col-lg-3 col-8"
+            [class]="isSearchHide ? '' : 'invisible '"
+          >
+            <form>
+              <div class="input-group">
+                <input
+                  type="text"
+                  class="form-control"
+                  (input)="onKey($event)"
+                  [matAutocomplete]="auto"
+                  placeholder="Anahtar Kelimeler"
+                  *ngIf="isSearchHide"
+                />
+                <mat-autocomplete
+                  autoActiveFirstOption
+                  #auto="matAutocomplete"
+                  (optionSelected)="onLey($event.option.value)"
+                >
+                  <mat-option
+                    *ngFor="let p of filteredPrd"
+                    [value]="p.name"
+                    (click)="redirectTo(p.name, p.id)"
+                  >
+                    <span
+                      [routerLink]="
+                        p.name.toLowerCase().replaceAll(' ', '-').trim()
+                      "
+                      [queryParams]="{ p: p.id }"
+                    >
+                      {{ p?.name }}
+                    </span>
+                  </mat-option>
+                </mat-autocomplete>
+                <button aria-label="ürün ara" class="btn btn-primary">
+                  <i class="fa fa-search"></i>
+                </button>
+              </div>
+            </form>
+          </div>
+          <div class="col-lg-7 col-sm-8">
+            <div class="text-start">
+              <a
+                [routerLink]="isAdmin ? '/admin' : ''"
+                class="btn btn-danger text-white"
+                type="submit"
+                *ngIf="isAdmin"
+                >Yönetim Paneli</a
+              >
+              <a
+                [routerLink]="['/hesabim']"
+                class="btn btn-light"
+                *ngIf="isAuthenticated"
+              >
+                <i class="fa fa-user"></i>
+                <span class="ms-1 d-none d-sm-inline-block">Hesabım</span>
+              </a>
+              <a
+                [routerLink]="[
+                  isAuthenticated ? '/hesabim/favorilerim' : '/giris'
+                ]"
+                class="btn btn-light"
+              >
+                <i class="fa fa-heart"></i>
+                <span class="ms-1 d-none d-sm-inline-block">Listem</span>
+              </a>
+              <a
+                class="btn btn-light"
+                routerLink="kayit"
+                *ngIf="!isAuthenticated"
+                >Kayıt Ol</a
+              >
+              <a
+                class="btn btn-light"
+                routerLink="giris"
+                *ngIf="!isAuthenticated"
+                ><i class="fa-solid fa-user"></i> Giriş Yap</a
+              >
+
+              <a routerLink="/sepetim" class="btn btn-light">
+                <span class="font-icon">
+                  <i class="fa-solid fa-cart-shopping" id="cartIcon"></i>
+                  <span class="badge-count">{{ basketCount }}</span>
+                </span>
+                <span class="ms-2 d-none d-sm-inline-block">Sepetim</span>
+              </a>
+              <a
+                class="btn btn-danger text-white"
+                style="cursor: pointer"
+                (click)="signOut()"
+                *ngIf="isAuthenticated"
+                >Çıkış Yap</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <nav class="navbar bg-light navbar-expand-lg container-xxl">
+      <div class="container">
+        <button
+          type="button"
+          class="navbar-toggler border"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbar_main"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbar_main">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <a routerLink="/products" class="nav-link ps-0">Kadın</a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/" class="nav-link">Erkek</a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/" class="nav-link">Çocuk</a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/" class="nav-link">Yeni Gelenler</a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/" class="nav-link">Çok Satanlar</a>
+            </li>
+            <li class="nav-item">
+              <a routerLink="/" class="nav-link">İndirimdekiler</a>
+            </li>
+
+            <li class="nav-item dropdown">
+              <a
+                href="#"
+                class="dropdown-toggle nav-link"
+                data-bs-toggle="dropdown"
+                >Diğer Kategoriler</a
+              >
+              <ul class="dropdown-menu">
+                <li>
+                  <a href="#" class="dropdown-item">Category 1</a>
+                </li>
+                <li>
+                  <a href="#" class="dropdown-item">Category 2</a>
+                </li>
+                <li>
+                  <a href="#" class="dropdown-item">Category 3</a>
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
+</ng-template>

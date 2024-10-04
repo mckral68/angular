@@ -1,0 +1,125 @@
+.my-account-layout {
+  background-color: #fafafa;
+  padding: 10px;
+  font-family: Source Sans Pro, sans-serif;
+}
+
+.user-menu .user-content .main {
+  font-weight: 600;
+}
+
+#my-account a {
+  color: black;
+  text-decoration: none;
+}
+
+.orders-menu {
+  padding: 10px 0 25px;
+}
+
+.orders-menu .title {
+  line-height: normal;
+  padding: 0 0 10px 15px;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 1px solid #e6e6e6;
+}
+
+.orders-menu .content {
+  display: flex;
+  color: #333;
+  padding: 15px 4px 0;
+}
+
+.orders-menu .content .order-menu-item {
+  flex: 1;
+  width: 0;
+  text-align: center;
+}
+
+.orders-menu .content .order-menu-item .icon {
+  width: 35px;
+  height: 35px;
+  background: linear-gradient(135deg, #f1a447 23%, #ec6241);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  position: relative;
+}
+
+.q-icon.white:before {
+  color: #fff;
+}
+
+.orders-menu .content .order-menu-item .text {
+  line-height: normal;
+  height: 30px;
+  margin: 5px 15px 0;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.user-menu .user-content .user {
+  flex: 1;
+  padding: 0 2px;
+  white-space: nowrap;
+}
+
+.user-menu .user-menu-item {
+  flex: 1;
+  text-align: center;
+}
+.user-menu .user-menu-item .text {
+  font-size: 12px;
+}
+.user-menu .user-content .verify {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #f27a1a;
+  height: 20px;
+  width: 70px;
+  font-size: 10px;
+  border-radius: 4px;
+  color: #fff !important;
+}
+
+.help-menu .title {
+  line-height: normal;
+  padding: 10px 0 10px 15px;
+  font-weight: 600;
+  color: #333;
+  border-bottom: 1px solid #e6e6e6;
+}
+
+.help-menu .content {
+  color: #333;
+}
+
+.help-menu .content .help-menu-item:not(:last-child) {
+  border-bottom: 1px solid #e6e6e6;
+  padding-bottom: 10px;
+}
+
+.help-menu .content .help-menu-item {
+  margin: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 5px;
+}
+
+.help-menu .content .help-menu-item .info {
+  line-height: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.help-menu .content .help-menu-item .info .text {
+  margin-left: 10px;
+  font-size: 14px;
+}

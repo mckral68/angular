@@ -1,0 +1,105 @@
+<main id="favorites">
+  <div class="sub-header">
+    <div
+      class="d-flex justify-content-between px-1 border border-0 border-bottom p-2"
+      data-tracker="seen:PageView"
+    >
+      <div class="left-icon">
+        <a routerLink="/" class="ps-1">
+          <i class="fa-solid fa-angle-left" style="font-size: 20px"></i>
+        </a>
+      </div>
+      <div class="title">
+        <p style="margin-bottom: 0; font-weight: 600">Favorilerim</p>
+      </div>
+      <div class="right-icon"></div>
+    </div>
+  </div>
+  <div class="mx-1">
+    <div class="row">
+      <div class="col-5 col-xl-2 col-md-3" *ngFor="let p of favPrd">
+        <div class="card">
+          <div class="mx-auto">
+            <img
+              ngSrc="{{ p.productImageFiles[0].path }}"
+              priority
+              width="170"
+              height="130"
+              alt="{{ p?.name }}"
+              class="img-fluid"
+              alt="{{ p?.name }}"
+              (click)="redirect(p)"
+            />
+            <div
+              class="close-buton"
+              data-bs-toggle="modal"
+              (click)="remove(p.favId)"
+              data-bs-target="#removeFavorite"
+            >
+              <i class="fa-solid fa-xmark"></i>
+            </div>
+          </div>
+          <div class="card-body p-0">
+            <h5 class="card-title text-center">{{ p.name }}</h5>
+            <p class="card-text"></p>
+          </div>
+
+          <div class="fw-bold ps-2" style="color: #f27a1a">
+            {{ p.price }} TL
+          </div>
+          <div class="card-body">
+            <div (click)="redirect(p)" class="btn btn-outline-danger w-100">
+              Sepete Ekle
+            </div>
+          </div>
+        </div>
+        <div
+          class="modal fade"
+          id="removeFavorite"
+          tabindex="-1"
+          aria-labelledby="removeFavorite"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header border-0">
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body text-center">
+                <div class="mb-2">
+                  <i class="fa-solid fa-trash-can fa-2xl text-danger"></i>
+                </div>
+                Bu Ürünü Favorilerinizden Silmek İstediğinize Emin Misiniz?
+              </div>
+              <div class="modal-footer d-block">
+                <div class="d-flex flex-column">
+                  <button
+                    type="button"
+                    class="btn"
+                    style="background-color: #f27a1a"
+                    data-bs-dismiss="modal"
+                  >
+                    <span class="text-white fw-bold"> Hayır </span>
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-light mt-2"
+                    data-bs-dismiss="modal"
+                    (click)="removeFavPrd()"
+                  >
+                    Evet
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

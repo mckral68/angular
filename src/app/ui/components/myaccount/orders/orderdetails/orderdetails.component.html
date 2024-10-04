@@ -1,0 +1,210 @@
+<main id="order-detail" class="container-xxl">
+  <div class="border p-2">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="d-flex justify-content-between top-item">
+          <a [routerLink]="['/hesabim']">
+            <i class="fa-solid fa-chevron-left fa-xl text-center"></i>
+          </a>
+          <p class="my-auto">Sipariş Detay</p>
+          <div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="main-container">
+    <div class="card">
+      <div class="card-body">
+        <p class="od-ct">Sipariş No: {{ orderInfo?.orderNumber }}</p>
+        <p class="od-ct">
+          Sipariş Tarihi: {{ orderInfo?.createdDate | date : "d/MM/yyyy H:mm"  }}
+        </p>
+        <p class="od-ct">Sipariş Özeti: {{ orderInfo?.orderSummary }} Ürün</p>
+        <p class="od-ct">
+          Sipariş Detay:
+          <span style="color: #0bc15c"> {{ transactStatus }}</span>
+        </p>
+        <p class="od-ct">
+          Toplam:
+          <span class="text-danger">{{ total }} TL</span>
+        </p>
+        <p
+          class="od-ct"
+          *ngIf="
+            orderInfo?.transactStatus == 0 || orderInfo?.transactStatus == 1
+          "
+        >
+          Siparişinle İlgili
+          <button
+            class="btn btn-sm btn-danger"
+            data-bs-toggle="modal"
+            data-bs-target="#askQuestion"
+          >
+            Soru Sor
+          </button>
+        </p>
+        <button
+          *ngIf="
+            orderInfo?.transactStatus == 0 || orderInfo?.transactStatus == 1
+          "
+          class="btn btn-danger float-end btn-sm"
+          data-bs-toggle="modal"
+          data-bs-target="#cancelOrder"
+        >
+          Siparişi İptal Et
+        </button>
+        <div
+          class="modal fade"
+          id="cancelOrder"
+          tabindex="-1"
+          aria-labelledby="cancelOrder"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header border-0">
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body text-center">
+                <div class="mb-2">
+                  <i class="fa-solid fa-trash-can fa-2xl text-danger"></i>
+                </div>
+                Bu Siparişi İptal Etmek İstediğinize Emin Misiniz?
+              </div>
+              <div class="modal-footer d-block">
+                <div class="d-flex flex-column">
+                  <button
+                    type="button"
+                    class="btn"
+                    style="background-color: #f27a1a"
+                    data-bs-dismiss="modal"
+                  >
+                    <span class="text-white fw-bold"> Hayır </span>
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-light mt-2"
+                    data-bs-dismiss="modal"
+                    (click)="cancelOrder(orderInfo.id)"
+                  >
+                    Evet
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div
+          class="modal fade"
+          id="askQuestion"
+          tabindex="-1"
+          aria-labelledby="askQuestion"
+          aria-hidden="true"
+        >
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header border-0">
+                <h1 class="modal-title fs-5" id="askQuestion">
+                  Siparişinle İlgili Satıcıya Sor
+                </h1>
+                <button
+                  type="button"
+                  class="btn-close"
+                  data-bs-dismiss="modal"
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div class="modal-body text-center">
+                <form
+                  [formGroup]="sellerAskForm"
+                  (ngSubmit)="askSeller(sellerAskForm.value)"
+                >
+                  <select
+                    formControlName="subjectId"
+                    class="form-select"
+                    aria-label="Subject"
+                  >
+                    <option selected disabled>Konu Seçiniz</option>
+                    <option *ngFor="let s of subjects" [value]="s.id">
+                      {{ s.name }}
+                    </option>
+                  </select>
+                  <div formGroupName="message">
+                    <textarea
+                      formControlName="text"
+                      placeholder="Mesaj içeriğini buraya yazınız."
+                      type="text"
+                      class="form-control mt-2"
+                    >
+                    </textarea>
+                  </div>
+                  <div class="modal-footer d-block">
+                    <div class="d-flex flex-column">
+                      <button
+                        type="submit"
+                        class="btn text-white"
+                        style="background-color: #f27a1a"
+                        data-bs-dismiss="modal"
+                      >
+                        Gönder
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card" *ngFor="let od of odList">
+    <div class="card-header bg-white">
+      <p style="color: #0bc15c">{{ transactStatus }}</p>
+      <p class="m-0" style="font-size: 11px; font-weight: 500">
+        Kargo Firması: {{ od.shipper }}
+      </p>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-5">
+          <img
+            ngSrc="{{ od.img }}"
+            width="100"
+            height="120"
+            (click)="redirect(od?.name, od.id)"
+            class="img-fluid"
+            priority
+            alt="{{ od.name }}"
+          />
+        </div>
+        <div class="col-7">
+          <p class="fw-bold">{{ od.name }}</p>
+          <p>
+            Renk: <span class="text-muted">{{ od.color }} | </span> Beden:
+            <span class="text-muted">{{ od.size }}</span>
+          </p>
+          <p>Adet: {{ od.quantity }}</p>
+          <p class="fw-bold text-danger">{{ od.unitPrice }} TL</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      <p class="text-danger fw-bold border-bottom">Teslimat Adresi</p>
+      <p class="fw-bold m-0 fs-6">
+        {{ orderInfo?.fullName }}
+      </p>
+      <p style="font-size: 12px; margin: 0">
+        {{ orderInfo?.phone }}
+      </p>
+      <p style="font-size: 12px; margin: 0">{{ orderInfo?.adres }}</p>
+    </div>
+  </div>
+</main>

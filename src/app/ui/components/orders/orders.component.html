@@ -1,0 +1,201 @@
+<main id="order-page" class="container-xxl">
+  <div class="d-flex justify-content-between align-items-center bg-white pt-2">
+    <div routerLink="/sepetim">
+      <i class="fa-solid fa-xl fa-xmark"></i>
+    </div>
+    <p class="fw-bold my-auto">Güvenli Ödeme</p>
+    <i class="fa-brands fa-xl fa-expeditedssl"></i>
+  </div>
+  <div class="row my-3">
+    <div class="col-md-8 col-lg-12 order-md-1">
+      <form
+        class="needs-validation"
+        [formGroup]="orderForm"
+        (ngSubmit)="deneme()"
+      >
+        <main>
+          <div id="checkout">
+            <div class="container-xl">
+              <div
+                data-testid="shipment-address-box"
+                class="border-top border-bottom pt-2"
+              >
+                <div class="d-flex justify-content-between border-bottom p-2">
+                  <div class="text">Teslimat Adresi</div>
+                  <div
+                    class="text-end text-dark"
+                    [routerLink]="['/hesabim/adresBilgileri']"
+                  >
+                    <span id="add-address-link">Ekle </span
+                    ><span id="edit-address-link">/ Düzenle</span>
+                  </div>
+                </div>
+                <div class="dropdown-bottom-sheet">
+                  <div class="select-option" data-testid="selected-item">
+                    <select class="form-select" required>
+                      <option
+                        *ngFor="let a of userAddressDetails"
+                        value="{{ a }}"
+                      >
+                        {{ a?.name }} ( {{ a.neighbourhood?.name }}/{{
+                          a.district?.name
+                        }}/{{ a.city?.name }}
+                        )
+                      </option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label" for="invoice">
+                    Faturamı Aynı Adrese Gönder
+                  </label>
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    value=""
+                    id="invoice"
+                  />
+                </div>
+                <div class="row mt-4" formGroupName="creditCart">
+                  <div class="d-flex justify-content-between p-2 border-bottom">
+                    <div class="text">Kart Bilgileri</div>
+                    <div class="action">
+                      <span id="add-address-link">Ekle</span
+                      ><span id="edit-address-link">/Düzenle</span>
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-md-3">
+                    <label for="cc-name">Ad Soyad</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="cc-name"
+                      formControlName="fullName"
+                      placeholder="Kart Sahibinin Adı Soyadı"
+                      required
+                    />
+                    <div class="invalid-feedback">
+                      Karttaki isim bilgisi gerekli
+                    </div>
+                  </div>
+                  <div class="col-md-6 mb-md-3">
+                    <label for="cc-number">Kart Numarası</label>
+                    <input
+                      type="tel"
+                      maxlength="19"
+                      class="form-control"
+                      id="cc-number"
+                      formControlName="cartNo"
+                      mask="0000 0000 0000 0000"
+                      placeholder="16 Haneli Kart Numarası"
+                      required
+                    />
+                    <div class="invalid-feedback">
+                      Lütfen kredi kartı numaranızı giriniz
+                    </div>
+                  </div>
+                  <div class="row">
+                    <label for="cc-expiration"
+                      ><strong>Son Kullanma Tarihi</strong>
+                    </label>
+                    <div class="col-4 mb-md-3">
+                      <label for="month">Ay</label>
+                      <select
+                        class="form-select"
+                        id="month"
+                        required=""
+                        formControlName="creditCartMonth"
+                      >
+                        <option *ngFor="let a of ay" value="{{ a }}">
+                          {{ a }}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="col-5 mb-2">
+                      <label for="year">Yıl</label>
+                      <select
+                        class="form-select"
+                        id="year"
+                        formControlName="creditCartYear"
+                      >
+                        <option *ngFor="let y of yil" value="{{ y }}">
+                          {{ y }}
+                        </option>
+                      </select>
+                    </div>
+                    <div class="col-3 mb-3">
+                      <label for="cc-expiration">CVC</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="cc-cvc"
+                        formControlName="cvc"
+                        maxlength="3"
+                      />
+                      <div class="invalid-feedback">Güvenlik kodu gerekli</div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bottom-bar-wrapper">
+                  <div class="me-2">
+                    <i
+                      class="q-icon q-icon-small icon-arrow-drop-down primary detail-icon icon-active"
+                    ></i>
+                  </div>
+                  <div class="left">
+                    <div class="price-text">Toplam</div>
+                    <div class="price">{{ total }} TL</div>
+                    <span class="promotion-info free-cargo-promotion"
+                      >Kargo Bedava</span
+                    >
+                  </div>
+                  <div class="right">
+                    <button class="btn btn-md btn-danger">
+                      Onayla ve Bitir
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </main>
+      </form>
+      <div class="contract">
+        <div class="approval">
+          <div class="checkbox">
+            <div class="quark-checkbox">
+              <i class="icon-checkbox-unchecked checkbox"></i>
+            </div>
+          </div>
+          <div>
+            <div class="form-check">
+              <label
+                class="form-check-label"
+                style="color: #b00"
+                for="flexCheckDefault"
+                >Ön Bilgilendirme Koşulları'nı ve Mesafeli Satış Sözleşmesi'ni
+                okudum, onaylıyorum.</label
+              >
+              <input
+                class="form-check-input p-1"
+                type="checkbox"
+                id="flexCheckDefault"
+                style="scale: 1.4"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex justify-content-between">
+        <button
+          routerLink="/"
+          class="btn btn-outline-primary btn-md"
+          type="submit"
+        >
+          Alışverişe Devam Et
+        </button>
+      </div>
+    </div>
+  </div>
+</main>

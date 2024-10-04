@@ -1,0 +1,23 @@
+#favorites .col-6 img {
+  height: 17rem;
+  width: 100%;
+  object-fit: contain;
+}
+
+#favorites .close-buton {
+  top: 2px;
+  right: 2px;
+  border: 1px solid #e6e6e6;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  text-decoration: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  position: absolute;
+}
+#favorites .favorite-wrapper .col-6 {
+  --bs-gutter-x: 0.8rem;
+}

@@ -1,0 +1,54 @@
+#addAdres label {
+  color: #333;
+  display: block;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 18px;
+  padding: 0;
+  margin-bottom: 10px;
+}
+#addAdres input {
+  background-color: #fff1f1;
+}
+#addAdres .row {
+  --bs-gutter-x: 5px;
+}
+#us-ad {
+  --bs-gutter-x: 0;
+}
+#us-ad .toptitle {
+  font-weight: 700;
+  color: #333;
+}
+#us-ad .top-item {
+  border: 1px solid #e6e6e6;
+  padding: 10px;
+}
+#us-ad .modal {
+  --bs-modal-margin: 0;
+}
+#us-ad .address-header {
+  border-bottom: 1px solid #e9e9e9;
+}
+#us-ad .name {
+  line-height: 18px;
+  flex: 1;
+  color: #333;
+}
+#us-ad .detail {
+  font-size: 14px;
+}
+#us-ad .address {
+  color: #333;
+  line-height: 18px;
+  white-space: nowrap;
+}
+#us-ad .city {
+  line-height: 18px;
+  margin-bottom: 10px;
+  color: #333;
+}
+#us-ad .phone {
+  line-height: 18px;
+  color: #333;
+}

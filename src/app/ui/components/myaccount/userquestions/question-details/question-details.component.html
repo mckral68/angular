@@ -1,0 +1,338 @@
+<main id="page-content" class="container-xxl px-0">
+  <div class="ticket-history mb-3" *ngIf="filterRoute">
+    <div class="row">
+      <div class="col-lg-9">
+        <div id="ticketDetail" class="card" *ngFor="let q of sellerQuestions">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb" style="list-style: none">
+              <li class="breadcrumb-item">
+                <a
+                  class="text-secondary text-decoration-none"
+                  [routerLink]="['/hesabim']"
+                  routerLinkActive="router-link-active"
+                  >Hesabım</a
+                >
+              </li>
+              <li class="breadcrumb-item">
+                <a
+                  class="text-secondary text-decoration-none"
+                  [routerLink]="['/hesabim/sorularim']"
+                  routerLinkActive="router-link-active"
+                  >Sorularım</a
+                >
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">
+                Destek Talebi
+              </li>
+            </ol>
+          </nav>
+          <div class="card-header bg-dark text-white">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="flex-column">
+                <div>
+                  <small
+                    style="font-size: 12px; font-weight: 600; font-size: 13px"
+                    >Konu: {{ q.name }}</small
+                  >
+                </div>
+                <div class="mx-auto" style="font-weight: 600; font-size: 13px">
+                  Destek No:
+                  {{ q.ticketNumber }}
+                </div>
+              </div>
+              <button style="height: 45px" class="btn btn-secondary btn-sm">
+                <span><i class="fa-regular fa-envelope"></i></span>
+                {{
+                  q.status == 0
+                    ? "Cevap Bekleniyor"
+                    : q.status == 1
+                    ? "Cevaplandı"
+                    : "Reddedildi"
+                }}
+              </button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="ticket-messages">
+              <div *ngFor="let m of q.messages">
+                <div class="ticket-message customer" *ngIf="!m.owner">
+                  <div class="t-message">
+                    <p>
+                      <span> {{ m.text }}</span> &nbsp;
+                    </p>
+                  </div>
+                  <div class="t-meta">
+                    {{ q.fullName
+                    }}<span
+                      ><div class="componentDate">
+                        {{ m.createdDate | date : "d/MM/yyyy H:mm" }}
+                      </div></span
+                    >
+                  </div>
+                </div>
+                <div class="ticket-message admin" *ngIf="m.owner">
+                  <div class="t-message">
+                    <p>
+                      {{ m.text }}
+                    </p>
+                  </div>
+                  <div class="t-meta">
+                    Eylül Modalife<span
+                      ><div class="componentDate">
+                        {{ m.createdDate | date : "d/MM/yyyy H:mm" }}
+                      </div></span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="ticket-answer">
+              <div class="ticket-reply">
+                <form
+                  [formGroup]="sentMessage"
+                  (ngSubmit)="sendMessage(sentMessage.value)"
+                >
+                  <div formGroupName="message">
+                    <textarea
+                      id="tinymce-1"
+                      cols="30"
+                      rows="6"
+                      formControlName="text"
+                      required="required"
+                      class="form-control"
+                      aria-hidden="true"
+                    ></textarea>
+                  </div>
+                  <div
+                    aria-hidden="true"
+                    class="tox-throbber"
+                    style="display: none"
+                  ></div>
+                  <span id="filePath"></span>
+                  <input
+                    type="file"
+                    name="files[]"
+                    id="customFile"
+                    multiple="multiple"
+                    style="display: none"
+                  />
+                  <button type="button" class="btn btn-light">
+                    <i class="fa-solid fa-paperclip"></i><span> Dosya</span>
+                  </button>
+                  <button type="submit" class="btn btn-primary is-green">
+                    <i class="fa-regular fa-paper-plane"></i
+                    ><span> Gönder</span>
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <div class="ticket-dashboard mb-3">
+          <div class="row" *ngFor="let q of sellerQuestions">
+            <div class="col-lg-12 mb-3">
+              <div class="card">
+                <div class="card-body">
+                  <div class="row d-flex justify-content-center">
+                    <div class="col">
+                      <p class="text-dark mb-0">Durum</p>
+                      <h3 class="m-0">
+                        <span class="text-secondary">
+                          {{
+                            q.status == 0
+                              ? "Cevap Bekleniyor"
+                              : q.status == 1
+                              ? "Cevaplandı"
+                              : "Reddedildi"
+                          }}</span
+                        >
+                      </h3>
+                    </div>
+                    <div class="col-auto align-self-center">
+                      <div class="report-icon">
+                        <i class="fa-solid fa-flag"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-12 mb-3">
+              <div class="card">
+                <div class="card-body">
+                  <div class="row d-flex justify-content-center">
+                    <div class="col">
+                      <p class="text-dark mb-0">Konu</p>
+                      <h3 class="m-0">{{ q.name }}</h3>
+                    </div>
+                    <div class="col-auto align-self-center">
+                      <div class="report-icon">
+                        <i class="fa-regular fa-flag"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-12 mb-3">
+              <div class="card">
+                <div class="card-body">
+                  <div class="row d-flex justify-content-center">
+                    <div class="col">
+                      <p class="text-dark mb-0">Başlatma Tarihi</p>
+                      <h3 class="m-0">
+                        <div class="componentDate">
+                          {{ q.createdDate | date : "d/MM/yyyy H:mm" }}
+                        </div>
+                      </h3>
+                    </div>
+                    <div class="col-auto align-self-center">
+                      <div class="report-icon">
+                        <i class="fa-regular fa-calendar-days"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-12 mb-3">
+              <div class="card">
+                <div class="card-body">
+                  <div class="row d-flex justify-content-center">
+                    <div class="col">
+                      <p class="text-dark mb-0">Son Güncelleme</p>
+                      <h3 class="m-0">
+                        <div class="componentDate">
+                          {{ q.updatedDate | date : "d/MM/yyyy H:mm" }}
+                        </div>
+                      </h3>
+                    </div>
+                    <div class="col-auto align-self-center">
+                      <div class="report-icon">
+                        <i class="fa-regular fa-calendar-days"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ticket-history mb-3" *ngIf="!filterRoute">
+    <div class="row">
+      <div class="col-lg-9">
+        <div id="ticketDetail" class="card" *ngFor="let q of prdQuestions">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb" style="list-style: none">
+              <li class="breadcrumb-item">
+                <a
+                  class="text-secondary text-decoration-none"
+                  [routerLink]="['/hesabim']"
+                  routerLinkActive="router-link-active"
+                  >Hesabım</a
+                >
+              </li>
+              <li class="breadcrumb-item">
+                <a
+                  class="text-secondary text-decoration-none"
+                  [routerLink]="['/hesabim/sorularim']"
+                  routerLinkActive="router-link-active"
+                  >Sorularım</a
+                >
+              </li>
+              <li class="breadcrumb-item active" aria-current="page">
+                Destek Talebi
+              </li>
+            </ol>
+          </nav>
+          <div class="card-header bg-dark text-white">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="flex-column">
+                <div>
+                  <small
+                    style="font-size: 12px; font-weight: 600; font-size: 13px"
+                    >Konu: {{ q.name }}</small
+                  >
+                </div>
+              </div>
+              <button style="height: 45px" class="btn btn-secondary btn-sm">
+                <span><i class="fa-regular fa-envelope"></i></span>
+                {{ q.isAnswered == false ? "Cevap Bekleniyor" : "Cevaplandı" }}
+              </button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="ticket-messages">
+              <div>
+                <div class="ticket-message customer">
+                  <div class="t-message">
+                    <p>
+                      <span> {{ q.text }}</span> &nbsp;
+                    </p>
+                  </div>
+                  <div class="t-meta">
+                    {{ q.fullName
+                    }}<span
+                      ><div class="componentDate">
+                        {{ q.createdDate | date : "d/MM/yyyy H:mm" }}
+                      </div></span
+                    >
+                  </div>
+                </div>
+                <div *ngIf="q.isAnswered" class="ticket-message admin">
+                  <div class="t-message">
+                    <p>
+                      {{ q.answer }}
+                    </p>
+                  </div>
+                  <div class="t-meta">
+                    Eylül Modalife<span
+                      ><div class="componentDate">
+                        {{ q.createdDate | date : "d/MM/yyyy H:mm" }}
+                      </div></span
+                    >
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-3">
+        <div class="ticket-dashboard mb-3">
+          <div class="row" *ngFor="let q of prdQuestions">
+            <div class="col-lg-12 mb-3">
+              <div class="card">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <div class="d-flex justify-content-between">
+                        <button
+                          class="btn btn-sm btn-outline-danger"
+                          (click)="redirectToPrdQuestion(q.name, q.productId)"
+                        >
+                          Başka Soru Sor
+                        </button>
+                        <button
+                          (click)="redirectToProduct(q.name, q.productId)"
+                          class="btn btn-sm btn-danger ms-2"
+                        >
+                          Ürüne Git
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>

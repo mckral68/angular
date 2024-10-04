@@ -1,0 +1,55 @@
+<!-- src/app/product-form/product-form.component.html -->
+<div class="container mt-5">
+  <h2>Add New Product</h2>
+  <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+    <div class="mb-3">
+      <label for="productName" class="form-label">Product Name</label>
+      <input
+        id="productName"
+        formControlName="name"
+        type="text"
+        class="form-control"
+        required
+      />
+    </div>
+
+    <div *ngIf="attributes$ | async as attributes">
+      <div class="mb-3" *ngFor="let attribute of attributes">
+        <label class="form-label">{{ attribute.name }}</label>
+        <select
+          class="form-select"
+          [formControlName]="attribute.attributeID.toString()"
+          (change)="
+            onAttributeChange(attribute.attributeID, $event.target.value)
+          "
+          required
+        >
+          <option value="">Select {{ attribute.name }}</option>
+          <option
+            *ngFor="let value of attributeValues$ | async"
+            [value]="value.attributeValueID"
+          >
+            {{ value.value }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Stock Quantity</label>
+      <div
+        *ngFor="let attribute of attributes$ | async"
+        class="input-group mb-3"
+      >
+        <input
+          type="number"
+          class="form-control"
+          placeholder="Enter quantity for {{ attribute.name }}"
+          (change)="onStockChange(attribute.attributeID, $event.target.value)"
+        />
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Add Product</button>
+  </form>
+</div>

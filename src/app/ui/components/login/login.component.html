@@ -1,0 +1,218 @@
+<section class="pb-4">
+  <div class="bg-white">
+    <div
+      class="container pt-3 d-flex flex-column justify-content-between"
+      style="
+        height: 120px;
+        background-image: linear-gradient(
+          to bottom,
+          #ff5b51 2%,
+          #ff6737 36%,
+          #ff6a30 79%,
+          #ff7617 98%
+        );
+      "
+    >
+      <div class="d-flex align-items-center pt-2">
+        <h2 id="login-title" class="text-center text-white mx-auto">
+          Eylül Modalife
+        </h2>
+        <a routerLink="/">
+          <i style="color: #fff" class="fa-solid fa-xmark fa-2xl"></i>
+        </a>
+      </div>
+
+      <div class="d-block">
+        <ul class="nav nav-pills nav-justified" id="ex1" role="tablist">
+          <li class="nav-item" role="presentation">
+            <a
+              class="nav-link active"
+              id="tab-login"
+              style="
+                color: #f27a1a !important;
+                background-color: #fff !important;
+                border-radius: 12px 12px 0 0 !important;
+              "
+              data-mdb-toggle="pill"
+              role="tab"
+              aria-controls="pills-login"
+              aria-selected="true"
+              >Giriş</a
+            >
+          </li>
+          <li class="nav-item mx-2" role="presentation">
+            <a
+              class="nav-link"
+              id="tab-register"
+              style="
+                background-color: rgba(255, 255, 255, 0.2) !important;
+                color: #fff;
+                border-radius: 12px 12px 0 0 !important;
+              "
+              data-mdb-toggle="pill"
+              role="tab"
+              aria-controls="pills-register"
+              aria-selected="false"
+              routerLink="/kayit"
+              tabindex="-1"
+              >Kayıt</a
+            >
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <section id="login-page" class="d-flex justify-content-center">
+      <div class="container">
+        <div class="tab-content">
+          <div
+            class="tab-pane fade active show"
+            id="pills-login"
+            role="tabpanel"
+            aria-labelledby="tab-login"
+          >
+            <form [formGroup]="registerForm" (ngSubmit)="login()">
+              <div class="form-outline">
+                <label for="email" class="form-label">
+                  <i
+                    class="text-danger"
+                    *ngIf="
+                      !registerForm.get('email').valid &&
+                      registerForm.get('email').touched
+                    "
+                  >
+                    [Zorunlu Alan]</i
+                  >
+                </label>
+                <input
+                  id="email"
+                  placeholder="E-Posta"
+                  formControlName="email"
+                  name="email"
+                  class="form-control"
+                />
+                <div class="form-notch">
+                  <div class="form-notch-leading" style="width: 9px"></div>
+                  <div class="form-notch-middle" style="width: 114.4px"></div>
+                  <div class="form-notch-trailing"></div>
+                </div>
+              </div>
+              <!-- Password input -->
+              <div class="form-outline" id="sifre">
+                <label for="password" class="form-label">
+                  <i
+                    class="text-danger"
+                    *ngIf="
+                      !registerForm.get('password').valid &&
+                      registerForm.get('password').touched
+                    "
+                  >
+                    [Zorunlu Alan]</i
+                  >
+                </label>
+                <input
+                  type="password"
+                  placeholder="Şifre"
+                  formControlName="password"
+                  name="password"
+                  id="password"
+                  class="form-control"
+                  [type]="show ? 'text' : 'password'"
+                />
+                <div
+                  *ngIf="registerForm.get('password').value?.length > 0"
+                  class="toggle-password"
+                  (click)="showPass()"
+                >
+                  <i
+                    class="fa"
+                    [class]="{ 'fa-eye': show, 'fa-eye-slash': !show }"
+                  ></i>
+                </div>
+              </div>
+              <div class="row mb-4 d-flex">
+                <div class="col-md-6 d-flex justify-content-center">
+                  <a data-bs-toggle="modal" data-bs-target="#forgotPassword"
+                    >Şifremi Unuttum?</a
+                  >
+                </div>
+              </div>
+              <button
+                type="submit"
+                class="btn mb-3 w-100"
+                style="background-color: #f27a1a; color: #fff"
+              >
+                Giriş
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+    <p class="text-center fw-bold">Sosyal Medya Hesabınla Giriş Yapabilirsin</p>
+    <div class="d-flex align-content-center justify-content-center">
+      <asl-google-signin-button
+        type="icon"
+        size="large"
+      ></asl-google-signin-button>
+      <a
+        class="btn btn-primary facebook-btn mx-2"
+        (click)="facebookLogin()"
+        role="button"
+        style="color: #fff"
+        ><i class="fab fa-facebook-f"></i>
+      </a>
+    </div>
+    <div
+      class="modal fade"
+      id="forgotPassword"
+      tabindex="-1"
+      aria-labelledby="forgotPassword"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content text-center">
+          <div
+            class="modal-header h5 text-white bg-primary justify-content-center"
+          >
+            Şifremi Sıfırla
+          </div>
+          <div class="modal-body px-5">
+            <p class="py-2">
+              Şifrenizi sıfırlayabilmemiz için aşağıdaki alana hesabınıza ait
+              e-posta adresini giriniz.
+            </p>
+            <form [formGroup]="resetForm" (ngSubmit)="passwordReset()">
+              <div class="form-outline">
+                <span
+                  class="text-danger"
+                  *ngIf="
+                    resetForm.get('email').invalid &&
+                    resetForm.get('email').value?.length > 0
+                  "
+                >
+                  Lütfen geçerli bir e-posta giriniz</span
+                >
+                <input
+                  type="email"
+                  id="typeEmail"
+                  formControlName="email"
+                  placeholder="E-posta"
+                  class="form-control my-3"
+                />
+              </div>
+              <button
+                [disabled]="resetForm.get('email').invalid"
+                class="btn btn-danger w-100"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              >
+                Şifremi yenile
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

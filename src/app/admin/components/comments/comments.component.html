@@ -1,0 +1,113 @@
+<section class="container-xxl overflow-auto">
+  <div>
+    <h2>Bekleyen Yorumlar</h2>
+  </div>
+  <table class="table table-responsive">
+    <thead>
+      <tr>
+        <th scope="col"></th>
+        <th scope="col">Adı</th>
+        <th scope="col">Soyadı</th>
+        <th scope="col">İçeriği</th>
+        <th scope="col">Yıldız</th>
+        <th scope="col">Ürün</th>
+        <th scope="col">Tarih</th>
+        <th scope="col">Onayla</th>
+        <th scope="col">Reddet</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let c of comments; let i = index">
+        <th scope="row">{{ i + 1 }}</th>
+        <td>{{ c?.firstName }}</td>
+        <td>{{ c?.lastName }}</td>
+        <td>{{ c?.content }}</td>
+        <td>{{ c?.rankScore }}</td>
+        <td>{{ c?.name }}</td>
+        <td>{{ c?.createdDate | date : "d/MM/yyyy H:mm" }}</td>
+        <td>
+          <input
+            type="checkbox"
+            class="form-check-input"
+            [checked]="c?.isApproved && c?.isAdminAssessment"
+            (change)="approval(c?.id, (c.isApproved = true))"
+          />
+        </td>
+        <td>
+          <input
+            type="checkbox"
+            class="form-check-input"
+            [checked]="!c?.isApproved && c?.isAdminAssessment"
+            (change)="approval(c?.id, (c.isApproved = false))"
+          />
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <mat-paginator
+    (page)="pageChanged($event)"
+    [length]="100"
+    showFirstLastButtons
+    [pageSize]="10"
+    [pageSizeOptions]="[5, 10, 25, 100]"
+    aria-label="Select page"
+  >
+  </mat-paginator>
+</section>
+
+<section class="container-xxl overflow-auto">
+  <div>
+    <h2>Değerlendirilen Yorumlar</h2>
+  </div>
+  <table class="table table-responsive">
+    <thead>
+      <tr>
+        <th scope="col"></th>
+        <th scope="col">Adı</th>
+        <th scope="col">Soyadı</th>
+        <th scope="col">İçeriği</th>
+        <th scope="col">Yıldız</th>
+        <th scope="col">Ürün</th>
+        <th scope="col">Tarih</th>
+        <th scope="col">Onayla</th>
+        <th scope="col">Reddet</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let c of assessmentcomments; let i = index">
+        <th scope="row">{{ i + 1 }}</th>
+        <td>{{ c?.firstName }}</td>
+        <td>{{ c?.lastName }}</td>
+        <td>{{ c?.content }}</td>
+        <td>{{ c?.rankScore }}</td>
+        <td>{{ c?.name }}</td>
+        <td>{{ c?.createdDate | date : "d/MM/yyyy H:mm"  }}</td>
+        <td>
+          <input
+            type="checkbox"
+            class="form-check-input"
+            [checked]="c?.isApproved && c?.isAdminAssessment"
+            (change)="approval(c?.id, (c.isApproved = true))"
+          />
+        </td>
+        <td>
+          <input
+            type="checkbox"
+            class="form-check-input"
+            [checked]="!c?.isApproved && c?.isAdminAssessment"
+            (change)="approval(c?.id, (c.isApproved = false))"
+          />
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <mat-paginator
+    [pageSizeOptions]="[5, 10, 20]"
+    [length]="100"
+    [pageSize]="10"
+    showFirstLastButtons
+    (page)="pageChanged($event)"
+    aria-label="Periyodik öğelerin sayfasını seçin"
+  >
+  </mat-paginator>
+</section>

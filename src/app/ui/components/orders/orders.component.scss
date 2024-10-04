@@ -1,0 +1,117 @@
+.dropdown-bottom-sheet {
+  height: 40px;
+  border-radius: 4px;
+  border: 1px solid #e6e6e6;
+  background-color: #f5f5f5;
+  margin: 15px;
+}
+#order-page main .text {
+  color: #f27a1a;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 23px;
+}
+#order-page .action {
+  font-style: normal;
+  font-stretch: normal;
+  line-height: normal;
+  letter-spacing: normal;
+  text-align: right;
+  color: #333;
+}
+
+.dropdown-bottom-sheet .select-option {
+  display: flex;
+  flex: 1;
+}
+
+.dropdown-bottom-sheet .select-option select {
+  color: currentColor;
+  font-size: 14px;
+  font-weight: 600;
+  border: 0;
+  line-height: 23px;
+  background: transparent;
+  padding-left: 15px;
+  width: 100%;
+  height: 40px;
+  z-index: 2;
+}
+#order-page {
+  .row {
+    --bs-gutter-x: 1.4rem;
+  }
+}
+.checkout .address-wrapper .footer {
+  padding: 0 15px 15px;
+  display: flex;
+  flex-direction: row;
+}
+
+.checkout .quark-checkbox .icon-checkbox-checked {
+  color: #f27a1a;
+}
+
+.checkout .quark-checkbox .checkbox {
+  display: flex;
+  font-size: 20px;
+}
+
+.checkout .address-wrapper .footer .text {
+  padding-top: 3px;
+  padding-left: 10px;
+}
+
+.bottom-bar-wrapper {
+  position: fixed;
+  padding: 15px;
+  bottom: 0;
+  left: 0;
+  width: auto;
+  height: 74px;
+  right: 0;
+  background-color: #fff;
+  box-shadow: 0 2px 2px 0 rgb(0 0 0 / 24%), 0 0 2px 0 rgb(0 0 0 / 12%);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  z-index: 90;
+}
+
+.bottom-bar-wrapper .left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.bottom-bar-wrapper .left .price-text {
+  color: #666;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.bottom-bar-wrapper .left .price {
+  font-weight: 600;
+  font-size: 16px;
+  color: #333;
+  line-height: 20px;
+}
+
+.bottom-bar-wrapper .left .promotion-info.free-cargo-promotion {
+  color: #0bc15c;
+}
+
+.bottom-bar-wrapper .left .promotion-info {
+  font-size: 12px;
+  line-height: 15px;
+  font-weight: 600;
+}
+a {
+  text-decoration: none;
+}
+.contract {
+  margin-bottom: 80px;
+  display: flex;
+  flex-direction: column;
+}

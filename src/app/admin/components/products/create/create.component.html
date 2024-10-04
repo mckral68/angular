@@ -1,0 +1,249 @@
+<section id="prd-create">
+  <div class="accordion" id="createPrdForm">
+    <div class="accordion-item">
+      <h2 class="accordion-header" id="headingOne">
+        <button
+          class="accordion-button"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#collapsePrd"
+          aria-expanded="false"
+          (click)="crtPrd($event.srcElement['ariaExpanded'])"
+          aria-controls="collapsePrd"
+        >
+          Ürün Eklemek için tıklayınız
+        </button>
+      </h2>
+      <div
+        id="collapsePrd"
+        class="accordion-collapse collapse"
+        aria-labelledby="headingOne"
+        data-bs-parent="#createPrdForm"
+      >
+        <div class="accordion-body">
+          <main>
+            <h4 class="text-center">
+              {{ isEditMode ? "Güncelle" : "Ürün Ekle" }}
+            </h4>
+            <form
+              [formGroup]="productForm"
+              (ngSubmit)="
+                !isEditMode
+                  ? create(productForm.value)
+                  : updateProduct(productForm.value)
+              "
+            >
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label for="productName" class="form-label">Ürün Adı</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="productName"
+                      aria-describedby="productName"
+                      formControlName="name"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label for="description" class="form-label"
+                      >Ürün Açıklaması</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="description"
+                      aria-describedby="description"
+                      formControlName="description"
+                    />
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <mat-form-field appearance="fill">
+                    <mat-label>Kategori Seçimi</mat-label>
+                    <mat-select
+                      formControlName="categoryIds"
+                      multiple
+                      [compareWith]="compareObjects"
+                    >
+                      <mat-option
+                        *ngFor="let c of categoryList; let i = index"
+                        [value]="c?.id"
+                        >{{ c?.name }}</mat-option
+                      >
+                    </mat-select>
+                  </mat-form-field>
+                </div>
+                @for (item of attributes; track $index) {
+                <div class="accordion-item">
+                  <h2 class="accordion-header">
+                    <button
+                      class="accordion-button"
+                      type="button"
+                      [attr.data-bs-target]="'#' + $index"
+                      [attr.aria-controls]="$index"
+                      data-bs-toggle="collapse"
+                      aria-expanded="true"
+                    >
+                      {{ item.value }}
+                    </button>
+                  </h2>
+                  <div
+                    [id]="$index"
+                    class="accordion-collapse collapse"
+                    data-bs-parent="#variation"
+                  >
+                    <div class="accordion-body">
+                      <div class="col-md-6">
+                        <div class="mb-3">
+                          <label for="regularPrice" class="form-label"
+                            >Normal Fiyatı</label
+                          >
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="regularPrice"
+                            [value]="productForm.controls['regularPrice'].value"
+                            aria-describedby="regularPrice"
+                            formControlName="regularPrice"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="mb-3">
+                          <label for="salePrice" class="form-label"
+                            >Satış Fiyatı</label
+                          >
+                          <input
+                            type="number"
+                            class="form-control"
+                            id="salePrice"
+                            [value]="productForm.controls['salePrice'].value"
+                            aria-describedby="salePrice"
+                            formControlName="salePrice"
+                          />
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <label class="form-label" for="qty">Stok Miktarı</label>
+                        <input
+                          id="qty"
+                          formControlName="qty"
+                          class="form-control"
+                          type="number"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                }
+
+                <div formGroupName="variations">
+                  <div class="col-md-6">
+                    <label for="">Renk ve Beden İşlemleri</label>
+                    <div class="row mb-3">
+                      <div class="col-5">
+                        <select
+                          class="form-select"
+                          aria-label="colors"
+                          formControlName="colorId"
+                        >
+                          <option
+                            value="1"
+                            *ngFor="let v of attributes"
+                            [value]="v.id"
+                          >
+                            {{ v.value }}
+                          </option>
+                        </select>
+                      </div>
+                      <div class="col-5">
+                        <select
+                          class="form-select ms-1"
+                          aria-label="sizes"
+                          formControlName="sizeId"
+                        >
+                          <option
+                            value="1"
+                            *ngFor="let v of values"
+                            [value]="v.id"
+                          >
+                            {{ v.value }}
+                          </option>
+                        </select>
+                      </div>
+
+                      <div class="col-md-4">
+                        <div class="form-check ms-2">
+                          <label class="form-check-label" for="isDiscount">
+                            İndirim
+                          </label>
+                          <input
+                            class="form-check-input p-2"
+                            type="checkbox"
+                            [checked]="productForm.get('isDiscounted')"
+                            id="isDiscounted"
+                            formControlName="isDiscounted"
+                            [value]="productForm.get('isDiscounted')"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-md-6">
+                    <div
+                      id="varstock"
+                      class="accordion-collapse collapse show"
+                      data-bs-parent="#varstock"
+                    >
+                      <div class="accordion-body mb-2">
+                        <div class="row">
+                          <div class="col-4 mt-auto text-center">
+                            <button
+                              class="btn btn-success"
+                              type="button"
+                              (click)="saveVariation()"
+                            >
+                              Kaydet
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-6">
+                  <div class="row">
+                    <div class="col-6 col-md-6">
+                      <div class="form-check">
+                        <label class="form-check-label" for="isHome">
+                          Anasayfa
+                        </label>
+                        <input
+                          class="form-check-input p-2"
+                          type="checkbox"
+                          [checked]="productForm.get('isHome').value"
+                          id="isHome"
+                          formControlName="isHome"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <button class="btn btn-danger w-100" type="submit">
+                    Ürün Ekle
+                  </button>
+                </div>
+              </div>
+            </form>
+          </main>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,140 @@
+<nav class="navbar bg-light sticky-top" id="admin-layout">
+  <div class="container-fluid">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="offcanvas"
+      data-bs-target="#offcanvasNavbar"
+      aria-controls="offcanvasNavbar"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div
+      class="offcanvas offcanvas-start text-bg-dark"
+      tabindex="-1"
+      id="offcanvasNavbar"
+      aria-labelledby="offcanvasNavbarLabel"
+    >
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">
+          Yönetim Paneli
+        </h5>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="offcanvas"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="offcanvas-body">
+        <ul class="list-unstyled mb-0 pb-3 pb-md-2 pe-lg-2">
+          <li>
+            <strong class="d-flex w-100 align-items-center fw-semibold"
+              ><a routerLink="/" aria-label="Close" class="nav-link">
+                Siteye Dön
+              </a>
+            </strong>
+            <hr />
+          </li>
+          <li>
+            <strong class="d-flex w-100 align-items-center fw-semibold"
+              ><a routerLink="customers" class="nav-link" aria-label="Close">
+                Müşteriler
+              </a>
+            </strong>
+            <hr />
+          </li>
+          <li>
+            <strong class="d-flex w-100 align-items-center fw-semibold">
+              <a routerLink="products" class="nav-link">Tüm ürünler </a>
+            </strong>
+            <hr />
+          </li>
+          <li>
+            <strong class="d-flex w-100 align-items-center fw-semibold">
+              <a routerLink="comments" class="nav-link">Ürün Yorumları </a>
+            </strong>
+            <hr />
+          </li>
+          <li>
+            <strong class="d-flex w-100 align-items-center fw-semibold">
+              <a routerLink="questions" class="nav-link">Ürün Soruları </a>
+            </strong>
+            <hr />
+          </li>
+          <li>
+            <strong class="d-flex w-100 align-items-center fw-semibold">
+              <a routerLink="sellerquestions" class="nav-link"
+                >Müşteri Soruları
+              </a>
+            </strong>
+            <hr />
+          </li>
+          <li>
+            <strong class="d-flex w-100 align-items-center fw-semibold">
+              <a routerLink="attribute" class="nav-link"> Ürün varyasyon </a>
+            </strong>
+            <hr />
+          </li>
+          <li>
+            <strong class="d-flex w-100 align-items-center fw-semibold"
+              ><a routerLink="category" class="nav-link">
+                Kategori İşlemleri
+              </a>
+            </strong>
+            <hr />
+          </li>
+          <li>
+            <strong class="d-flex w-100 align-items-center fw-semibold"
+              ><a routerLink="discounts" class="nav-link">
+                İndirim İşlemleri
+              </a>
+            </strong>
+            <hr />
+          </li>
+          <li>
+            <strong class="d-flex w-100 align-items-center fw-semibold"
+              ><a routerLink="orders" class="nav-link"> Siparişler </a>
+            </strong>
+            <hr />
+          </li>
+          <li>
+            <strong class="d-flex w-100 align-items-center fw-semibold"
+              ><a routerLink="shipment" class="nav-link"> Kargo İşlemleri </a>
+            </strong>
+            <hr />
+          </li>
+          <li>
+            <strong class="d-flex w-100 align-items-center fw-semibold"
+              ><a routerLink="subjects" class="nav-link"> Mesaj Konuları </a>
+            </strong>
+            <hr />
+          </li>
+          <li>
+            <strong class="d-flex w-100 align-items-center fw-semibold"
+              ><a routerLink="authorize-menu" class="nav-link">
+                Yetkilendirme
+              </a>
+            </strong>
+            <hr />
+          </li>
+          <li>
+            <strong class="d-flex w-100 align-items-center fw-semibold"
+              ><a routerLink="roles" class="nav-link"> Roller </a>
+            </strong>
+            <hr />
+          </li>
+          <li>
+            <strong class="d-flex w-100 align-items-center fw-semibold"
+              ><a routerLink="users" class="nav-link"> Kullanıcılar </a>
+            </strong>
+            <hr />
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+<div>
+  <router-outlet></router-outlet>
+</div>

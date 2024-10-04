@@ -1,0 +1,111 @@
+#details-comp .modal {
+  height: auto;
+  position: absolute;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: 100%;
+  --bs-modal-border-color: transparent;
+  --bs-modal-header-border-color: transparent;
+  --bs-modal-bg: transparent;
+}
+#details-comp .modal .modal-header {
+  opacity: 1;
+}
+.col-3,
+.col-6,
+.col-9 {
+  --bs-gutter-x: 0.8rem;
+}
+
+#details-comp #right-icon {
+  position: absolute;
+  right: 2px;
+  bottom: 50% !important;
+  align-items: center;
+  cursor: pointer;
+}
+#details-comp #left-icon {
+  position: absolute;
+  left: 2px;
+  bottom: 50% !important;
+  align-items: center;
+  cursor: pointer;
+}
+#details-comp .img-big-wrap img {
+  transition: 0.25s linear;
+}
+#details-comp .img-big-wrap:hover img {
+  transform: scale(1.06);
+}
+#details-comp .img-thumbnail {
+  background-color: #fff;
+  border: 1px solid #dee2e6;
+  border-radius: 0.35rem;
+  max-width: max-content;
+  max-height: max-content;
+}
+#details-comp .gallery-wrap .img-big-wrap p {
+  text-align: center;
+  display: block;
+  max-width: max-content;
+}
+.rating-wrap i {
+  position: relative;
+  display: inline-block;
+  font-size: 1.2rem;
+  color: #e9e9e9;
+}
+.rating-wrap .filled {
+  color: #ffc000;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.label-rating {
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.addbasket-btn {
+  background-color: orange !important;
+  color: #fff;
+  border: 1px solid #f27a1a;
+  width: 170px;
+}
+.free-cargo {
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 15px;
+}
+.ng-image-slider .ng-image-slider-container .main .main-inner .img-div {
+  box-shadow: none !important;
+}
+.ng-image-slider .ng-image-slider-container .main .main-inner .img-div img {
+  width: 88% !important;
+  object-fit: contain !important;
+}
+.about-questions .answer {
+  border-left: 1px solid #e6e6e6;
+  padding-left: 15px;
+  word-break: break-word;
+  margin-top: 15px;
+}
+.about-questions .answer .answer-text,
+.about-questions .question-text {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  letter-spacing: 0.35px;
+}
+.question-products {
+  background-color: #fff;
+  padding: 0 14px;
+  font-size: 14px;
+  line-height: 18px;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid #e9e9e9;
+}

@@ -1,0 +1,6 @@
+#sellerAsk .table > :not(caption) > * > * {
+  background-color: transparent;
+}
+::-webkit-scrollbar {
+  display: none;
+}

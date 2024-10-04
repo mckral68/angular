@@ -1,0 +1,54 @@
+<div class="container-xxl">
+  <form
+    class="col-lg-6"
+    [formGroup]="subjectForm"
+    (ngSubmit)="
+      updMode == false
+        ? createSubject(subjectForm.value)
+        : updateSubject(subjectForm.value)
+    "
+  >
+    <div class="m-2 input-group">
+      <input
+        placeholder="Konu"
+        type="text"
+        class="form-control"
+        id="name"
+        formControlName="name"
+      />
+      <button
+        type="submit"
+        class="btn"
+        [class]="{ 'btn-danger': updMode, 'btn-primary': !updMode }"
+      >
+        {{ updMode ? "Güncelle" : "Oluştur" }}
+      </button>
+    </div>
+  </form>
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col">Konu Adı</th>
+          <th scope="col">İşlemler</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let d of subjects; let i = index">
+          <th scope="row">{{ i + 1 }}</th>
+          <td>{{ d.name }}</td>
+          <td class="d-flex flex-column">
+            <button class="btn btn-primary btn-sm">Konuyu Düzenle</button>
+            <button
+              class="btn btn-danger btn-sm mt-1 mt-lg-0 mx-lg-1"
+              (click)="removeSubject(d.id)"
+            >
+              Soruyu Sil
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

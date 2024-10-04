@@ -1,0 +1,28 @@
+.rating-wrap i {
+  position: relative;
+  display: inline-block;
+  font-size: 1.2rem;
+  color: #e9e9e9;
+}
+.rating-wrap .filled {
+  color: #ffc000;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.row .checkbox-wrapper {
+  display: flex;
+  margin-top: 15px;
+}
+.row .checkbox-wrapper .chexbox-text {
+  font-size: 12px;
+  line-height: 16px;
+  color: #666;
+  font-weight: 400;
+  margin-top: 3px;
+}
+#comment-prd .mb-2 {
+  height: 32px;
+  border: 0;
+  border-bottom: 1px solid #e6e6e6;
+}

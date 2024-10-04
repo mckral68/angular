@@ -1,0 +1,253 @@
+<main>
+  <section class="pb-4">
+    <div class="bg-white">
+      <div
+        class="container pt-3 d-flex flex-column justify-content-between"
+        style="
+          height: 120px;
+          background-image: linear-gradient(
+            to bottom,
+            #ff5b51 2%,
+            #ff6737 36%,
+            #ff6a30 79%,
+            #ff7617 98%
+          );
+        "
+      >
+        <div class="d-flex align-items-center pt-2">
+          <h2 id="login-title" class="text-center text-white mx-auto">
+            Eylül Modalife
+          </h2>
+          <a routerLink="/">
+            <i style="color: #fff" class="fa-solid fa-xmark fa-2xl"></i>
+          </a>
+        </div>
+        <div class="d-block">
+          <ul class="nav nav-pills nav-justified" id="ex1" role="tablist">
+            <li class="nav-item" role="presentation">
+              <a
+                class="nav-link active"
+                id="tab-login"
+                style="
+                  background-color: rgba(255, 255, 255, 0.2) !important;
+                  color: #fff;
+                  border-radius: 12px 12px 0 0 !important;
+                "
+                data-mdb-toggle="pill"
+                role="tab"
+                routerLink="/giris"
+                aria-controls="pills-login"
+                aria-selected="true"
+                >Giriş</a
+              >
+            </li>
+            <li class="nav-item mx-2" role="presentation">
+              <a
+                class="nav-link"
+                id="tab-register"
+                style="
+                  color: #f27a1a !important;
+                  background-color: #fff !important;
+                  border-radius: 12px 12px 0 0 !important;
+                "
+                data-mdb-toggle="pill"
+                role="tab"
+                aria-controls="pills-register"
+                aria-selected="false"
+                tabindex="-1"
+                >Kayıt</a
+              >
+            </li>
+          </ul>
+        </div>
+      </div>
+      <section class="container">
+        <div class="tab-content">
+          <div
+            class="tab-pane fad active show"
+            id="pills-register"
+            role="tabpanel"
+            aria-labelledby="tab-register"
+          >
+            <form
+              [formGroup]="registerForm"
+              (ngSubmit)="register(registerForm.value)"
+            >
+              <div class="form-outline mb-1">
+                <label
+                  class="form-label"
+                  for="firstName"
+                  style="margin-left: 0px"
+                >
+                  <i
+                    class="text-danger"
+                    *ngIf="
+                      !registerForm.get('firstName').valid &&
+                      registerForm.get('firstName').touched
+                    "
+                  >
+                    [Zorunlu Alan]
+                  </i>
+                </label>
+                <input
+                  placeholder="Ad"
+                  type="text"
+                  id="firstName"
+                  formControlName="firstName"
+                  name="firstName"
+                  class="form-control"
+                />
+              </div>
+              <!-- Username input -->
+              <div class="form-outline mb-1">
+                <label
+                  class="form-label"
+                  for="lastName"
+                  style="margin-left: 0px"
+                >
+                  <i
+                    class="text-danger"
+                    *ngIf="
+                      !registerForm.get('lastName').valid &&
+                      registerForm.get('lastName').touched
+                    "
+                  >
+                    [Zorunlu Alan]
+                  </i>
+                </label>
+                <input
+                  placeholder="Soyad"
+                  type="text"
+                  formControlName="lastName"
+                  name="lastName"
+                  id="lastName"
+                  class="form-control"
+                />
+              </div>
+              <!-- Email input -->
+              <div class="form-outline mb-1">
+                <label for="email" class="form-label">
+                  <i
+                    class="text-danger"
+                    *ngIf="
+                      !registerForm.get('email').valid &&
+                      registerForm.get('email').touched
+                    "
+                    >[Zorunlu Alan]
+                  </i>
+                </label>
+                <input
+                  placeholder="E-Posta"
+                  formControlName="email"
+                  name="email"
+                  type="email"
+                  id="registerEmail"
+                  class="form-control"
+                />
+              </div>
+              <div class="form-outline mb-1" id="sifre">
+                <label for="password" class="form-label">
+                  <i
+                    class="text-danger"
+                    *ngIf="
+                      registerForm.get('password').pristine &&
+                      registerForm.get('password').touched
+                    "
+                  >
+                    [Zorunlu Alan]
+                  </i>
+                </label>
+                <input
+                  type="password"
+                  placeholder="Şifre"
+                  formControlName="password"
+                  name="password"
+                  id="password"
+                  class="form-control"
+                  [type]="show ? 'text' : 'password'"
+                />
+                <div
+                  class="toggle-password"
+                  (click)="showPass('pass')"
+                  *ngIf="registerForm.get('password').value?.length > 0"
+                >
+                  <i
+                    class="fa"
+                    [class]="{ 'fa-eye': show, 'fa-eye-slash': !show }"
+                  ></i>
+                </div>
+                <span
+                  class="text-danger"
+                  *ngIf="
+                    registerForm.get('password').dirty &&
+                    registerForm.get('password')?.value?.length > 0 &&
+                    registerForm.get('password')?.value?.length < 9
+                  "
+                >
+                  Şifre uzunluğu en az 8 karakter olmalıdır En az bir büyük harf
+                  ve özel karakter olmalıdır.
+                </span>
+              </div>
+              <div class="form-outline mb-3" id="sifre">
+                <label for="PasswordConfirm" class="form-label"> </label>
+                <input
+                  type="Password"
+                  placeholder="Şifre(Tekrar)"
+                  formControlName="passwordConfirm"
+                  name="PasswordConfirm"
+                  id="PasswordConfirm"
+                  class="form-control"
+                  [type]="reshow ? 'text' : 'password'"
+                />
+                <div
+                  *ngIf="registerForm.get('passwordConfirm').value?.length > 0"
+                  class="toggle-password"
+                  (click)="showPass('repass')"
+                >
+                  <i
+                    class="fa"
+                    [class]="{ 'fa-eye': reshow, 'fa-eye-slash': !reshow }"
+                  ></i>
+                </div>
+                <div
+                  *ngIf="
+                    registerForm.get('passwordConfirm').dirty &&
+                    registerForm.get('password').value !==
+                      registerForm.get('passwordConfirm').value
+                  "
+                >
+                  <small class="text-danger">Parolalar Eşleşmiyor </small>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6 px-2">
+                  <button
+                    type="submit"
+                    class="btn mb-2 w-100"
+                    style="background-color: #f27a1a; color: #fff"
+                  >
+                    Kaydol
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+  <p class="text-center fw-bold">Sosyal Medya Hesabınla Kayıt Olabilirsin</p>
+  <div class="d-flex align-content-center justify-content-center">
+    <asl-google-signin-button
+      type="icon"
+      size="large"
+    ></asl-google-signin-button>
+    <a
+      class="btn btn-primary facebook-btn mx-2"
+      (click)="facebookLogin()"
+      role="button"
+      style="color: #fff"
+      ><i class="fab fa-facebook-f"></i>
+    </a>
+  </div>
+</main>

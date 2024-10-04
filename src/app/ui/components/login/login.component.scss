@@ -1,0 +1,58 @@
+#login-page .nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+  --mdb-nav-pills-link-active-bg: #e3ebf7;
+  --mdb-nav-pills-link-active-color: #285192;
+  background-color: var(--mdb-nav-pills-link-active-bg);
+  color: var(--mdb-nav-pills-link-active-color);
+}
+#login-page .nav-item .nav-link {
+  font-size: var(--mdb-nav-link-font-size);
+  font-weight: var(--mdb-nav-link-font-weight);
+  color: rgba(0, 0, 0, 0.55);
+  background-color: #f7f7f7;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
+}
+#login-page a {
+  text-decoration: none;
+  color: #3b71ca;
+  cursor: pointer;
+}
+
+#login-page .form-outline input {
+  font-size: 17px;
+  padding: 10px;
+  box-sizing: border-box;
+  background: #f5f5f5;
+  outline: none;
+  text-indent: 11px;
+  width: 100%;
+}
+#login-page .form-outline input.ng-invalid.ng-touched {
+  border-left: 5px solid #a94442;
+}
+#sifre {
+  position: relative;
+}
+#login-page .form-outline .toggle-password {
+  position: absolute;
+  width: 35px;
+  height: 40px;
+  top: 30px;
+  right: 10px;
+  border-radius: 50%;
+  line-height: 35px;
+  font-size: 20px;
+  cursor: pointer;
+}
+#login-title {
+  position: relative;
+}
+#login-title:before {
+  position: absolute;
+  left: 100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent 0%, #fff 20%, #fff 70%);
+  animation: animate 15s linear alternate-reverse;
+}

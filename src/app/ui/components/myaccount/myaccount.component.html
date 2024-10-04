@@ -1,0 +1,174 @@
+<main class="my-account-layout container-xxl mx-auto" id="my-account">
+  <div class="border mb-2 rounded">
+    <div
+      class="user-menu"
+      style="line-height: normal"
+      data-tracker="seen:PageView"
+    >
+      <div
+        class="user-content d-flex justify-content-between p-2 border-bottom"
+      >
+        <div class="navigate">
+          <a routerLink="/">
+            <i class="fa-solid fa-angle-left" style="font-size: 18px"></i>
+          </a>
+        </div>
+        <div class="text-center">
+          <div style="font-weight: 600" class="text-nowrap">
+            {{ user?.firstName }} {{ user?.lastName }}
+          </div>
+          <div class="sub text">{{ user?.email }}</div>
+        </div>
+        <a class="verify" (click)="!user.emailConfirmed ? confirmEmail() : ''"
+          >{{ user?.emailConfirmed ? "ONAYLANDI" : "DOĞRULA" }}
+        </a>
+      </div>
+      <div class="d-flex p-2">
+        <a href="/hesabim/indirim-kuponlari" class="user-menu-item">
+          <div class="icon-wrapper">
+            <i
+              class="fa-solid fa-ticket"
+              style="font-size: 18px; color: red"
+            ></i>
+          </div>
+          <div class="text">İndirim Kuponlarım</div> </a
+        ><a href="/onceden-gezdiklerim" class="user-menu-item">
+          <div class="icon-wrapper">
+            <i class="fa-regular fa-clock fa-lg"></i>
+          </div>
+          <div class="text">Önceden Gezdiklerim</div> </a
+        ><a
+          [routerLink]="isAdmin ? ['/admin'] : 'sorularim'"
+          routerLinkActive="router-link-active"
+          class="user-menu-item"
+        >
+          <div class="icon-wrapper">
+            <i
+              *ngIf="!isAdmin"
+              class="q-icon icon-diamond-stroke black"
+              style="font-size: 16px"
+            ></i>
+            <i *ngIf="isAdmin" class="fa-solid fa-list-check"></i>
+            <i *ngIf="!isAdmin" class="fa-regular fa-circle-question"></i>
+          </div>
+          <div class="text">
+            {{ isAdmin ? "Yönetim Paneli" : "Sorularım" }}
+          </div> </a
+        ><a [routerLink]="['/hesabim/favorilerim']" class="user-menu-item">
+          <div class="icon-wrapper">
+            <i class="fa-regular fa-heart fa-lg"></i>
+          </div>
+          <div class="text">Favoriler</div>
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="orders-menu">
+    <div class="title">Siparişlerim</div>
+    <div class="content">
+      <a
+        routerLink="/hesabim/siparislerim"
+        [queryParams]="{ filter: 'All' }"
+        class="order-menu-item"
+      >
+        <i
+          class="fa-solid fa-box q-icon icon white"
+          style="font-size: 16px"
+        ></i>
+        <div class="text">Tüm Siparişlerim</div> </a
+      ><a
+        routerLink="/hesabim/siparislerim"
+        [queryParams]="{ filter: 'Cancelled' }"
+        class="order-menu-item"
+      >
+        <i
+          class="fa-solid fa-clock-rotate-left q-icon white icon"
+          style="font-size: 16px"
+        ></i>
+        <div class="text">İptal & İadeler</div> </a
+      ><a routerLink="/hesabim/degerlendirmelerim" class="order-menu-item">
+        <i
+          class="fa-regular fa-envelope white icon q-icon"
+          style="font-size: 18px"
+        >
+        </i>
+        <div class="text">Yorumlarım</div>
+      </a>
+      <a href="/tekrar-al" class="order-menu-item fixed">
+        <i class="fa-solid fa-box-archive q-icon white icon"></i>
+        <div class="text">Tekrar Satın Al</div>
+      </a>
+    </div>
+  </div>
+  <div class="help-menu">
+    <div class="title">Hesabım &amp; Yardım</div>
+    <div class="content">
+      <a routerLink="/hesabim/kullaniciBilgileri" class="help-menu-item">
+        <div class="info">
+          <i class="fa-regular fa-user"></i>
+          <div class="text">Kullanıcı Bilgilerim</div>
+        </div>
+        <i
+          class="q-icon icon-forward-button dark-gray"
+          style="font-size: 12px"
+        ></i>
+      </a>
+      <a routerLink="/hesabim/adresBilgileri" class="help-menu-item">
+        <div class="info">
+          <i class="fa-solid fa-location-dot"></i>
+          <div class="text">Adres Bilgilerim</div>
+        </div>
+        <i
+          class="q-icon icon-forward-button dark-gray"
+          style="font-size: 12px"
+        ></i>
+      </a>
+      <a href="/hesabim/KrediKartlarim" class="help-menu-item">
+        <div class="info">
+          <i class="fa-regular fa-credit-card"></i>
+          <div class="text">Kayıtlı Kartlarım</div>
+        </div>
+        <i
+          class="q-icon icon-forward-button dark-gray"
+          style="font-size: 12px"
+        ></i>
+      </a>
+      <a href="/hesabim/duyurutercihleri" class="help-menu-item">
+        <div class="info">
+          <i class="fa-solid fa-bell"></i>
+          <div class="text">Duyuru Tercihlerim</div>
+        </div>
+        <i
+          class="q-icon icon-forward-button dark-gray"
+          style="font-size: 12px"
+        ></i>
+      </a>
+      <a [routerLink]="['/SifreGuncelleme']" class="help-menu-item">
+        <div class="info">
+          <i class="fa-solid fa-lock"></i>
+          <div class="text">Şifre Değişikliği</div>
+        </div>
+        <i
+          class="q-icon icon-forward-button dark-gray"
+          style="font-size: 12px"
+        ></i>
+      </a>
+      <a [routerLink]="['/faq']" class="help-menu-item">
+        <div class="info">
+          <i class="fa-regular fa-circle-question"></i>
+          <div class="text">Yardım</div>
+        </div>
+        <i
+          class="q-icon icon-forward-button dark-gray"
+          style="font-size: 12px"
+        ></i>
+      </a>
+    </div>
+  </div>
+  <div class="mb-2 rounded border" (click)="signOut()">
+    <div class="d-flex justify-content-between p-2 fw-bold">
+      <a class="text">Çıkış Yap</a>
+      <i class="fa-solid fa-arrow-right-from-bracket"></i>
+    </div>
+  </div>
+</main>

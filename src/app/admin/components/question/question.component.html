@@ -1,0 +1,119 @@
+<div class="container-xxl">
+  <div class="accordion" id="accordionExample">
+    <div class="accordion-item" *ngIf="openAnswer">
+      <h2 class="accordion-header" id="discount">
+        <button
+          class="accordion-button"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#answerQuestion"
+          aria-expanded="true"
+          aria-controls="answerQuestion"
+        >
+          Müşteri Sorusuna Yanıt Ver
+        </button>
+      </h2>
+      <div
+        id="answerQuestion"
+        class="accordion-collapse collapse show"
+        aria-labelledby="discount"
+        data-bs-parent="#discount"
+      >
+        <div class="accordion-body">
+          <form
+            [formGroup]="answerForm"
+            (ngSubmit)="
+              updMode == false
+                ? createAnswer(answerForm.value)
+                : updateAnswer(answerForm.value)
+            "
+          >
+            <div class="mb-3">
+              <label for="answer" class="form-label">Cevap</label>
+              <textarea
+                type="text"
+                class="form-control"
+                id="answer"
+                formControlName="answer"
+              ></textarea>
+            </div>
+
+            <button
+              type="submit"
+              class="btn"
+              [class]="{ 'btn-danger': updMode, 'btn-primary': !updMode }"
+            >
+              {{ updMode ? "Cevabı Güncelle" : "Cevabı Gönder" }}
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 col-lg-5 col-xl-4">
+      <select
+        class="form-select"
+        aria-label="soru filtreleme"
+        (click)="getWaitAnswer($event.target['value'])"
+      >
+        <option selected disabled>Filtrele</option>
+        <option value="0">Cevap Bekleyenler</option>
+        <option value="1">Cevaplanlar</option>
+        <option value="2">Tümü</option>
+      </select>
+    </div>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-striped w-auto">
+      <thead>
+        <tr>
+          <th scope="col"></th>
+          <th scope="col">Ürün Adı</th>
+          <th scope="col">Adı Soyadı</th>
+          <th scope="col">Soru İçeriği</th>
+          <th scope="col">Cevabım</th>
+          <th scope="col">Soru Sorma Tarihi</th>
+          <th scope="col">İşlemler</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let d of questions; let i = index">
+          <th scope="row">{{ i + 1 }}</th>
+          <td>
+            <span (click)="redirectPrd(d.name, d.productId)"
+              >{{ d.name }}
+            </span>
+          </td>
+          <td>{{ d.fullName }}</td>
+          <td>
+            <span>
+              {{ d.text }}
+            </span>
+          </td>
+          <td>{{ d.answer }}</td>
+          <td>{{ d.createdDate | date : "d/MM/yyyy H:mm" }}</td>
+          <td class="d-flex flex-column">
+            <button
+              class="btn btn-primary mb-xl-0"
+              *ngIf="!d.isAnswered"
+              (click)="passAnswer(d.id)"
+            >
+              Cevap Ver
+            </button>
+            <button
+              class="btn btn-primary"
+              *ngIf="d.isAnswered"
+              (click)="editAnswer(d)"
+            >
+              Cevabı Düzenle
+            </button>
+            <button class="btn btn-danger mt-1" (click)="removeQuestion(d.id)">
+              Soruyu Sil
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

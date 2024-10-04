@@ -1,0 +1,195 @@
+<div class="user-info-layout">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="d-flex align-items-center">
+          <a [routerLink]="['/hesabim']">
+            <i class="fa-solid fa-xl fa-chevron-left"></i>
+          </a>
+          <h5 class="mx-auto">Kullanıcı Bilgilerim</h5>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container" id="userInfo">
+    <form
+      [formGroup]="userInfo"
+      (ngSubmit)="update(userInfo.value)"
+      class="row mb-3 pt-2"
+    >
+      <div class="col-sm-6">
+        <label for="firstname" class="col-sm-2 col-form-label"
+          >Adı
+          <i
+            class="text-danger"
+            *ngIf="
+              userInfo.get('firstName').invalid &&
+              userInfo.get('firstName').touched
+            "
+          >
+            [Zorunlu Alan]
+          </i>
+        </label>
+        <div class="col-sm-10">
+          <input
+            type="text"
+            formControlName="firstName"
+            name="FirstName"
+            class="form-control"
+            id="firstname"
+            [value]="user?.firstName"
+          />
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <label for="lastname" class="col-sm-2 col-form-label"
+          >Soyadı
+          <i
+            class="text-danger"
+            *ngIf="
+              userInfo.get('lastName').invalid &&
+              userInfo.get('lastName').touched
+            "
+          >
+            [Zorunlu Alan]
+          </i>
+        </label>
+        <div class="col-sm-10">
+          <input
+            type="text"
+            formControlName="lastName"
+            class="form-control"
+            name="LastName"
+            id="lastname"
+            [value]="user?.lastName"
+          />
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <label for="email" class="col-sm-2 col-form-label"
+          >Email
+          <i
+            class="text-danger"
+            *ngIf="
+              userInfo.get('email').invalid && userInfo.get('email').touched
+            "
+          >
+            [Zorunlu Alan]
+          </i>
+        </label>
+        <div class="col-sm-10">
+          <input
+            type="email"
+            formControlName="email"
+            maxlength="40"
+            name="Email"
+            [value]="email"
+            class="form-control"
+            id="email"
+          />
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <label for="phone" class="col-sm-12 col-form-label"
+          >Cep Telefonu
+          <i
+            class="text-danger"
+            *ngIf="
+              userInfo.get('phone').invalid && userInfo.get('phone').touched
+            "
+          >
+            [Zorunlu Alan]
+          </i></label
+        >
+        <div class="col-sm-10">
+          <input
+            type="text"
+            class="form-control"
+            name="Phone"
+            formControlName="phone"
+            (keydown.code.Backspace)="userInfo.get('phone')?.value?.length >= 3"
+            [value]="user?.phone || ''"
+            (focus)="
+              userInfo.get('phone')?.value?.length <= 1 ? pc($event) : ''
+            "
+            id="phone"
+            placeholder="0(5__) ___ __ __"
+            mask="0(000) 000 00 00"
+          />
+        </div>
+      </div>
+      <div class="col-sm-6 mt-2">
+        <div id="birthDay">
+          <label for="birthday" class="col-sm-12 col-form-label">
+            Doğum Günü
+          </label>
+          <i
+            class="text-danger"
+            *ngIf="
+              userInfo.get('birthDay').invalid &&
+              userInfo.get('birthDay').touched
+            "
+          >
+            [Zorunlu Alan]
+          </i>
+        </div>
+        <div
+          class="row mb-2"
+          style="--bs-gutter-x: 1.2rem"
+          formGroupName="birthDay"
+        >
+          <div class="col-4">
+            <select class="form-select" aria-label="gün" formControlName="day">
+              <option
+                [value]="i + 1"
+                *ngFor="let item of [].constructor(31); let i = index"
+              >
+                {{ i + 1 }}
+              </option>
+            </select>
+          </div>
+          <div class="col-4">
+            <select class="form-select" aria-label="ay" formControlName="month">
+              <option
+                [value]="i + 1"
+                *ngFor="let item of [].constructor(12); let i = index"
+              >
+                {{ i + 1 }}
+              </option>
+            </select>
+          </div>
+          <div class="col-4">
+            <select class="form-select" aria-label="yil" formControlName="year">
+              <option
+                [value]="i + 1920"
+                *ngFor="let item of [].constructor(96); let i = index"
+              >
+                {{ i + 1920 }}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 my-auto" id="gender">
+        <label class="example-margin">Cinsiyet</label>
+        <mat-radio-group formControlName="gender">
+          <mat-radio-button class="example-margin" [value]="false"
+            >Kadın</mat-radio-button
+          >
+          <mat-radio-button class="example-margin" [value]="true"
+            >Erkek</mat-radio-button
+          >
+        </mat-radio-group>
+      </div>
+      <div class="col-sm-6 mx-auto">
+        <button
+          type="submit"
+          id="updateButton"
+          class="btn btn-md w-100 pt-2 mt-2"
+        >
+          <strong>Güncelle </strong>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

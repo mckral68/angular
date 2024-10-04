@@ -1,0 +1,12 @@
+<!-- <button style="margin:15px;" mat-raised-button class="btn" color="primary" (click)="showProductQrCodeReading()">Product
+  QrCode Reading</button> -->
+
+<ng-container>
+  <app-create
+    (updatedProduct)="createdProduct($event)"
+    (createdProduct)="createdProduct($event)"
+  ></app-create>
+</ng-container>
+<ng-container class="mt-2">
+  <app-list (editProduct)="editPrd($event)"></app-list>
+</ng-container>

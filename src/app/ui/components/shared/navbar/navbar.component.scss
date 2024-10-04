@@ -1,0 +1,75 @@
+.offcanvas {
+  max-width: 90%;
+  background-color: #f0ffff;
+}
+.accordion-button {
+  background-color: #f0ffff;
+}
+#home-navbar a {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+  color: #003;
+  text-decoration: none;
+}
+#home-navbar .navbar-toggler {
+  border: none;
+  color: #003;
+}
+.top-bar {
+  padding-top: 1rem;
+}
+#home-navbar button:focus {
+  box-shadow: none;
+}
+.bd-links-heading a {
+  text-decoration: none;
+  color: #003;
+}
+#home-navbar .btn-light {
+  background-color: #fff;
+  border-color: #dee2e6;
+  color: #212529;
+}
+#home-navbar .btn-light:hover {
+  border-color: #c1c9d0;
+  color: #0d6efd;
+}
+#home-navbar .btn-light:hover i {
+  color: #0d6efd;
+}
+#home-navbar .btn-light i {
+  color: #9da1a7;
+}
+#home-navbar .font-icon {
+  position: relative;
+  display: inline-block;
+  text-decoration: none;
+  height: 30px;
+  line-height: 30px;
+  text-align: center;
+  width: 26px;
+}
+#home-navbar .row {
+  --bs-gutter-x: 0;
+}
+#home-navbar .badge-count {
+  background-color: #f27a1a;
+  color: #fff;
+  border-radius: 50%;
+  text-align: center;
+  height: 18px;
+  width: 18px;
+  font-size: 12px;
+  line-height: 18px;
+  position: absolute;
+  top: -4px;
+  right: -10px;
+  font-family: Lato, sans-serif;
+}
+#home-navbar .d-flex {
+  justify-content: center;
+  align-items: center;
+}
+.row {
+  --bs-gutter-x: 0;
+}

@@ -1,0 +1,136 @@
+.ticket-history .ticket-messages {
+  display: flex;
+  flex-direction: column;
+  max-height: 500px;
+  overflow-y: scroll;
+}
+::-webkit-scrollbar {
+  display: none;
+}
+
+@media only screen and (max-width: 767px) {
+  .ticket-history .card-body {
+    padding: 15px;
+  }
+  .ticket-history .ticket-message.admin {
+    max-width: 100%;
+  }
+  .ticket-history .ticket-message.customer {
+    max-width: 100%;
+  }
+  .ticket-history .ticket-answer .ticket-reply {
+    padding-bottom: 10px;
+  }
+  .ticket-history .ticket-answer form {
+    display: block;
+  }
+  .ticket-history .ticket-answer .tinymce-editor {
+    width: 100%;
+  }
+  .ticket-history .ticket-answer .btn {
+    position: relative;
+    width: 120px;
+    height: 42px;
+    float: left;
+    margin: 0 5px;
+    flex-direction: inherit;
+    top: inherit !important;
+    left: inherit !important;
+    right: inherit !important;
+  }
+}
+.ticket-history .ticket-message {
+  position: relative;
+  padding: 15px;
+  margin-bottom: 30px;
+}
+
+.ticket-history .ticket-message.customer {
+  text-align: left;
+  background-color: #f8f9fa;
+  max-width: 80%;
+  margin-left: auto;
+  border-radius: 15px 0 15px 15px;
+}
+.ticket-history .ticket-message.admin {
+  text-align: left;
+  background-color: #e3f0f9;
+  max-width: 80%;
+  margin-right: auto;
+  border-radius: 0 30px 30px 30px;
+}
+.ticket-history .ticket-message .t-message {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--color1);
+  border-bottom: 1px solid #0000000f;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+.ticket-history .ticket-message .t-meta {
+  font-size: 13px;
+  color: var(--color1);
+}
+.report-icon {
+  font-size: 20px;
+  width: 50px;
+  height: 50px;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  border-radius: 50%;
+  background-color: #f8f9fa;
+  color: var(--color1);
+  border: 1px solid #dee2e6;
+}
+
+.q-subheader {
+  background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 0;
+  height: 70px;
+  border-bottom: 1px solid #e6e6e6;
+  color: #333;
+  font-weight: 600;
+  align-content: center;
+}
+.tabs-wrapper {
+  display: flex;
+  background-color: #fff;
+  justify-content: space-between;
+  align-items: center;
+  height: 50px;
+  font-size: 14px;
+  box-sizing: border-box;
+}
+.tabs-wrapper .tab {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+  flex-direction: column;
+}
+.tabs-wrapper .active {
+  color: #f27a1a;
+  border-bottom: 2px solid #f27a1a;
+  font-weight: 600;
+}
+
+.blink {
+  animation-duration: 500ms;
+  animation-name: blink;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+}
+@keyframes blink {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}

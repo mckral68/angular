@@ -1,0 +1,239 @@
+<main class="bg-white" id="comment-prd">
+  <div class="container p-2">
+    <div class="mb-2">
+      <div class="d-flex justify-content-between">
+        <a [routerLink]="['/hesabim/degerlendirmelerim']">
+          <i class="fa-solid fa-chevron-left"></i>
+        </a>
+        <span style="color: #333; font-weight: 600">Ürünü Değerlendir</span>
+        <span></span>
+      </div>
+    </div>
+    <div class="row mt-2" *ngIf="name">
+      <div class="col-5 me-2">
+        <img
+          ngSrc="{{ path }}"
+          width="120"
+          height="170"
+          class="img-fluid"
+          priority
+          alt="{{ name }}"
+        />
+      </div>
+      <div class="col-6 my-auto">
+        <p>
+          {{ name }}
+        </p>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <form
+      [formGroup]="prdComment"
+      (ngSubmit)="
+        isEditMode
+          ? updateComment(prdComment.value)
+          : submitComment(prdComment?.value)
+      "
+    >
+      <div class="text-center">
+        <p class="">Ürünü aşağıdan puanlayabilir ve yorum yazabilirsin</p>
+        <div class="rating-wrap text-center">
+          <ng-template #t let-fill="fill">
+            <i class="bi bi-star-fill px-2" style="font-size: 2rem">
+              <i
+                *ngIf="fill > 0"
+                class="bi bi-star-fill filled px-2"
+                style="font-size: 2rem"
+                [style.width.%]="fill"
+              ></i>
+            </i>
+          </ng-template>
+          <ngb-rating
+            [starTemplate]="t"
+            [max]="5"
+            formControlName="rateScore"
+          ></ngb-rating>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="d-flex justify-content-between">
+          <p class="mb-2 fw-bold">Yorum Yap</p>
+          <p
+            class="mb-2"
+            data-bs-toggle="modal"
+            data-bs-target="#commentPostingCriteria"
+            style="font-size: 0.8rem; text-decoration-line: underline"
+          >
+            Yorum Yayınlama Kriterleri
+          </p>
+        </div>
+
+        <div class="mb-3">
+          <textarea
+            class="form-control"
+            placeholder="Ürünün hem fiyatı uygun hem de göründüğü gibi kaliteli bir ürün."
+            formControlName="content"
+          ></textarea>
+        </div>
+        <div class="row">
+          <div class="col-lg-3">
+            <div class="checkbox-wrapper">
+              <div id="checkbox">
+                <div class="form-check">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    formControlName="isNameShow"
+                    id="flexCheckDefault"
+                  />
+                  <label class="form-check-label" for="flexCheckDefault">
+                  </label>
+                </div>
+              </div>
+              <div class="chexbox-text">
+                <span
+                  >Yorumlarda ismimin gözükmesine ve yorum detaylarının site
+                  genelinde kullanılmasına izin veriyorum. Aydınlatma Metni’ne
+                  sitemizden ulaşabilirsiniz.
+                </span>
+              </div>
+            </div>
+          </div>
+          <div
+            class="modal fade"
+            id="commentPostingCriteria"
+            tabindex="-1"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+          >
+            <div
+              class="modal-dialog modal-dialog-scrollable"
+              style="max-height: 50vh"
+            >
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="commentPostingCriteria">
+                    Yorum Yayınlama Kriterleri
+                  </h1>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  <div>
+                    <p>
+                      Ürün yorumları müşterilerimizin platformumuzda yer alan
+                      ürünlere ilişkin görüş ve önerilerini paylaşabilecekleri,
+                      sorularına cevap bulabilecekleri, diğer müşterilerin
+                      ürünler hakkındaki düşüncelerini öğrenebilecekleri dürüst
+                      bir ticaret ortamı yaratma konusunda önemli bir araçtır.
+                      Bu itibarla ürünlere ilişkin yorumları yayınlarken olumlu
+                      ya da olumsuz olduğuna bakmaksızın metin ve varsa
+                      görseller bakımından
+                    </p>
+                    <p>- Mevzuata uygun,</p>
+                    <p>
+                      - Fikri/sınai hakları ihlal etmeyen, haksız rekabet
+                      yaratmayan,
+                    </p>
+                    <p>
+                      - Sağlık beyanı (insan sağlığına doğrudan veya dolaylı
+                      olarak faydalı olduğunu yahut hastalıklara veya
+                      belirtilerine karşı etkili olduğunu, koruduğunu, tedavi
+                      ettiğini belirten, ileri süren veya ima eden tüm ifadeler)
+                      içermeyen (metabolizmayı hızlandırır, sindirim sistemini
+                      düzenler, kolajen sentezini sağlar vb),
+                    </p>
+                    <p>
+                      - Hakaret/küfür içermeyen, kişilik haklarını ihlal
+                      etmeyen, suç unsuru içermeyen genel ahlaka ve kamu
+                      düzenine aykırı olmayan,
+                    </p>
+                    <p>- Müstehcenlik içermeyen, ürünle alakasız olmayan,</p>
+                    <p>- Kışkırtıcı olmayan, tehdit içermeyen,</p>
+                    <p>
+                      - Başkalarına dair kişisel verileri ya da özel hayatın
+                      gizliliğini ihlal etmeyen,
+                    </p>
+                    <p>
+                      - Hukuka aykırı bir durumu teşvik etmeyen/desteklemeyen,
+                    </p>
+                    <p>
+                      - Diğer müşterilerimizin yorumlarına cevap niteliğinde
+                      taciz edici/utandırıcı nitelikte olmayan, diğer markalara
+                      ilişkin kötüleme iltibas vb. haksız rekabet oluşturmayan,
+                    </p>
+                    <p>
+                      - Farklı sitelere yönlendiren link, reklam ya da
+                      karşılaştırma içermeyen&nbsp;
+                    </p>
+                    <p>
+                      - Dijital ortamdan alınmış ekran görüntülerini içermeyen,
+                    </p>
+                    <p>
+                      - Yorum yapılan ürünle bağlantısı olan görselleri içeren
+                    </p>
+                    <p>yorumları yayınlıyoruz.</p>
+                    <p>
+                      Müşterilerimizin doğru yönlendirilebilmesi amacıyla
+                      yalnızca ilgili ürünü satın almış müşterilerimiz yorum
+                      yapabilmektedir. Satın aldığınız ürüne ilişkin yapmış
+                      olduğunuz bir yorum mevzuata ya da yukarıda belirtilen
+                      kriterlere aykırılık yönünde bir tespit sonucunda yayımı
+                      reddedilebilir veya platformdan kaldırılabilir. Eğer
+                      yapmış olduğunuz yorumun haksız yere kaldırıldığını ya da
+                      reddedildiğini düşünüyorsanız çağrı merkezimizle iletişime
+                      geçebilirsiniz.
+                    </p>
+                    <p>
+                      Ürün yorumları sıralanırken müşterilerimizin doğru bilgiye
+                      ulaşabilmesi için verilen puanın yüksek ya da düşük
+                      olmasına bakılmaksızın aşağıdaki kriterler dikkate
+                      alınmaktadır:
+                    </p>
+                    <p>
+                      - Yorumun ürünle ilgili bilgi içermesi (beden, kalite vb)
+                    </p>
+                    <p>- Yorumların beğenilme sayısı</p>
+                    <p>- Yorumda görselin bulunması</p>
+                    <p>- Yorumun yakın zamanda yapılmış olması</p>
+                    <p>
+                      - Yorumun özellikle ürünle ilgili aranan bilgileri
+                      içeriyor olması
+                    </p>
+                    <p>
+                      Görsel eklenebilecek ürünler EylülGiyim tarafından
+                      belirlenmektedir. Sivil toplum kuruluşu satıcılar
+                      tarafından satışa sunulan dijital destek kartları, bazı iç
+                      giyim ve fantezi ürünleri gibi EylülGiyim tarafından
+                      görselli yorum eklenmesine izin verilmeyen ürünlere görsel
+                      eklenemeyecektir.&nbsp;
+                    </p>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-danger"
+                    data-bs-dismiss="modal"
+                  >
+                    Tamam
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-5 mt-2">
+            <button class="btn btn-danger w-100">
+              {{ isEditMode ? "Yorumunu Düzenle" : "Gönder" }}
+            </button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</main>

@@ -1,0 +1,10 @@
+<h1 mat-dialog-title class="text-danger">Dikkat</h1>
+<div mat-dialog-content>
+  <p>Seçilen ürünü favorilerden silmek istediğinize emin misiniz?</p>
+</div>
+<div mat-dialog-actions class="d-flex justify-content-between">
+  <button mat-button [mat-dialog-close]="!data" class="btn btn-danger">
+    Hayır
+  </button>
+  <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Evet</button>
+</div>

@@ -1,0 +1,382 @@
+<main class="container-xxl p-0" id="user-questions">
+  <div class="q-subheader">
+    <span routerLink="/hesabim"
+      ><i class="fa-solid fa-chevron-left fa-xl ms-2"></i
+    ></span>
+    <div>
+      <p class="mb-0" style="font-weight: 600">Sorularım</p>
+    </div>
+    <div></div>
+  </div>
+  <div class="tabs-wrapper">
+    <p
+      class="tab"
+      (click)="activeHandle(1)"
+      [class]="{ active: !isProductsQuestions }"
+    >
+      <span>Sipariş Sorularım</span>
+      <span class="text-danger" style="font-size: 10px"
+        >( {{ unseenUserQuestionCount }} Okunmamış Mesaj)</span
+      >
+    </p>
+    <p
+      class="tab"
+      (click)="activeHandle(2)"
+      [class]="{ active: isProductsQuestions }"
+    >
+      <span>Ürün Sorularım</span>
+      <span class="text-danger" style="font-size: 10px"
+        >( {{ unseenPrdQuestionCount }} Okunmamış Mesaj)</span
+      >
+    </p>
+  </div>
+  <ng-template
+    *ngIf="!isMobil"
+    [ngTemplateOutlet]="isProductsQuestions ? productQuestionss : userQuestions"
+  ></ng-template>
+  <ng-template #productQuestionss>
+    <div class="row border">
+      <div class="col-md-4">
+        <div
+          *ngFor="let q of productQuestions; let i = index"
+          (click)="activePrdQuestion(i)"
+          class="d-flex flex-column mb-2"
+          style="font-size: 12px"
+          [style]="
+            q == activePrdQuestions
+              ? 'background-color:#fff1e6 '
+              : 'background-color:#fff'
+          "
+        >
+          <ul style="list-style: none; font-weight: 600">
+            <li class="d-flex justify-content-between">
+              <span class="fw-bold"> {{ activePrdQuestions.name }} </span>
+              <span>
+                {{ q.createdDate | date : "d/MM/yyyy H:mm" }}
+              </span>
+            </li>
+            <li>
+              Satıcı:
+              <span style="font-weight: 600">{{ q.answer }} </span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="card border-start border-end">
+          <div class="card-header fw-bold bg-white">
+            <h5 class="card-title">Eylül Modalife</h5>
+          </div>
+          <div
+            class="card-header d-flex justify-content-between align-items-center"
+          >
+            <span class="text-secondary">{{ activePrdQuestions?.name }}</span>
+            <div>
+              <button
+                class="btn btn-sm btn-outline-danger"
+                (click)="
+                  redirectToPrdQuestion(
+                    activePrdQuestions.name,
+                    activePrdQuestions.productId
+                  )
+                "
+              >
+                Başka Soru Sor
+              </button>
+              <button
+                (click)="
+                  redirectToProduct(
+                    activePrdQuestions.name,
+                    activePrdQuestions.productId
+                  )
+                "
+                class="btn btn-sm btn-danger ms-2"
+              >
+                Ürüne Git
+              </button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="ticket-history">
+              <div class="ticket-messages">
+                <div>
+                  <div class="ticket-message customer">
+                    <div class="t-message">
+                      <p>
+                        <span> {{ activePrdQuestions.text }}</span> &nbsp;
+                      </p>
+                    </div>
+                    <div class="t-meta">
+                      {{ activeSellerQuestions.fullName
+                      }}<span
+                        ><div class="componentDate">
+                          {{
+                            activePrdQuestions.createdDate
+                              | date : "d/MM/yyyy H:mm"
+                          }}
+                        </div></span
+                      >
+                    </div>
+                  </div>
+                  <div class="ticket-message admin">
+                    <div class="t-message">
+                      <p>
+                        {{ activePrdQuestions.answer }}
+                      </p>
+                    </div>
+                    <div class="t-meta">
+                      Eylül Modalife<span
+                        ><div class="componentDate">
+                          {{
+                            activePrdQuestions.createdDate
+                              | date : "d/MM/yyyy H:mm"
+                          }}
+                        </div></span
+                      >
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <ng-template #userQuestions>
+    <div class="row border">
+      <div class="col-md-4">
+        <div
+          *ngFor="let q of sellerQuestions; let i = index"
+          (click)="activeQuestion(i)"
+          class="d-flex flex-column mb-2"
+          style="font-size: 12px"
+          [style]="
+            q == activeSellerQuestions
+              ? 'background-color:#fff1e6 '
+              : 'background-color:#fff'
+          "
+        >
+          <ul style="list-style: none; font-weight: 600">
+            <li class="d-flex justify-content-between">
+              <span class="fw-bold"> Eylül Modalife </span>
+              <span>
+                {{ q.createdDate | date : "d/MM/yyyy H:mm" }}
+              </span>
+            </li>
+            <li>Sipariş No: {{ q.orderNumber }}</li>
+            <li>Konu: {{ q.name }}</li>
+            <li>Destek No: {{ q.ticketNumber }}</li>
+          </ul>
+        </div>
+      </div>
+      <div class="col-md-8">
+        <div class="card border-start border-end">
+          <div class="card-header fw-bold bg-white">
+            <h5 class="card-title">Eylül Modalife</h5>
+          </div>
+          <div
+            class="card-header d-flex justify-content-between align-items-center"
+          >
+            <span class="text-secondary">{{
+              activeSellerQuestions?.name
+            }}</span>
+            <span style="font-size: 12px">
+              {{ activeSellerQuestions?.createdDate | date : "d/MM/yyyy H:mm" }}
+            </span>
+          </div>
+          <div class="card-body">
+            <div class="ticket-history">
+              <div class="ticket-messages">
+                <div *ngFor="let m of activeSellerQuestions?.messages">
+                  <div class="ticket-message customer" *ngIf="!m.owner">
+                    <div class="t-message">
+                      <p>
+                        <span> {{ m.text }}</span> &nbsp;
+                      </p>
+                    </div>
+                    <div class="t-meta">
+                      {{ activeSellerQuestions.fullName
+                      }}<span
+                        ><div class="componentDate">
+                          {{ m.createdDate | date : "d/MM/yyyy H:mm" }}
+                        </div></span
+                      >
+                    </div>
+                  </div>
+                  <div class="ticket-message admin" *ngIf="m.owner">
+                    <div class="t-message">
+                      <p>
+                        {{ m.text }}
+                      </p>
+                    </div>
+                    <div class="t-meta">
+                      Eylül Modalife<span
+                        ><div class="componentDate">
+                          {{ m.createdDate | date : "d/MM/yyyy H:mm" }}
+                        </div></span
+                      >
+                    </div>
+                  </div>
+                </div>
+                <div class="ticket-answer">
+                  <div class="ticket-reply">
+                    <form
+                      [formGroup]="sentMessage"
+                      (ngSubmit)="sendMessage(sentMessage.value)"
+                    >
+                      <div formGroupName="message">
+                        <textarea
+                          id="tinymce-1"
+                          cols="30"
+                          rows="6"
+                          formControlName="text"
+                          required="required"
+                          class="form-control"
+                          aria-hidden="true"
+                        ></textarea>
+                      </div>
+                      <div
+                        aria-hidden="true"
+                        class="tox-throbber"
+                        style="display: none"
+                      ></div>
+                      <span id="filePath"></span>
+                      <input
+                        type="file"
+                        name="files[]"
+                        id="customFile"
+                        multiple="multiple"
+                        style="display: none"
+                      />
+                      <div class="d-flex justify-content-between mt-1">
+                        <button type="button" class="btn btn-light">
+                          <i class="fa-solid fa-paperclip"></i
+                          ><span> Dosya</span>
+                        </button>
+                        <button type="submit" class="btn btn-primary is-green">
+                          <i class="fa-regular fa-paper-plane"></i
+                          ><span> Gönder</span>
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+  <section *ngIf="isMobil">
+    <div class="container-xxl p-0 overflow-auto">
+      <ng-template
+        [ngTemplateOutlet]="isProductsQuestions ? pQ : uQ"
+      ></ng-template>
+      <ng-template #uQ>
+        <table class="table table-responsive">
+          <thead>
+            <tr>
+              <th scope="col"></th>
+              <th scope="col">Konu</th>
+              <th scope="col">Destek No</th>
+              <th scope="col">Durum</th>
+              <th scope="col">Tarih</th>
+              <th scope="col">Güncelleme</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              *ngFor="let q of sellerQuestions; let i = index"
+              style="font-size: 13px"
+            >
+              <th scope="row">
+                <i
+                  class="fa-solid fa-circle"
+                  [class.blink]="q.isAnswered && !q.seen"
+                  [style]="q.seen ? 'color:#ADADAD ' : 'color:#f27a1a'"
+                ></i>
+              </th>
+              <td
+                class="d-flex flex-column"
+                [routerLink]="['/hesabim/sorularim/' + q.ticketNumber]"
+                [queryParams]="{ filter: 'seller-question' }"
+              >
+                <a class="text-decoration-none text-primary">
+                  {{ q.name }}
+                </a>
+              </td>
+              <td>{{ q.ticketNumber }}</td>
+              <td>
+                <span class="text-danger">
+                  {{
+                    q.status == 0
+                      ? "Bekleniyor"
+                      : q.status == 1
+                      ? "Cevaplandı"
+                      : "Reddedildi"
+                  }}</span
+                >
+              </td>
+              <td style="font-size: 11px">
+                {{ q.createdDate | date : "dd.MM.yyyy hh.mm" }}
+              </td>
+              <td style="font-size: 11px">
+                {{ q.updatedDate | date : "dd.MM.yyyy hh.mm" }}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </ng-template>
+      <ng-template #pQ>
+        <div style="background-color: #fafafa">
+          <ul
+            *ngFor="let q of productQuestions"
+            style="list-style: none; padding-left: 1rem; padding-right: 1rem"
+          >
+            <div>
+              <li class="d-flex justify-content-between">
+                <span style="font-weight: 600; font-size: 12px">
+                  <a
+                    class="text-decoration-none"
+                    [routerLink]="['/hesabim/sorularim/' + q.id]"
+                    [queryParams]="{ filter: 'product-question' }"
+                  >
+                    {{ q.name }}
+                  </a>
+                  <i
+                    class="fa-solid fa-circle"
+                    [class.blink]="q.isAnswered && !q.seen"
+                    style="color: #adadad"
+                    [style]="
+                      q.isAnswered && !q.seen
+                        ? 'color:#f27a1a '
+                        : 'color:#adadad'
+                    "
+                  ></i>
+                </span>
+                <span style="font-size: 11px">
+                  {{ q.createdDate | date : "d/MM/yyyy H:mm" }}
+                </span>
+              </li>
+              <li>
+                <span
+                  style="
+                    background-color: #fff4ea;
+                    color: #f27a1a;
+                    font-size: 11px;
+                  "
+                  >{{ q.isAnswered ? "Cevaplandı" : "Bekleniyor" }}</span
+                >
+                <span style="font-size: 12px; white-space: nowrap">
+                  {{ q.isAnswered ? "Satıcı: " + q.answer : "Ben: " + q.text }}
+                </span>
+              </li>
+            </div>
+          </ul>
+        </div>
+      </ng-template>
+    </div>
+  </section>
+</main>

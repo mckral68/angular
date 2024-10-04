@@ -1,0 +1,104 @@
+<div class="container-fluid overflow-auto">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="input-group">
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Anahtar Kelimeler"
+          (input)="getOrderList($event)"
+        />
+        <button class="btn btn-primary">
+          <i class="fa fa-search"></i>
+        </button>
+      </div>
+    </div>
+    <div class="mat-elevation-z8">
+      <table mat-table [dataSource]="dataSource">
+        <ng-container matColumnDef="orderNumber">
+          <th mat-header-cell *matHeaderCellDef>Sipariş No</th>
+          <td mat-cell *matCellDef="let element">{{ element.orderNumber }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="userName">
+          <th mat-header-cell *matHeaderCellDef>Adı Soyadı</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.firstName + " " + element.lastName }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="totalPrice">
+          <th mat-header-cell *matHeaderCellDef>Toplam Tutar</th>
+          <td mat-cell *matCellDef="let element">{{ element.totalPrice }}</td>
+        </ng-container>
+        <ng-container matColumnDef="Address">
+          <th mat-header-cell *matHeaderCellDef>Adres</th>
+          <td mat-cell *matCellDef="let element">{{ element.adres }}</td>
+        </ng-container>
+        <ng-container matColumnDef="createdDate">
+          <th mat-header-cell *matHeaderCellDef>Sipariş Tarihi</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element.createdDate | date : "d/MM/yyyy H:mm"  }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="completed">
+          <th mat-header-cell *matHeaderCellDef>Sipariş Durumu</th>
+          <td mat-cell *matCellDef="let element">
+            <select
+              class="form-select"
+              style="width: auto"
+              (change)="updateStatus(element.id, $event)"
+            >
+              <option
+                *ngFor="let t of transactStatus; let i = index"
+                [value]="t.value"
+                [selected]="element.transactStatus == t.value"
+              >
+                {{ t?.name }}
+              </option>
+            </select>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="viewdetail">
+          <th mat-header-cell *matHeaderCellDef width="30"></th>
+          <td mat-cell *matCellDef="let element">
+            <img
+              (click)="showDetail(element.id)"
+              style="cursor: pointer"
+              src="../../../../../assets/detail.png"
+              width="25"
+              height="25"
+            />
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="delete">
+          <th mat-header-cell *matHeaderCellDef width="30"></th>
+          <td
+            mat-cell
+            *matCellDef="let element"
+            appDelete
+            [id]="element.id"
+            (callback)="getOrders()"
+            controller="orders"
+          >
+            <!--<img src="../../../../../assets/delete.png" width="25" height="25" (click)="delete(element.id, $event)" />-->
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      </table>
+
+      <mat-paginator
+        (page)="pageChanged()"
+        [pageSize]="10"
+        [length]="100"
+        [pageSizeOptions]="[5, 10, 20]"
+        showFirstLastButtons
+        aria-label="Select page of periodic elements"
+      >
+      </mat-paginator>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,53 @@
+#product-review #tag-slider a {
+  --bs-bg-opacity: 1;
+  background-color: rgba(var(--bs-white-rgb), var(--bs-bg-opacity)) !important;
+}
+.rating-wrap i {
+  position: relative;
+  display: inline-block;
+  color: #e9e9e9;
+}
+.rating-wrap .filled {
+  color: #ffc000;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+#product-review #prdReview .prdName {
+  font-size: 16px;
+  line-height: 20px;
+  font-weight: 400;
+  color: #666;
+}
+
+#product-review .menu-list {
+  display: none;
+  position: absolute;
+  left: -160px;
+  bottom: -90px;
+  padding: 10px 15px;
+  border-radius: 3px;
+  box-shadow: 0 0 6px 0 rgba(0, 0, 0, 0.2);
+  background-color: #fff;
+  width: 130px;
+  box-sizing: border-box;
+  list-style: none;
+}
+#product-review #tag-slider .btn {
+  --bs-btn-padding-x: 0.5rem;
+}
+#product-review .product-title {
+  color: #666;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+#product-review .menu-list-open {
+  display: block;
+  animation-name: fadeMe;
+  animation-duration: 0.1s;
+  z-index: 1;
+}

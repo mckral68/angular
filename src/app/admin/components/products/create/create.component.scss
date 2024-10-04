@@ -1,0 +1,23 @@
+#prd-create :host {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+#prd-create .product-create {
+  margin: 5px 5px 5px;
+}
+
+#prd-create .mat-mdc-form-field {
+  width: 22rem;
+}
+#prd-create .col-md-6 label {
+  color: #003;
+  font-weight: 600;
+}
+#prd-create .row .accordion {
+  --bs-accordion-btn-padding-y: 0.5rem;
+  margin-left: 8px;
+}
+#prd-create .row {
+  --bs-gutter-x: 1rem;
+}

@@ -1,0 +1,43 @@
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+  --mdb-nav-pills-link-active-bg: #e3ebf7;
+  --mdb-nav-pills-link-active-color: #285192;
+  background-color: var(--mdb-nav-pills-link-active-bg);
+  color: var(--mdb-nav-pills-link-active-color);
+}
+
+.nav-item .nav-link {
+  font-size: var(--mdb-nav-link-font-size);
+  font-weight: var(--mdb-nav-link-font-weight);
+  color: rgba(0, 0, 0, 0.55);
+  background-color: #f7f7f7;
+  transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
+}
+
+.form-outline input {
+  padding: 10px;
+  font-size: 17px;
+  box-sizing: border-box;
+  background: #f5f5f5;
+  outline: none;
+  text-indent: 11px;
+  width: 100%;
+}
+.form-outline input.ng-invalid.ng-touched {
+  border-left: 5px solid #a94442;
+}
+#sifre {
+  position: relative;
+}
+.form-outline .toggle-password {
+  position: absolute;
+  width: 35px;
+  height: 40px;
+  top: 30px;
+  right: 2px;
+  border-radius: 50%;
+  line-height: 35px;
+  font-size: 20px;
+  cursor: pointer;
+}
