@@ -20,6 +20,9 @@ export class AttributeValuesComponent {
   value: string = '';
   id: string;
   editMode: boolean = false;
+  isSelected: boolean = false;
+  idList: number[] = [];
+  allSelected: boolean = false;
   async ngOnInit(): Promise<void> {
     await this.getValuesByAttId();
   }
@@ -28,9 +31,33 @@ export class AttributeValuesComponent {
       .getValuesByAttributeId(this.activatedRouted.snapshot.params.id)
       .then((c) => (this.values = c.values));
   }
+  activeState() {
+    this.productService
+      .updateAttributeValues(this.idList)
+      .then(async () => await this.getValuesByAttId());
+  }
   changeMode(m: boolean, value?: string, id?: string) {
     this.editMode = m;
     this.editMode ? ((this.value = value), (this.id = id)) : (this.value = '');
+  }
+  checkList(id: number, checked: boolean) {
+    if (checked) {
+      this.idList = [...new Set(this.idList), id];
+      this.idList = [...new Set(this.idList)];
+    } else {
+      this.idList.splice(
+        this.idList.findIndex((a) => a == id),
+        1
+      );
+    }
+  }
+  checkAll() {
+    this.isSelected = !this.isSelected;
+   this.isSelected ?
+    this.values.forEach(
+      (a) => (this.idList = [...new Set(this.idList), +a.id])
+    ):this.idList=[]
+    this.idList = [...new Set(this.idList)];
   }
   async addValue(value: string) {
     if (value.length < 1) {

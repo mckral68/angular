@@ -6,6 +6,11 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 
+type Names = {
+  name:string,
+  routerLink:string
+};
+
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.component.html',
@@ -20,10 +25,19 @@ import { MatSidenavModule } from '@angular/material/sidenav';
     SidebarComponent
   ]
 })
+
 export class LayoutComponent implements OnInit {
-
-  constructor() { }
-
+  nameList:Names[]=[{name:" Siteye Dön",routerLink:"/"},
+    {name:"Sipariş İşlemleri",routerLink:"orders"},
+    {name:"Müşteriler",routerLink:"customers"},
+    {name:"Kategori İşlemleri",routerLink:"category"},
+    {name:"Müşteri Soruları",routerLink:"sellerquestions"},
+    {name:"Mesaj Konuları",routerLink:"subjects"},
+    {name:"Kargo İşlemleri",routerLink:"shipment"},
+    {name:"Yetkilendirme",routerLink:"authorize-menu"},
+    {name:"Rol İşlemleri",routerLink:"roles"},
+    {name:"Kullanıcılar",routerLink:"users"},
+  ]
   ngOnInit(): void {
     document.querySelectorAll('a').forEach(el => {
       el.setAttribute("aria-label", "close");

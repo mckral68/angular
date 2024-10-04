@@ -64,7 +64,6 @@ export class SelectProductImageDialogComponent
 
   async ngOnInit() {
     this.images = await this.productService.readImages(this.data.id, () => '');
-    console.log(this.data);
   }
   async deleteImage(imageId: string, event: any) {
     this.dialogService.openDialog({

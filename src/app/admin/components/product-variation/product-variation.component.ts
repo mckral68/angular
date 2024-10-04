@@ -33,7 +33,6 @@ export class ProductVariationComponent implements OnInit {
   value: string = '';
   id: string;
   editMode: boolean = false;
-  optionId: string;
   idList: number[] = [];
   isSelected: boolean = false;
   allSelected: boolean = false;
@@ -50,32 +49,7 @@ export class ProductVariationComponent implements OnInit {
     a.status = !a.status;
     await this.updateAttribute(a);
   }
-  async createAttribue(value: string) {
-    if (value.length > 3) {
-      await this.productService
-        .createAttribute(value.trim())
-        .then(
-          async () =>
-            (this.attributes = await this.productService
-              .getAllAttributes()
-              .then((b) => (this.attributes = b.attributes)))
-        );
-      this.productForm.reset();
-    } else {
-      return;
-    }
-  }
-  async createValue(value: string) {
-    await this.productService
-      .createAttributeValue(this.att.id, value.trim())
-      .then(
-        async () =>
-          (this.values = await this.productService
-            .getAllAttributeValues()
-            .then((b) => (this.values = b.values)))
-      );
-    this.productForm.reset();
-  }
+
   async addValue(attribute: Attribute) {
     if (attribute.name.length < 1) {
       return;
@@ -106,11 +80,12 @@ export class ProductVariationComponent implements OnInit {
   }
   checkAll() {
     this.isSelected = !this.isSelected;
+    this.isSelected ?
     this.attributes.forEach(
       (a) => (this.idList = [...new Set(this.idList), +a.id])
-    );
+    ):this.idList=[]
     this.idList = [...new Set(this.idList)];
-    console.log(this.idList);
+    
   }
   checkList(id: number, checked: boolean) {
     if (checked) {
@@ -122,9 +97,7 @@ export class ProductVariationComponent implements OnInit {
         1
       );
     }
-    console.log(this.idList);
   }
-  deleteList(id: number) {}
   changeMode(m: boolean, value?: string, id?: string) {
     this.editMode = m;
     this.editMode ? ((this.value = value), (this.id = id)) : (this.value = '');

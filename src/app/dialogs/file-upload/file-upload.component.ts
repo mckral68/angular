@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { Component,Input } from '@angular/core';
+import { Component,Input, ViewEncapsulation } from '@angular/core';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { FileSystemFileEntry, NgxFileDropEntry } from 'ngx-file-drop';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -18,6 +18,7 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './file-upload.component.html',
   styleUrls: ['./file-upload.component.scss'],
   standalone: true,
+  encapsulation:ViewEncapsulation.None,
   imports: [CommonModule,
     NgxFileDropModule,
     MatDialogModule, MatButtonModule]

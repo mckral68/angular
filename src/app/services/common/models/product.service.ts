@@ -264,7 +264,20 @@ export class ProductService {
   async updateAttributeList(ids: number[]) {
     const observable: Observable<any> = this.httpClientService.post(
       {
-        action: 'UpdateAttributeList',
+        action: 'UpdateAttributes',
+        controller: 'Variation',
+      },
+      {
+        ids,
+      }
+    );
+    const promiseData = firstValueFrom(observable);
+    return await promiseData;
+  }
+  async updateAttributeValues(ids: number[]) {
+    const observable: Observable<any> = this.httpClientService.post(
+      {
+        action: 'UpdateAttributeValues',
         controller: 'Variation',
       },
       {

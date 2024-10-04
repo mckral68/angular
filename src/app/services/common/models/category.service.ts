@@ -13,8 +13,9 @@ export class CategoryService {
     const observable: Observable<any> = this.httpClientService.post(
       {
         controller: 'category',
+        queryString:`pid=${category.pid}&name=${category.name} `
       },
-      { category }
+    category.file
     );
     const promiseData = firstValueFrom(observable);
     promiseData.then(successCallBack);
@@ -31,17 +32,20 @@ export class CategoryService {
       });
     return await firstValueFrom(observable);
   }
-  async update(id: string, name: string) {
-    const observable = this.httpClientService.put(
+  async update(id: string, name: string,successCallBack?: () => void) {
+    const observable:Observable<any> = this.httpClientService.put(
       {
         controller: 'category',
       },
       {
-        id,
-        name,
+      category:{
+        id,name
+      }
       }
     );
-    await firstValueFrom(observable);
+    const promiseData = firstValueFrom(observable);
+    promiseData.then(successCallBack);
+    return (await promiseData) as { succeeded: boolean };
   }
   async remove(id: string): Promise<void> {
     const observable: Observable<any> = this.httpClientService.delete(
