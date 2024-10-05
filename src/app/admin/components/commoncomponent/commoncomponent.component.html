@@ -1,9 +1,11 @@
+@if (!editMode) {
+<ng-container
+  [ngTemplateOutlet]="modal"
+  *ngIf="formFields && formFields.length > 0"
+></ng-container>
+}
 <div class="d-flex mb-2 text-center">
-  <a
-    class="btn btn-primary btn-sm me-1"
-    data-bs-toggle="modal"
-    data-bs-target="#editAttribute"
-    (click)="changeMode(false)"
+  <a class="btn btn-primary btn-sm me-1" (click)="changeMode(false)"
     ><i class="fa-solid fa-plus" title="Yeni Ekle"></i> Yeni Ekle</a
   >
   <div class="dropdown">
@@ -28,7 +30,6 @@
     ><i class="fa-solid fa-trash"></i> Tümünü Sil
   </a>
 </div>
-
 <table class="table table-striped table-hover table-bordered">
   <thead>
     <tr>
@@ -69,38 +70,45 @@
       </td>
       <td class="text-center">
         <a
-          (mouseenter)="changeMode(true, item.name, item.id)"
+          class="btn btn-outline-secondary btn-sm me-1"
+          [routerLink]="item?.id"
+        >
+          Seçenek Ekle
+        </a>
+        <a
+          (mouseenter)="changeMode(true, item?.name, item?.id)"
           class="btn btn-secondary btn-sm"
-          data-bs-toggle="modal"
-          data-bs-target="#editAttribute"
-          ><i class="fas fa-edit"></i>
+        >
+          <i class="fas fa-edit"></i>
         </a>
         <a
           class="btn btn-success btn-sm ms-1"
           appDelete
           [id]="item.id"
-        >
-        </a>
+          [action]="options.action"
+          [controller]="options.controller"
+        ></a>
       </td>
+      <ng-container *ngIf="editMode"></ng-container>
     </tr>
+
     <tr *ngIf="items.length === 0">
       <td colspan="4" class="text-center">Veri bulunamadı</td>
     </tr>
   </tbody>
 </table>
-
-<ng-template #modal let-item>
+<ng-template #modal>
   <div
     class="modal fade"
-    id="editAttribute"
+    id="template-modal"
     tabindex="-1"
-    aria-labelledby="editAttributeValue"
+    aria-labelledby="modal-content"
     aria-hidden="true"
   >
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="editAttributeValue">
+          <h1 class="modal-title fs-5" id="modal-content">
             Özellik Değeri {{ editMode ? "Düzenle" : "Ekle" }}
           </h1>
           <button
@@ -111,33 +119,58 @@
           ></button>
         </div>
         <div class="modal-body">
-          <div class="input-group mb-3">
-            <input
-              type="text"
-              class="form-control"
-              [(ngModel)]="value"
-              aria-label="Attribute Value"
-            />
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-          >
-            Kapat
-          </button>
-          <button
-            (click)="editMode ? addValue(item) : addValue(value)"
-            type="button"
-            class="btn btn-primary"
-            data-bs-dismiss="modal"
-          >
-            {{ editMode ? "Güncelle" : "Ekle" }}
-          </button>
+          <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            @for (field of formFields; track $index) {
+            <div class="mb-3">
+              <label
+                class="form-label"
+                *ngIf="field.type != 'hidden'"
+                [for]="$index"
+                >{{ field.label }}</label
+              >
+              <input
+                *ngIf="field.type === 'hidden'"
+                type="hidden"
+                [formControlName]="field.name"
+                [value]="field?.value"
+                [id]="$index"
+                class="form-control"
+              />
+              <input
+                *ngIf="field.type === 'text'"
+                type="text"
+                [formControlName]="field.name"
+                [value]="field?.value"
+                [id]="$index"
+                class="form-control"
+              />
+              <input
+                *ngIf="field.type === 'checkbox'"
+                type="checkbox"
+                [checked]="field?.status"
+                [formControlName]="field.name"
+                class="form-check-input ms-2"
+                [id]="field.id"
+              />
+              <!-- Diğer form elemanlarını burada ekleyebilirsiniz -->
+            </div>
+            }@empty { }
+            <div class="d-flex justify-content-evenly">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Kapat
+              </button>
+              <button type="submit" class="btn btn-primary">
+                {{ editMode ? "Güncelle" : "Ekle" }}
+              </button>
+            </div>
+          </form>
         </div>
       </div>
+      <div class="modal-footer"></div>
     </div>
   </div>
 </ng-template>

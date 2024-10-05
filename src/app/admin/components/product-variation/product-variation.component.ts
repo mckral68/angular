@@ -1,13 +1,23 @@
 import { MatDialogModule } from '@angular/material/dialog';
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  inject,
+  OnInit,
+  Output,
+  ViewEncapsulation,
+} from '@angular/core';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { DialogService } from 'app/services/common/dialog.service';
 import { ProductService } from 'app/services/common/models/product.service';
 import { DeleteDirectiveModule } from 'app/directives/admin/delete.directive.module';
 import { AttributeValue, Attribute } from 'app/contracts/variable_option.model';
-import { CommoncomponentComponent } from '../commoncomponent/commoncomponent.component';
+import {
+  CommoncomponentComponent,
+  ItemType,
+  Options,
+} from '../commoncomponent/commoncomponent.component';
 @Component({
   selector: 'app-product-variation',
   templateUrl: './product-variation.component.html',
@@ -36,7 +46,28 @@ export class ProductVariationComponent implements OnInit {
   id: string;
   editMode: boolean = false;
   idList: number[] = [];
+  formFields: object[] = [
+    {
+      type: 'hidden',
+      name: 'id',
+      value: '',
+      label: 'id',
+      required: false,
+    },
+    { type: 'text', name: 'name', value: '', label: 'Adı', required: true },
+    {
+      type: 'checkbox',
+      name: 'state',
+      value: '',
+      label: 'Aktif mi',
+      required: false,
+    },
+  ];
   isSelected: boolean = false;
+  @Output() options: Partial<Options> = {
+    action: 'RemoveAttribute',
+    controller: 'variation',
+  };
   allSelected: boolean = false;
   async ngOnInit() {
     await this.getAllAttributes();
@@ -52,13 +83,11 @@ export class ProductVariationComponent implements OnInit {
     await this.updateAttribute(a);
   }
 
-  async addValue(attribute: Attribute) {
-    if (attribute.name.length < 1) {
+  async addValue(attribute: Attribute | any) {
+    if (attribute.length < 1) {
       return;
     } else {
-      this.editMode == false
-        ? await this.createAttribute(this.value)
-        : await this.updateAttribute(attribute);
+      await this.createAttribute(attribute);
     }
   }
   async createAttribute(v: string) {
@@ -68,8 +97,9 @@ export class ProductVariationComponent implements OnInit {
       }
     });
   }
-  async updateAttribute(att: Attribute) {
-    this.productService.updateAttribute(att).then(async (r) => {
+  async updateAttribute(at: ItemType) {
+    this.att = { id: at.id, name: at.name, status: at.state };
+    this.productService.updateAttribute(this.att).then(async (r) => {
       if (r.succeeded) {
         await this.getAllAttributes().then(() => (this.value = ''));
       }

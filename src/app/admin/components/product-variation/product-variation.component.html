@@ -1,1 +1,7 @@
-<commoncomponent [items]="attributes"></commoncomponent>
+<commoncomponent
+  (itemAdded)="addValue($event)"
+  (itemUpdated)="updateAttribute($event)"
+  [options]="options"
+  [items]="attributes"
+  [formFields]="formFields"
+></commoncomponent>
