@@ -54,6 +54,7 @@
     "@angular/compiler": "^18.2.7",
     "@angular/localize": "^18.2.7",
     "@fullhuman/postcss-purgecss": "^6.0.0",
+    "@types/bootstrap": "^5.2.10",
     "@types/jasmine": "~5.1.4",
     "@types/jquery": "^3.5.31",
     "@types/node": "^22.5.4",

@@ -53,10 +53,11 @@ export class AttributeValuesComponent {
   }
   checkAll() {
     this.isSelected = !this.isSelected;
-   this.isSelected ?
-    this.values.forEach(
-      (a) => (this.idList = [...new Set(this.idList), +a.id])
-    ):this.idList=[]
+    this.isSelected
+      ? this.values.forEach(
+          (a) => (this.idList = [...new Set(this.idList), +a.id])
+        )
+      : (this.idList = []);
     this.idList = [...new Set(this.idList)];
   }
   async addValue(value: string) {
@@ -76,6 +77,7 @@ export class AttributeValuesComponent {
     if (this.editMode) {
       a.value = this.value;
     }
+    a.id = this.id;
     await this.productService.updateAttValue(a).then(async (r) => {
       if (r.succeeded) {
         await this.getValuesByAttId().then(() => (this.value = ''));

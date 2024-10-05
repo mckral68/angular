@@ -7,6 +7,7 @@ import { DialogService } from 'app/services/common/dialog.service';
 import { ProductService } from 'app/services/common/models/product.service';
 import { DeleteDirectiveModule } from 'app/directives/admin/delete.directive.module';
 import { AttributeValue, Attribute } from 'app/contracts/variable_option.model';
+import { CommoncomponentComponent } from '../commoncomponent/commoncomponent.component';
 @Component({
   selector: 'app-product-variation',
   templateUrl: './product-variation.component.html',
@@ -19,6 +20,7 @@ import { AttributeValue, Attribute } from 'app/contracts/variable_option.model';
     MatDialogModule,
     DeleteDirectiveModule,
     ReactiveFormsModule,
+    CommoncomponentComponent,
     FormsModule,
   ],
   providers: [DialogService],
@@ -80,12 +82,12 @@ export class ProductVariationComponent implements OnInit {
   }
   checkAll() {
     this.isSelected = !this.isSelected;
-    this.isSelected ?
-    this.attributes.forEach(
-      (a) => (this.idList = [...new Set(this.idList), +a.id])
-    ):this.idList=[]
+    this.isSelected
+      ? this.attributes.forEach(
+          (a) => (this.idList = [...new Set(this.idList), +a.id])
+        )
+      : (this.idList = []);
     this.idList = [...new Set(this.idList)];
-    
   }
   checkList(id: number, checked: boolean) {
     if (checked) {

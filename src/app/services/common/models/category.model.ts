@@ -1,10 +1,11 @@
 export interface Category {
   id?: string;
   name: string;
-  no:string
+  no: string;
   pid?: string;
-  parentName:string
-  status:boolean
-  file:File
+  parentName: string;
+  status: boolean;
+  file: File;
+  path: string;
   updateDate?: Date;
 }

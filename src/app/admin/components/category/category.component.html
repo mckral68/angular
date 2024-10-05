@@ -5,7 +5,7 @@
         <a [routerLink]="['/admin']"><i class="fa-solid fa-house"></i> </a>
       </li>
       <li class="breadcrumb-item active" aria-current="page">
-       Kategori İşlemleri
+        Kategori İşlemleri
       </li>
     </ol>
   </nav>
@@ -61,62 +61,69 @@
     </thead>
     <tbody>
       @for (a of categories; track $index) {
-      <tr>
-        <th class="text-center">
-          <input
-            class="form-check-input p-2"
-            type="checkbox"
-            [checked]="isSelected"
-            #box
-            (click)="checkList(+a.id, box.checked)"
-          />
-        </th>
-        <td> {{ a.parentName ?  a.parentName +" / ": "" }} <strong>{{a.name}}</strong></td>
-        <td>{{ a.no }}</td>
-        <td>
-          <div class="form-check form-switch">
+      <ng-container [ngTemplateOutlet]="image">
+        <tr>
+          <th class="text-center">
             <input
-              class="form-check-input"
-              [checked]="a.status"
+              class="form-check-input p-2"
               type="checkbox"
-              role="switch"
-              (change)="changeStatus(a)"
-              id="flexSwitchCheckDefault"
+              [checked]="isSelected"
+              #box
+              (click)="checkList(+a.id, box.checked)"
             />
-          </div>
-        </td>
-        <td class="text-center">
-          <a
-          class="btn btn-outline-success me-1 btn-sm"
-          ><i class="fa-solid fa-image"></i>
-        </a>
-          <a
-            (mouseenter)="[changeMode(true, a)]"
-            class="btn btn-secondary btn-sm"
-            data-bs-toggle="modal"
-            data-bs-target="#editAttribute"
-            ><i class="fas fa-edit"></i>
-          </a>
-          <a
-            class="btn btn-success btn-sm ms-1"
-            appDelete
-            controller="category"
-            (callback)="getAllCat()"
-            [id]="a.id"
-          >
-          </a>
-        </td>
-      </tr>
-      <ng-container
-        [ngTemplateOutlet]="modal"
-        [ngTemplateOutletContext]="{ value: a }"
-      >
+          </th>
+          <td>
+            {{ a.parentName ? a.parentName + " / " : "" }}
+            <strong>{{ a.name }}</strong>
+          </td>
+          <td>{{ a.no }}</td>
+          <td>
+            <div class="form-check form-switch">
+              <input
+                class="form-check-input"
+                [checked]="a.status"
+                type="checkbox"
+                role="switch"
+                (change)="changeStatus(a)"
+                id="flexSwitchCheckDefault"
+              />
+            </div>
+          </td>
+          <td class="text-center">
+            <a
+              class="btn btn-outline-success me-1 btn-sm"
+              (click)="openModal(a.path)"
+              ><i class="fa-solid fa-image"></i>
+            </a>
+            <a
+              (mouseenter)="[changeMode(true, a)]"
+              class="btn btn-secondary btn-sm"
+              data-bs-toggle="modal"
+              data-bs-target="#editAttribute"
+              ><i class="fas fa-edit"></i>
+            </a>
+            <a
+              class="btn btn-success btn-sm ms-1"
+              appDelete
+              controller="category"
+              (callback)="getAllCat()"
+              [id]="a.id"
+            >
+            </a>
+          </td>
+        </tr>
+        <ng-container
+          [ngTemplateOutlet]="modal"
+          [ngTemplateOutletContext]="{ value: a }"
+        >
+        </ng-container>
+        <ng-container
+          [ngTemplateOutlet]="image"
+          [ngTemplateOutletContext]="{ img: a.path }"
+        >
+        </ng-container>
       </ng-container>
-      }@empty { @if(!editMode){
-      <ng-container [ngTemplateOutlet]="modal"></ng-container>
 
-      }
-      <p>Veri bulunamadı</p>
       }
     </tbody>
   </table>
@@ -142,7 +149,7 @@
             aria-label="Close"
           ></button>
         </div>
-        <div class="modal-body" [formGroup]="categoryForm ">
+        <div class="modal-body" [formGroup]="categoryForm">
           <div class="input-group mb-3">
             <input
               type="text"
@@ -151,21 +158,29 @@
               formControlName="name"
               aria-label="Attribute Value"
               aria-describedby="basic-addon1"
-              [value]="editMode ? category?.name :''"
+              [value]="editMode ? category?.name : ''"
             />
           </div>
           <div class="input-group mb-3">
-            <select formControlName="pid" class="form-select" aria-label="Parent Category">
+            <select
+              formControlName="pid"
+              class="form-select"
+              aria-label="Parent Category"
+            >
               <option selected value="0">Üst Kategori</option>
               @for (c of categories; track $index) {
-                <option [value]="c.id">{{c.name}}</option> 
+              <option [value]="c.id">{{ c.name }}</option>
               }
             </select>
           </div>
           <div class="input-group mb-3">
-          <input type="file" multiple="true" (change)="handleFileInput($event.target.files)">
+            <input
+              type="file"
+              multiple="true"
+              (change)="handleFileInput($event.target.files)"
+            />
+          </div>
         </div>
-      </div>
         <div class="modal-footer">
           <button
             type="button"
@@ -175,11 +190,57 @@
             Kapat
           </button>
           <button
-            (click)="editMode ? updateCategory(att) : addValue(categoryForm.value)"
+            (click)="
+              editMode ? updateCategory(att) : addValue(categoryForm.value)
+            "
             type="button"
             class="btn btn-primary"
             data-bs-dismiss="modal"
           >
+            {{ editMode ? "Güncelle" : "Ekle" }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>
+<ng-template #image>
+  <div
+    class="modal fade"
+    id="openImage"
+    tabindex="-1"
+    aria-labelledby="openImage"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="openImage">Kategori Resmi</h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body" *ngIf="path">
+          <img
+            [ngSrc]="path"
+            class="object-fit-cover"
+            priority
+            width="300"
+            height="320"
+          />
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Kapat
+          </button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">
             {{ editMode ? "Güncelle" : "Ekle" }}
           </button>
         </div>
