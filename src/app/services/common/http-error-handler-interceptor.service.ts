@@ -36,20 +36,13 @@ export class HttpErrorHandlerInterceptorService implements HttpInterceptor {
       catchError((error) => {
         switch (error.status) {
           case HttpStatusCode.Unauthorized:
-            this.userAuthService.refreshTokenLogin(
-              localStorage.getItem('refreshToken'),
-              (state) => {
-                if (!state) {
-                  this.router.navigateByUrl('/giris');
-                  this.toastrService.message(
-                    'Bu işlemi yapmaya yetkiniz bulunmamaktadır!',
-                    'Yetkisiz işlem!',
-                    {
-                      messageType: ToastrMessageType.Warning,
-                      position: ToastrPosition.BottomFullWidth,
-                    }
-                  );
-                }
+            this.router.navigateByUrl('/giris');
+            this.toastrService.message(
+              'Bu işlemi yapmaya yetkiniz bulunmamaktadır!',
+              'Yetkisiz işlem!',
+              {
+                messageType: ToastrMessageType.Warning,
+                position: ToastrPosition.BottomFullWidth,
               }
             );
             break;

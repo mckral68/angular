@@ -11,12 +11,12 @@ import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { DialogService } from 'app/services/common/dialog.service';
 import { ProductService } from 'app/services/common/models/product.service';
-import { DeleteDirectiveModule } from 'app/directives/admin/delete.directive.module';
+import { DeleteDirective } from 'app/directives/admin/delete.directive';
 import { AttributeValue, Attribute } from 'app/contracts/variable_option.model';
 import {
   CommoncomponentComponent,
+  Itemoptions,
   ItemType,
-  Options,
 } from '../commoncomponent/commoncomponent.component';
 @Component({
   selector: 'app-product-variation',
@@ -28,7 +28,7 @@ import {
     CommonModule,
     RouterModule,
     MatDialogModule,
-    DeleteDirectiveModule,
+    DeleteDirective,
     ReactiveFormsModule,
     CommoncomponentComponent,
     FormsModule,
@@ -57,16 +57,20 @@ export class ProductVariationComponent implements OnInit {
     { type: 'text', name: 'name', value: '', label: 'Adı', required: true },
     {
       type: 'checkbox',
-      name: 'state',
+      name: 'status',
       value: '',
       label: 'Aktif mi',
       required: false,
     },
   ];
   isSelected: boolean = false;
-  @Output() options: Partial<Options> = {
-    action: 'RemoveAttribute',
+  @Output() itemoptions: Partial<Itemoptions> = {
+    addAction: 'CreateAttribute',
+    updAction: 'UpdateAttribute',
+    removeAction: 'RemoveAttribute',
     controller: 'variation',
+    updateStatus:'UpdateAttributes',
+    objectName: 'attribute',
   };
   allSelected: boolean = false;
   async ngOnInit() {
@@ -98,7 +102,7 @@ export class ProductVariationComponent implements OnInit {
     });
   }
   async updateAttribute(at: ItemType) {
-    this.att = { id: at.id, name: at.name, status: at.state };
+    this.att = { id: at.id, name: at.name, status: at.status };
     this.productService.updateAttribute(this.att).then(async (r) => {
       if (r.succeeded) {
         await this.getAllAttributes().then(() => (this.value = ''));

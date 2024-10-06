@@ -1,14 +1,13 @@
-import { DiscountComponent } from './../admin/components/discount/discount.component';
-import { GuardService } from './../guards/guard.service';
 import { Routes } from "@angular/router";
 import { DashboardComponent } from 'app/admin/components/dashboard/dashboard.component';
 import { LayoutComponent } from 'app/admin/layout/layout.component';
 import { inject } from "@angular/core";
+import { GuardService } from "app/guards/guard.service";
 
 
 export const AppRoute: Routes = [
     {
-        path: "admin", canActivateChild: [() => inject(GuardService).checkAuthentication], component: LayoutComponent, children: [
+        path: "admin", canActivateChild: [() => inject(GuardService).checkAuthentication()], component: LayoutComponent, children: [
             { path: "", component: DashboardComponent },
             { path: "customers", loadComponent: () => import("../admin/components/customer/customer.component").then(module => module.CustomerComponent) },
             { path: "products", loadComponent: () => import("../admin/components/products/products.component").then(module => module.ProductsComponent) },

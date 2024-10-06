@@ -3,13 +3,13 @@ import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { AttributeValue } from 'app/contracts/variable_option.model';
-import { DeleteDirectiveModule } from 'app/directives/admin/delete.directive.module';
+import { DeleteDirective } from 'app/directives/admin/delete.directive';
 import { ProductService } from 'app/services/common/models/product.service';
 
 @Component({
   selector: 'app-attribute-values',
   standalone: true,
-  imports: [CommonModule, RouterModule, FormsModule, DeleteDirectiveModule],
+  imports: [CommonModule, RouterModule, FormsModule, DeleteDirective],
   templateUrl: './attribute-values.component.html',
   styleUrl: './attribute-values.component.scss',
 })

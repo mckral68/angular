@@ -6,7 +6,7 @@ import { RouterModule } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { DeleteDirectiveModule } from '../../../directives/admin/delete.directive.module';
+import { DeleteDirective } from '../../../directives/admin/delete.directive';
 import { List_Order } from 'app/contracts/order/list_order';
 import { OrderService } from 'app/services/common/models/order.service';
 import { OrderDetailDialogComponent } from 'app/dialogs/order-detail-dialog/order-detail-dialog.component';
@@ -26,7 +26,7 @@ import { DialogService } from 'app/services/common/dialog.service';
     MatTableModule,
     MatDialogModule,
     MatPaginatorModule,
-    DeleteDirectiveModule,
+    DeleteDirective,
   ],
   providers: [DialogService],
 })
@@ -95,6 +95,6 @@ export class OrderComponent extends BaseComponent implements OnInit {
     });
   }
   async updateStatus(a: string, b: any) {
-   await this.orderService.updateOrderByAdmin(a,b.target.value)
+    await this.orderService.updateOrderByAdmin(a, b.target.value);
   }
 }

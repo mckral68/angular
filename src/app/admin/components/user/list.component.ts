@@ -12,14 +12,14 @@ import { AlertifyService, MessageType, Position } from '../../../services/admin/
 import { DialogService } from '../../../services/common/dialog.service';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatButtonModule } from '@angular/material/button';
-import { DeleteDirectiveModule } from 'app/directives/admin/delete.directive.module';
+import { DeleteDirective } from 'app/directives/admin/delete.directive';
 import { UserAuthService } from 'app/services/common/models/user-auth.service';
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
   styleUrls: ['./list.component.scss'], standalone: true,
   encapsulation: ViewEncapsulation.None,
-  imports: [CommonModule, RouterModule, MatPaginatorModule, MatTableModule, MatButtonModule, DeleteDirectiveModule, MatDialogModule],
+  imports: [CommonModule, RouterModule, MatPaginatorModule, MatTableModule, MatButtonModule, DeleteDirective, MatDialogModule],
   providers: [DialogService]
 })
 export class ListComponent extends BaseComponent implements OnInit {

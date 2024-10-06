@@ -1,4 +1,4 @@
-import { Router, RouterStateSnapshot } from '@angular/router';
+import { Router } from '@angular/router';
 import {
   UserAuthService,
   _isAuthenticated,
@@ -36,7 +36,7 @@ export class GuardService {
       }),
       tap((isAdmin) => {
         if (!isAdmin) {
-          this._router.navigate(['/login']);
+          this._router.navigate(['/giris']);
         }
       })
     );

@@ -6,6 +6,7 @@ import {
   Output,
   OnInit,
   ViewEncapsulation,
+  inject,
 } from '@angular/core';
 import {
   FormBuilder,
@@ -16,7 +17,8 @@ import {
 } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { Attribute, AttributeValue } from 'app/contracts/variable_option.model';
-import { DeleteDirectiveModule } from 'app/directives/admin/delete.directive.module';
+import { DeleteDirective } from 'app/directives/admin/delete.directive';
+import { CommonService } from 'app/services/common/common.service';
 import { Modal } from 'bootstrap';
 @Component({
   selector: 'commoncomponent',
@@ -26,37 +28,42 @@ import { Modal } from 'bootstrap';
     RouterModule,
     ReactiveFormsModule,
     FormsModule,
-    DeleteDirectiveModule,
+    DeleteDirective,
   ],
+  providers: [CommonService],
   encapsulation: ViewEncapsulation.None,
   templateUrl: './commoncomponent.component.html',
   styleUrl: './commoncomponent.component.scss',
 })
 export class CommoncomponentComponent implements OnInit {
   @Input() items: Attribute[] | AttributeValue[] = [];
-  @Input() modalTitle: string = '';
   @Input() isSelected: boolean = false;
   @Input() idList: number[] = [];
   @Input() formFields: any[] = [];
-  @Input() value: string = '';
-  @Input() id: string = '';
-  @Input() controller: string = '';
-  @Input() options: Partial<Options>;
+  @Input() itemoptions: Partial<Itemoptions>;
   @Output() itemAdded = new EventEmitter<Attribute | AttributeValue>();
   @Output() itemUpdated = new EventEmitter<ItemType>();
   @Output() statusChanged = new EventEmitter<Attribute | AttributeValue>();
+  @Output() callbackFunc = new EventEmitter<void>();
   editMode: boolean = false;
   form: FormGroup;
+  paginatedItems: ItemType[] = []; // Görünen öğeleri tutar
+  currentPage: number = 1;
+  itemsPerPage: number = 4; // Her sayfada kaç öğe gösterileceği
+  totalPages: number = 0;
+  pages: number[] = []; // Sayfa numaralarını tutar
   item: ItemType = {
     id: '',
     name: '',
     value: '',
-    state: true,
+    status: true,
   };
+  private modal: Modal;
+  private _commonService = inject(CommonService);
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({});
   }
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.formFields.forEach((field) => {
       this.form.addControl(
         field?.name,
@@ -66,6 +73,46 @@ export class CommoncomponentComponent implements OnInit {
         )
       );
     });
+  }
+  ngOnChanges(): void {
+    if (this.items.length > 0) {
+      this.totalPages = Math.ceil(this.items.length / this.itemsPerPage);
+      this.updatePaginatedItems();
+      this.generatePageNumbers();
+    }
+  }
+  updatePaginatedItems() {
+    const start = (this.currentPage - 1) * this.itemsPerPage;
+    this.paginatedItems = this.items.slice(start, start + this.itemsPerPage);
+  }
+
+  generatePageNumbers() {
+    this.pages = [];
+    for (let i = 1; i <= this.totalPages; i++) {
+      this.pages.push(i);
+    }
+  }
+
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.updatePaginatedItems();
+    }
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.updatePaginatedItems();
+    }
+  }
+
+  goToPage(page: number) {
+    this.currentPage = page;
+    this.updatePaginatedItems();
+  }
+  callBack() {
+    this.callbackFunc.emit();
   }
   checkAll() {
     this.isSelected = !this.isSelected;
@@ -87,51 +134,61 @@ export class CommoncomponentComponent implements OnInit {
       );
     }
   }
-  async addValue(v: any) {
-    console.log(v);
-    if (v.length < 1) {
-      return;
-    } else {
-      this.itemAdded.emit(v);
-    }
-  }
-  async updateValue(v: ItemType) {
-    if (v.name?.length < 1 || v.value?.length < 1) {
-      return;
-    } else {
-      this.itemUpdated.emit(v);
-    }
-  }
+
   onSubmit() {
     if (this.form.valid) {
-      // Burada form verilerini işleyebilirsiniz
+      this._commonService
+        .add(
+          this.itemoptions.controller + '/' + this.itemoptions.addAction,
+          this.form.value
+        )
+        .subscribe((a) => (a.succeeded ? this.callBack() : ''));
     }
   }
-  changeMode(m: boolean, value?: string, id?: string) {
+  changeMode(m: boolean, item?: ItemType) {
     this.editMode = m;
-    this.editMode
-      ? ((this.item.id = id), (this.item.name = value))
-      : (this.value = '');
-    const modal = new Modal(document.getElementById('template-modal'));
-    modal.show();
+    const patchObject = {};
+    if (this.editMode) {
+      this.formFields.forEach((field) => {
+        patchObject[field.name] = item[field.name];
+      });
+      this.form.patchValue(patchObject);
+    } else {
+      this.form.reset();
+    }
   }
-  changeStatus(a: Attribute) {
+
+  changeStatus(a: ItemType) {
     a.status = !a.status;
-    this.itemUpdated.emit(a);
+    this._commonService
+      .update(this.itemoptions.controller + '/' + this.itemoptions.updAction, {
+        [this.itemoptions.objectName]: a,
+      })
+      .subscribe();
   }
   activeState() {
+    this._commonService
+      .add(
+        `${this.itemoptions.controller + '/' + this.itemoptions.updateStatus}`,
+        { ids: this.idList }
+      )
+      .subscribe((a) => (a.succeeded ? this.callBack() : ''));
     // this.productService
     //   .updateAttributeList(this.idList)
     //   .then(async () => await this.getAllAttributes());
   }
 }
-export class Options {
+export interface Itemoptions {
   controller?: string;
-  action?: string;
+  removeAction?: string;
+  addAction?: string;
+  updAction?: string;
+  objectName: string;
+  updateStatus: string;
 }
 export class ItemType {
   id: string;
   name: string;
   value?: string;
-  state?: boolean;
+  status?: boolean;
 }

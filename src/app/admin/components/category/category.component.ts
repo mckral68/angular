@@ -14,7 +14,7 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { DeleteDirectiveModule } from 'app/directives/admin/delete.directive.module';
+import { DeleteDirective } from 'app/directives/admin/delete.directive';
 import { DialogService } from 'app/services/common/dialog.service';
 import { Category } from 'app/services/common/models/category.model';
 import { CategoryService } from 'app/services/common/models/category.service';
@@ -33,7 +33,7 @@ import { Modal } from 'bootstrap';
     ReactiveFormsModule,
     RouterModule,
     NgOptimizedImage,
-    DeleteDirectiveModule,
+    DeleteDirective,
   ],
   providers: [DialogService],
 })

@@ -1,7 +1,8 @@
 <commoncomponent
   (itemAdded)="addValue($event)"
   (itemUpdated)="updateAttribute($event)"
-  [options]="options"
+  [itemoptions]="itemoptions"
   [items]="attributes"
   [formFields]="formFields"
+  (callbackFunc)="getAllAttributes()"
 ></commoncomponent>

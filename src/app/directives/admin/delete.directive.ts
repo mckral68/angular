@@ -1,8 +1,9 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { EventEmitter } from '@angular/core';
 import {
-  Directive,
+  EventEmitter,
   ElementRef,
+  inject,
+  Directive,
   HostListener,
   Input,
   Output,
@@ -27,23 +28,22 @@ declare var $: any;
 
 @Directive({
   selector: '[appDelete]',
+  standalone: true,
 })
 export class DeleteDirective {
-  constructor(
-    private element: ElementRef,
-    private _renderer: Renderer2,
-    private httpClientService: HttpClientService,
-    private spinner: NgxSpinnerService,
-    public dialog: MatDialog,
-    private alertifyService: AlertifyService,
-    private dialogService: DialogService
-  ) {
-    const i = _renderer.createElement('i');
+  private element = inject(ElementRef);
+  private _renderer = inject(Renderer2);
+  private httpClientService = inject(HttpClientService);
+  private dialog = inject(MatDialog);
+  private alertifyService = inject(AlertifyService);
+  private dialogService = inject(DialogService);
+  constructor(private spinner: NgxSpinnerService) {
+    const i = this._renderer.createElement('i');
     i.setAttribute('class', 'fa-solid fa-trash');
     i.setAttribute('style', 'cursor: pointer;');
     i.width = 25;
     i.height = 25;
-    _renderer.appendChild(element.nativeElement, i);
+    this._renderer.appendChild(this.element.nativeElement, i);
   }
 
   @Input() id: string;

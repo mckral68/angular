@@ -11,7 +11,7 @@ import {
   Position,
 } from '../../../../services/admin/alertify.service';
 import { ProductService } from '../../../../services/common/models/product.service';
-import { DeleteDirectiveModule } from 'app/directives/admin/delete.directive.module';
+import { DeleteDirective } from 'app/directives/admin/delete.directive';
 import { SelectProductImageDialogComponent } from 'app/dialogs/select-product-image-dialog/select-product-image-dialog.component';
 import { RouterModule } from '@angular/router';
 import {
@@ -35,7 +35,7 @@ declare var $: any;
     RouterModule,
     MatTableModule,
     MatPaginatorModule,
-    DeleteDirectiveModule,
+    DeleteDirective,
     SelectProductImageDialogComponent,
   ],
 })
