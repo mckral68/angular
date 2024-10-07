@@ -14,10 +14,13 @@
 a {
   text-decoration: none;
 }
-strong{
+strong {
   cursor: pointer;
 }
-#admin-layout
-.dropdown-menu{
+#admin-layout .dropdown-menu {
   width: 100%;
+}
+#admin-layout a {
+  color: #ffff;
+  cursor: pointer;
 }

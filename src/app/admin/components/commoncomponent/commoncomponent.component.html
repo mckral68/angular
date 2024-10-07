@@ -44,7 +44,11 @@
       <th class="text-center" style="width: 40%" scope="col">İşlem</th>
     </tr>
   </thead>
+  <!-- child.component.html -->
   <tbody>
+    <tr *ngIf="paginatedItems && paginatedItems.length === 0">
+      <td colspan="4" class="text-center">Veri bulunamadı</td>
+    </tr>
     <tr *ngFor="let item of paginatedItems">
       <th class="text-center">
         <input
@@ -91,9 +95,6 @@
           [controller]="itemoptions.controller"
         ></a>
       </td>
-    </tr>
-    <tr *ngIf="items.length === 0">
-      <td colspan="4" class="text-center">Veri bulunamadı</td>
     </tr>
   </tbody>
 </table>
@@ -142,38 +143,25 @@
         <form [formGroup]="form" (ngSubmit)="onSubmit()">
           @for (field of formFields; track $index) {
           <div class="mb-3">
-            <label
-              class="form-label"
-              *ngIf="field.type != 'hidden'"
-              [for]="$index"
-              >{{ field.label }}</label
-            >
-            <input
-              *ngIf="field.type === 'hidden'"
-              type="hidden"
-              [formControlName]="field.name"
-              [value]="field?.value"
-              [id]="$index"
-              class="form-control"
-            />
+            <label *ngIf="field.type !== 'hidden'" [for]="field.name">{{
+              field.label
+            }}</label>
             <input
               *ngIf="field.type === 'text'"
               type="text"
               [formControlName]="field.name"
-              [value]="field?.value"
-              [id]="$index"
+              [id]="field.name"
               class="form-control"
             />
             <input
               *ngIf="field.type === 'checkbox'"
               type="checkbox"
-              [checked]="field?.status"
               [formControlName]="field.name"
-              class="form-check-input ms-2"
-              [id]="field.id"
+              [id]="field.name"
+              class="form-check-input"
             />
-            <!-- Diğer form elemanlarını burada ekleyebilirsiniz -->
           </div>
+          <!-- Diğer form elemanlarını burada ekleyebilirsiniz -->
           }@empty { }
           <div class="d-flex justify-content-evenly">
             <button

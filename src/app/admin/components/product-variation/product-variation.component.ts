@@ -69,7 +69,7 @@ export class ProductVariationComponent implements OnInit {
     updAction: 'UpdateAttribute',
     removeAction: 'RemoveAttribute',
     controller: 'variation',
-    updateStatus:'UpdateAttributes',
+    updateStatus: 'UpdateAttributes',
     objectName: 'attribute',
   };
   allSelected: boolean = false;

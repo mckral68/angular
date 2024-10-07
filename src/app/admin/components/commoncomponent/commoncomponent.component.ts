@@ -36,18 +36,17 @@ import { Modal } from 'bootstrap';
   styleUrl: './commoncomponent.component.scss',
 })
 export class CommoncomponentComponent implements OnInit {
-  @Input() items: Attribute[] | AttributeValue[] = [];
+  @Input() paginatedItems: ItemType[] = []; // Görünen öğeleri tutar
   @Input() isSelected: boolean = false;
   @Input() idList: number[] = [];
   @Input() formFields: any[] = [];
   @Input() itemoptions: Partial<Itemoptions>;
-  @Output() itemAdded = new EventEmitter<Attribute | AttributeValue>();
-  @Output() itemUpdated = new EventEmitter<ItemType>();
+  @Output() itemAdded = new EventEmitter<Attribute | any>();
+  @Output() itemUpdated = new EventEmitter<ItemType | any>();
   @Output() statusChanged = new EventEmitter<Attribute | AttributeValue>();
   @Output() callbackFunc = new EventEmitter<void>();
   editMode: boolean = false;
   form: FormGroup;
-  paginatedItems: ItemType[] = []; // Görünen öğeleri tutar
   currentPage: number = 1;
   itemsPerPage: number = 4; // Her sayfada kaç öğe gösterileceği
   totalPages: number = 0;
@@ -64,26 +63,44 @@ export class CommoncomponentComponent implements OnInit {
     this.form = this.fb.group({});
   }
   async ngOnInit(): Promise<void> {
+    this.initializeFormControls();
+  }
+  ngOnChanges() {
+    if (this.paginatedItems) {
+      // Paginated items'ın bir dizi olduğunu kontrol edin
+      if (this.paginatedItems.length > 0) {
+        this.totalPages = Math.ceil(
+          this.paginatedItems.length / this.itemsPerPage
+        );
+        this.updatePaginatedItems();
+        this.generatePageNumbers();
+      }
+    }
+    this.initializeFormControls();
+    console.log(this.form.value);
+  }
+  private initializeFormControls(): void {
     this.formFields.forEach((field) => {
       this.form.addControl(
-        field?.name,
+        field.name,
         this.fb.control(
           field.value || '',
-          field.required && Validators.required
+          field.required ? Validators.required : null
+          
         )
       );
     });
   }
-  ngOnChanges(): void {
-    if (this.items.length > 0) {
-      this.totalPages = Math.ceil(this.items.length / this.itemsPerPage);
-      this.updatePaginatedItems();
-      this.generatePageNumbers();
-    }
-  }
+  breadcrumbItems = [
+    { label: 'Ürün Özellikleri', link: '/admin/attribute' },
+    { label: 'Renk' },
+  ];
   updatePaginatedItems() {
     const start = (this.currentPage - 1) * this.itemsPerPage;
-    this.paginatedItems = this.items.slice(start, start + this.itemsPerPage);
+    this.paginatedItems = this.paginatedItems.slice(
+      start,
+      start + this.itemsPerPage
+    );
   }
 
   generatePageNumbers() {
@@ -117,7 +134,7 @@ export class CommoncomponentComponent implements OnInit {
   checkAll() {
     this.isSelected = !this.isSelected;
     this.isSelected
-      ? this.items.forEach(
+      ? this.paginatedItems.forEach(
           (a) => (this.idList = [...new Set(this.idList), +a.id])
         )
       : (this.idList = []);
@@ -136,6 +153,7 @@ export class CommoncomponentComponent implements OnInit {
   }
 
   onSubmit() {
+    console.log(this.form.value);
     if (this.form.valid) {
       this._commonService
         .add(

@@ -1,0 +1,16 @@
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item">
+        <a [routerLink]="['/admin']"><i class="fa-solid fa-house"></i></a>
+      </li>
+      <li *ngFor="let item of items" class="breadcrumb-item" [ngClass]="{'active': !item.link}">
+        <ng-container *ngIf="item.link; else activeLink">
+          <a [routerLink]="item.link">{{ item.label }}</a>
+        </ng-container>
+        <ng-template #activeLink>
+          {{ item.label }}
+        </ng-template>
+      </li>
+    </ol>
+  </nav>
+  

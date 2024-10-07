@@ -4,21 +4,19 @@
       class="navbar-toggler"
       type="button"
       data-bs-toggle="offcanvas"
-      data-bs-target="#offcanvasNavbar"
-      aria-controls="offcanvasNavbar"
+      data-bs-target="#adminLayout"
+      aria-controls="adminLayout"
     >
       <span class="navbar-toggler-icon"></span>
     </button>
     <div
       class="offcanvas offcanvas-start text-bg-dark"
       tabindex="-1"
-      id="offcanvasNavbar"
-      aria-labelledby="offcanvasNavbarLabel"
+      id="adminLayout"
+      aria-labelledby="adminLayoutLabel"
     >
       <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">
-          Yönetim Paneli
-        </h5>
+        <h5 class="offcanvas-title" id="adminLayoutLabel">Yönetim Paneli</h5>
         <button
           type="button"
           class="btn-close btn-close-white"
@@ -28,53 +26,40 @@
       </div>
       <div class="offcanvas-body">
         <ul class="list-unstyled mb-0 pb-3 pb-md-2 pe-lg-2">
-          <li>
-            <strong class="d-flex w-100 align-items-center fw-semibold" data-bs-toggle="dropdown" aria-expanded="false">
-              Ürün İşlemleri
-            </strong>
+          <li *ngFor="let item of nameList">
+            <a
+              class="d-flex w-100 align-items-center fw-semibold"
+              (click)="handleItemClick(item)"
+              aria-expanded="openSubItems[item.name]"
+              aria-label="Close"
+              [attr.data-bs-dismiss]="item.subItems ? null : 'offcanvas'"
+            >
+              {{ item.name }}
+            </a>
             <hr />
-            <div class="dropdown w-100">
-              <ul class="dropdown-menu dropdown-menu-dark">
-                <li>
+            <div
+              *ngIf="item.subItems && openSubItems[item.name]"
+              class="collapse show"
+            >
+              <ul class="list-unstyled ps-3">
+                <li *ngFor="let subItem of item.subItems">
                   <strong class="d-flex w-100 align-items-center fw-semibold">
-                    <a routerLink="products" class="nav-link">Ürünler </a>
-                  </strong>
-                </li>
-                  <li>
-                    <strong class="d-flex w-100 align-items-center fw-semibold">
-                      <a routerLink="comments" class="nav-link">Ürün Yorumları </a>
-                    </strong>
-                  </li>
-                <li>
-                <strong class="d-flex w-100 align-items-center fw-semibold">
-                  <a routerLink="questions" class="nav-link">Ürün Soruları </a>
-                </strong>
-                </li>
-                <li>
-                  <strong class="d-flex w-100 align-items-center fw-semibold">
-                    <a routerLink="attribute" class="nav-link"> Ürün varyasyon </a>
+                    <a
+                      [routerLink]="subItem.routerLink"
+                      class="nav-link"
+                      data-bs-dismiss="offcanvas"
+                      aria-label="Close"
+                    >
+                      {{ subItem.name }}
+                    </a>
                   </strong>
                 </li>
               </ul>
             </div>
           </li>
-          @for (n of nameList; track $index) {
-            <li>
-              <strong class="d-flex w-100 align-items-center fw-semibold"
-                ><a [routerLink]="n.routerLink" aria-label="Close" class="nav-link">
-                {{n.name}}
-                </a>
-              </strong>
-              <hr />
-            </li>
-          }
-
-
         </ul>
       </div>
     </div>
   </div>
 </nav>
-<div>
-  <router-outlet></router-outlet>
-</div>
+<router-outlet></router-outlet>
