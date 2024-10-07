@@ -21,7 +21,11 @@ import {
   Output,
   ViewChild,
 } from '@angular/core';
-import { Edit_Product, ReadImages } from 'app/contracts/create_product';
+import {
+  Create_Product,
+  Edit_Product,
+  ReadImages,
+} from 'app/contracts/create_product';
 
 declare var $: any;
 
@@ -48,37 +52,11 @@ export class ListComponent extends BaseComponent implements OnInit {
   ) {
     super(spinner);
   }
-  displayedColumns: string[] = [
-    'name',
-    'category',
-    'price',
-    'photos',
-    'qrcode',
-    'edit',
-    'delete',
-  ];
-  dataSource: MatTableDataSource<Edit_Product> = null;
+
   @Output() editProduct = new EventEmitter<Edit_Product>();
   @ViewChild(MatPaginator) paginator: MatPaginator;
   async getProducts() {
-    this.showSpinner(SpinnerType.BallAtom);
-    const allProducts: { totalProductCount: number; products: Edit_Product[] } =
-      await this.productService.read(
-        this.paginator ? this.paginator.pageIndex : 0,
-        this.paginator ? this.paginator.pageSize : 5,
-        () => this.hideSpinner(SpinnerType.BallAtom),
-        (errorMessage) =>
-          this.alertifyService.message(errorMessage, {
-            dismissOthers: true,
-            messageType: MessageType.Error,
-            position: Position.TopRight,
-          })
-      );
-    this.hideSpinner(SpinnerType.BallAtom);
-    this.dataSource = new MatTableDataSource<Edit_Product>(
-      allProducts.products
-    );
-    this.paginator.length = allProducts.totalProductCount;
+    this.products = (await this.productService.read(0, 999)).products;
   }
 
   addProductImages(id: string, valueId: string) {
@@ -92,16 +70,51 @@ export class ListComponent extends BaseComponent implements OnInit {
     });
   }
 
-  async pageChanged() {
-    await this.getProducts();
-  }
+  paginatedItems: Create_Product[] = []; // Görüntülenen ürünler
+  products: Create_Product[] = []; // Görüntülenen ürünler
+  currentPage: number = 1;
+  itemsPerPage: number = 5; // Sayfa başına gösterilecek ürün sayısı
+  totalPages: number = 0;
+  pages: number[] = [];
   async edit(product: Edit_Product) {
     this.editProduct.emit(product);
   }
   async ngOnInit() {
     await this.getProducts();
+    this.totalPages = Math.ceil(this.products.length / this.itemsPerPage);
+    this.updatePaginatedItems();
+    this.generatePageNumbers();
+  }
+  updatePaginatedItems() {
+    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
+    this.paginatedItems = this.products.slice(
+      startIndex,
+      startIndex + this.itemsPerPage
+    );
   }
 
+  generatePageNumbers() {
+    this.pages = Array.from({ length: this.totalPages }, (_, i) => i + 1);
+  }
+
+  goToPage(page: number) {
+    this.currentPage = page;
+    this.updatePaginatedItems();
+  }
+
+  previousPage() {
+    if (this.currentPage > 1) {
+      this.currentPage--;
+      this.updatePaginatedItems();
+    }
+  }
+
+  nextPage() {
+    if (this.currentPage < this.totalPages) {
+      this.currentPage++;
+      this.updatePaginatedItems();
+    }
+  }
   showQRCode(productId: string) {
     this.dialogService.openDialog({
       componentType: QrcodeDialogComponent,

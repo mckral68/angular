@@ -40,7 +40,6 @@ export class ProductsComponent extends BaseComponent implements OnInit {
     await this.listComponents.getProducts();
   }
   async editPrd(editPrd: Edit_Product) {
-    await this.createComponent.editPrd(editPrd)
   }
   // showProductQrCodeReading() {
   //   this.dialogService.openDialog({

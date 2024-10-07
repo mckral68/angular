@@ -49,12 +49,12 @@ bootstrapApplication(AppComponent, {
     provideEnvironmentNgxMask(maskConfigFunction),
     // {
     //   provide: 'baseUrl',
-    //   useValue: 'https://api.eylulmodalife.web.tr/api',
+    //   useValue: 'https://api.hidayetrehberi.com.tr/api',
     //   multi: true,
     // },
     // {
     //   provide: 'baseSignalRUrl',
-    //   useValue: 'https://api.eylulmodalife.web.tr/',
+    //   useValue: 'https://api.hidayetrehberi.com.tr/',
     //   multi: true,
     // },
     { provide: 'baseUrl', useValue: 'https://localhost:7131/api', multi: true },
@@ -73,7 +73,7 @@ bootstrapApplication(AppComponent, {
       JwtModule.forRoot({
         config: {
           tokenGetter: tokenGetter,
-          allowedDomains: ['localhost:7131'],
+          allowedDomains: ['localhost:7131', 'api.hidayetrehberi.com.tr'],
         },
       }),
       ToastrModule.forRoot({

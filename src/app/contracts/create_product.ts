@@ -4,9 +4,13 @@ import { Categories, Stock } from './simpleProduct';
 export class Create_Product {
   name: string;
   description: string;
-  categoryIds: Categories[];
-  totalStock: number;
+  catName?: string;
+  categoryId: string;
   isHome: boolean;
+  status: boolean;
+  regularPrice: number;
+  salePrice: number;
+  isStock: boolean;
   variations: SessionVarOptions[];
 }
 export class Create_Favorite {

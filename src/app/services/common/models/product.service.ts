@@ -21,14 +21,15 @@ export class ProductService {
   _isHomePage = new Subject<boolean>();
   constructor(private httpClientService: HttpClientService) {}
   async createProduct(product: Create_Product): Promise<Create_Product> {
-    const observable: Observable<Create_Product> =
-      this.httpClientService.post<Create_Product>(
-        {
-          controller: 'products',
-          action: 'CreateProduct',
-        },
-        product
-      );
+    const observable: Observable<Create_Product> = this.httpClientService.post<
+      Create_Product | any
+    >(
+      {
+        controller: 'products',
+        action: 'CreateProduct',
+      },
+      { product: product }
+    );
     return (await firstValueFrom(observable)) as Create_Product;
   }
   async read(
@@ -36,13 +37,13 @@ export class ProductService {
     size: number = 2,
     successCallBack?: () => void,
     errorCallBack?: (errorMessage: string) => void
-  ): Promise<{ totalProductCount: number; products: Edit_Product[] }> {
+  ): Promise<{ totalProductCount: number; products: Create_Product[] }> {
     const observable: Observable<{
       totalProductCount: number;
-      products: Edit_Product[];
+      products: Create_Product[];
     }> = this.httpClientService.get<{
       totalProductCount: number;
-      products: Edit_Product[];
+      products: Create_Product[];
     }>({
       controller: 'products',
       queryString: `page=${page}&size=${size}`,
