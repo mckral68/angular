@@ -10,6 +10,7 @@ import {
   CommoncomponentComponent,
   Itemoptions,
 } from '../commoncomponent/commoncomponent.component';
+import { DataService } from 'app/services/admin/data.service';
 
 @Component({
   selector: 'app-attribute-values',
@@ -27,6 +28,7 @@ import {
 })
 export class AttributeValuesComponent {
   private productService = inject(ProductService);
+  private dataService = inject(DataService);
   private activatedRouted = inject(ActivatedRoute);
   values: AttributeValue[];
   value: string = '';
@@ -49,6 +51,7 @@ export class AttributeValuesComponent {
     this.activatedRouted.params.subscribe((params) => {
       const attributeId = params['id'];
       this.initializeFormFields(attributeId);
+      this.dataService.updateFormFields(this.formFields);
     });
   }
   private initializeFormFields(attributeId: string) {

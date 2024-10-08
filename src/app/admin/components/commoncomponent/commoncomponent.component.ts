@@ -18,6 +18,7 @@ import {
 import { RouterModule } from '@angular/router';
 import { Attribute, AttributeValue } from 'app/contracts/variable_option.model';
 import { DeleteDirective } from 'app/directives/admin/delete.directive';
+import { DataService } from 'app/services/admin/data.service';
 import { CommonService } from 'app/services/common/common.service';
 import { Modal } from 'bootstrap';
 @Component({
@@ -39,7 +40,7 @@ export class CommoncomponentComponent implements OnInit {
   @Input() paginatedItems: ItemType[] = []; // Görünen öğeleri tutar
   @Input() isSelected: boolean = false;
   @Input() idList: number[] = [];
-  @Input() formFields: any[] = [];
+  formFields: any[] = [];
   @Input() itemoptions: Partial<Itemoptions>;
   @Output() itemAdded = new EventEmitter<Attribute | any>();
   @Output() itemUpdated = new EventEmitter<ItemType | any>();
@@ -59,11 +60,12 @@ export class CommoncomponentComponent implements OnInit {
   };
   private modal: Modal;
   private _commonService = inject(CommonService);
+  private dataService = inject(DataService);
   constructor(private fb: FormBuilder) {
     this.form = this.fb.group({});
   }
   async ngOnInit(): Promise<void> {
-    this.initializeFormControls();
+    this.dataService.formFields$.subscribe((a) => (this.formFields = a));
   }
   ngOnChanges() {
     if (this.paginatedItems) {
@@ -77,7 +79,9 @@ export class CommoncomponentComponent implements OnInit {
       }
     }
     this.initializeFormControls();
-    console.log(this.form.value);
+    this.form.valueChanges.subscribe((value) => {
+      console.log(value); // Her değişiklikte form değerini konsola yazdır
+    });
   }
   private initializeFormControls(): void {
     this.formFields.forEach((field) => {
@@ -86,7 +90,6 @@ export class CommoncomponentComponent implements OnInit {
         this.fb.control(
           field.value || '',
           field.required ? Validators.required : null
-          
         )
       );
     });
@@ -167,12 +170,9 @@ export class CommoncomponentComponent implements OnInit {
     this.editMode = m;
     const patchObject = {};
     if (this.editMode) {
-      this.formFields.forEach((field) => {
-        patchObject[field.name] = item[field.name];
-      });
-      this.form.patchValue(patchObject);
+      this.initializeFormControls();
     } else {
-      this.form.reset();
+      this.initializeFormControls();
     }
   }
 

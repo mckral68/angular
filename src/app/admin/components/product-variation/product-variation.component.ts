@@ -9,7 +9,6 @@ import {
 } from '@angular/core';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { DialogService } from 'app/services/common/dialog.service';
 import { ProductService } from 'app/services/common/models/product.service';
 import { DeleteDirective } from 'app/directives/admin/delete.directive';
 import { AttributeValue, Attribute } from 'app/contracts/variable_option.model';
@@ -18,6 +17,7 @@ import {
   Itemoptions,
   ItemType,
 } from '../commoncomponent/commoncomponent.component';
+import { DataService } from 'app/services/admin/data.service';
 @Component({
   selector: 'app-product-variation',
   templateUrl: './product-variation.component.html',
@@ -33,11 +33,10 @@ import {
     CommoncomponentComponent,
     FormsModule,
   ],
-  providers: [DialogService],
 })
 export class ProductVariationComponent implements OnInit {
   private productService = inject(ProductService);
-  private dialogService = inject(DialogService);
+  private dataService = inject(DataService);
   attributes: Attribute[] = [];
   values: AttributeValue[] = [];
   att: Attribute;
@@ -75,6 +74,7 @@ export class ProductVariationComponent implements OnInit {
   allSelected: boolean = false;
   async ngOnInit() {
     await this.getAllAttributes();
+    this.dataService.updateFormFields(this.formFields);
   }
 
   async getAllAttributes() {
