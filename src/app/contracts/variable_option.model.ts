@@ -2,7 +2,7 @@ export class Attribute {
   id: string;
   name: string;
   status: boolean;
-  value?: string;
+  attributeValues?: AttributeValue[];
 }
 export class AttributeValue {
   id: string;

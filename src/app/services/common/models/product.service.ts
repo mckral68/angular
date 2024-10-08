@@ -218,8 +218,8 @@ export class ProductService {
   }
   async getAllAttributeValues(
     successCallBack?: () => void
-  ): Promise<{ values: AttributeValue[] }> {
-    const observable: Observable<{ values: AttributeValue[] }> =
+  ): Promise<{ attributeValues: AttributeValue[] }> {
+    const observable: Observable<{ attributeValues: AttributeValue[] }> =
       this.httpClientService.get({
         action: 'GetAllAttributeValues',
         controller: 'Variation',
