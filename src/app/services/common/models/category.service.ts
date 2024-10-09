@@ -13,6 +13,7 @@ export class CategoryService {
     const observable: Observable<any> = this.httpClientService.post(
       {
         controller: 'category',
+        action:"CreateCategory",
         queryString:`pid=${category.pid}&name=${category.name} `
       },
     category.file

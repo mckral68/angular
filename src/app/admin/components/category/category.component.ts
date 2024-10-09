@@ -3,6 +3,7 @@ import {
   Component,
   inject,
   OnInit,
+  Output,
   TemplateRef,
   ViewChild,
   ViewEncapsulation,
@@ -20,6 +21,11 @@ import { Category } from 'app/services/common/models/category.model';
 import { CategoryService } from 'app/services/common/models/category.service';
 import { RouterModule } from '@angular/router';
 import { Modal } from 'bootstrap';
+import {
+  CommoncomponentComponent,
+  Itemoptions,
+} from '../commoncomponent/commoncomponent.component';
+import { DataService } from 'app/services/admin/data.service';
 
 @Component({
   selector: 'app-category',
@@ -34,6 +40,7 @@ import { Modal } from 'bootstrap';
     RouterModule,
     NgOptimizedImage,
     DeleteDirective,
+    CommoncomponentComponent,
   ],
   providers: [DialogService],
 })
@@ -48,6 +55,8 @@ export class CategoryComponent implements OnInit {
     });
   }
   private categoryService = inject(CategoryService);
+  private dataService = inject(DataService);
+
   private fb = inject(FormBuilder);
   @ViewChild('modal') modal: TemplateRef<any>;
   @ViewChild('image') image: TemplateRef<any>;
@@ -60,12 +69,49 @@ export class CategoryComponent implements OnInit {
   category: Category;
   categoryForm: FormGroup;
   fileToUpload: File | null = null;
-
+  formFields: object[] = [];
+  @Output() itemoptions: Partial<Itemoptions> = {
+    addAction: 'CreateCategory',
+    removeAction: 'Delete',
+    controller: 'category',
+    updAction: 'UpdateCategory',
+    objectName: 'category',
+  };
   async ngOnInit() {
     await this.getAllCat();
+    this.initializeFormFields();
   }
   async updateData() {
     await this.categoryService.getAllCategories();
+  }
+  handleItemSelected(item: Category) {
+    console.log(item); // Child bileşeninden gelen öğeyi işleyin.
+  }
+  private initializeFormFields() {
+    this.formFields = [
+      {
+        type: 'hidden',
+        name: 'id',
+        value: '',
+        label: 'id',
+        required: false,
+      },
+      {
+        type: 'text',
+        name: 'name',
+        value: '',
+        label: 'Kategori Adı',
+        required: true,
+      },
+      {
+        type: 'checkbox',
+        name: 'status',
+        value: '',
+        label: 'Aktif mi',
+        required: false,
+      },
+    ];
+    this.dataService.updateFormFields(this.formFields);
   }
   handleFileInput(files: FileList) {
     this.fileToUpload = files.item(0);
@@ -133,7 +179,7 @@ export class CategoryComponent implements OnInit {
   }
   async updateCategory(a: Category) {
     if (this.editMode) {
-      this.category = this.categoryForm.value;
+      this.category = a;
     }
     await this.categoryService.update(a.id, a.name).then(async (r) => {
       if (r.succeeded) {

@@ -21,6 +21,10 @@ import { DeleteDirective } from 'app/directives/admin/delete.directive';
 import { DataService } from 'app/services/admin/data.service';
 import { CommonService } from 'app/services/common/common.service';
 import { Modal } from 'bootstrap';
+import {
+  BreadcrumbComponent,
+  BreadcrumbItem,
+} from '../../utils/breadcrumb/breadcrumb.component';
 @Component({
   selector: 'commoncomponent',
   standalone: true,
@@ -30,6 +34,7 @@ import { Modal } from 'bootstrap';
     ReactiveFormsModule,
     FormsModule,
     DeleteDirective,
+    BreadcrumbComponent,
   ],
   providers: [CommonService],
   encapsulation: ViewEncapsulation.None,
@@ -41,6 +46,7 @@ export class CommoncomponentComponent implements OnInit {
   @Input() isSelected: boolean = false;
   @Input() idList: number[] = [];
   formFields: any[] = [];
+  breadcrumbItems: BreadcrumbItem[] = [];
   @Input() itemoptions: Partial<Itemoptions>;
   @Output() itemAdded = new EventEmitter<Attribute | any>();
   @Output() itemUpdated = new EventEmitter<ItemType | any>();
@@ -65,7 +71,13 @@ export class CommoncomponentComponent implements OnInit {
     this.form = this.fb.group({});
   }
   async ngOnInit(): Promise<void> {
-    this.dataService.formFields$.subscribe((a) => (this.formFields = a));
+    this.dataService.formFields$.subscribe((fields) => {
+      this.formFields = fields; // Form alanlarını al
+      this.initializeFormControls(); // Kontrolleri oluştur
+    });
+    this.dataService.breadCrumbItems$.subscribe(
+      (b) => (this.breadcrumbItems = b)
+    );
   }
   ngOnChanges() {
     if (this.paginatedItems) {
@@ -79,9 +91,6 @@ export class CommoncomponentComponent implements OnInit {
       }
     }
     this.initializeFormControls();
-    this.form.valueChanges.subscribe((value) => {
-      console.log(value); // Her değişiklikte form değerini konsola yazdır
-    });
   }
   private initializeFormControls(): void {
     this.formFields.forEach((field) => {
@@ -94,10 +103,7 @@ export class CommoncomponentComponent implements OnInit {
       );
     });
   }
-  breadcrumbItems = [
-    { label: 'Ürün Özellikleri', link: '/admin/attribute' },
-    { label: 'Renk' },
-  ];
+
   updatePaginatedItems() {
     const start = (this.currentPage - 1) * this.itemsPerPage;
     this.paginatedItems = this.paginatedItems.slice(
@@ -159,10 +165,9 @@ export class CommoncomponentComponent implements OnInit {
     console.log(this.form.value);
     if (this.form.valid) {
       this._commonService
-        .add(
-          this.itemoptions.controller + '/' + this.itemoptions.addAction,
-          this.form.value
-        )
+        .add(this.itemoptions.controller + '/' + this.itemoptions.addAction, {
+          Category: this.form.value,
+        })
         .subscribe((a) => (a.succeeded ? this.callBack() : ''));
     }
   }
@@ -205,7 +210,7 @@ export interface Itemoptions {
   updateStatus: string;
 }
 export class ItemType {
-  id: string;
+  id?: string;
   name: string;
   value?: string;
   status?: boolean;

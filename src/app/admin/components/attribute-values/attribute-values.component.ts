@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { BreadcrumbComponent } from 'app/admin/utils/breadcrumb/breadcrumb.component';
 import { AttributeValue } from 'app/contracts/variable_option.model';
 import { DeleteDirective } from 'app/directives/admin/delete.directive';
 import { ProductService } from 'app/services/common/models/product.service';
@@ -11,6 +10,7 @@ import {
   Itemoptions,
 } from '../commoncomponent/commoncomponent.component';
 import { DataService } from 'app/services/admin/data.service';
+import { BreadcrumbItem } from 'app/admin/utils/breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-attribute-values',
@@ -21,7 +21,6 @@ import { DataService } from 'app/services/admin/data.service';
     RouterModule,
     FormsModule,
     DeleteDirective,
-    BreadcrumbComponent,
   ],
   templateUrl: './attribute-values.component.html',
   styleUrl: './attribute-values.component.scss',
@@ -46,12 +45,12 @@ export class AttributeValuesComponent {
     objectName: 'attributeValue',
   };
   formFields: object[] = [];
+  breadCrumbItems: BreadcrumbItem[] = [];
   async ngOnInit(): Promise<void> {
     await this.getValuesByAttId();
     this.activatedRouted.params.subscribe((params) => {
       const attributeId = params['id'];
       this.initializeFormFields(attributeId);
-      this.dataService.updateFormFields(this.formFields);
     });
   }
   private initializeFormFields(attributeId: string) {
@@ -84,16 +83,22 @@ export class AttributeValuesComponent {
         required: false,
       },
     ];
+    this.dataService.updateFormFields(this.formFields);
+    this.dataService.updatebreadCrumbItems([
+      {
+        label: 'Ürün Özellikleri',
+        link: '/admin/attribute/',
+      },
+      {
+        label: 'Özellik Ürünleri',
+      },
+    ]);
   }
   async getValuesByAttId() {
     await this.productService
       .getValuesByAttributeId(this.activatedRouted.snapshot.params.id)
       .then((c) => (this.values = c.values));
   }
-  breadcrumbItems = [
-    { label: 'Ürün Özellikleri', link: '/admin/attribute' },
-    { label: 'Renk' },
-  ];
   handleItemSelected(item: AttributeValue) {
     console.log(item); // Child bileşeninden gelen öğeyi işleyin.
   }

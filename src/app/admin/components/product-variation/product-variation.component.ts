@@ -18,6 +18,7 @@ import {
   ItemType,
 } from '../commoncomponent/commoncomponent.component';
 import { DataService } from 'app/services/admin/data.service';
+import { BreadcrumbItem } from 'app/admin/utils/breadcrumb/breadcrumb.component';
 @Component({
   selector: 'app-product-variation',
   templateUrl: './product-variation.component.html',
@@ -45,6 +46,7 @@ export class ProductVariationComponent implements OnInit {
   id: string;
   editMode: boolean = false;
   idList: number[] = [];
+  breadCrumbItems: BreadcrumbItem[] = [];
   formFields: object[] = [
     {
       type: 'hidden',
@@ -75,6 +77,12 @@ export class ProductVariationComponent implements OnInit {
   async ngOnInit() {
     await this.getAllAttributes();
     this.dataService.updateFormFields(this.formFields);
+    this.dataService.updatebreadCrumbItems([
+      {
+        label: 'Ürün Özellikleri',
+        link: '/admin/attribute/',
+      },
+    ]);
   }
 
   async getAllAttributes() {

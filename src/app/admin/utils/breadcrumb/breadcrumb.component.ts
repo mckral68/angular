@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { RouterModule } from '@angular/router';
-interface BreadcrumbItem {
+export interface BreadcrumbItem {
   label: string; // Breadcrumb metni
   link?: string; // Link (opsiyonel)
 }
