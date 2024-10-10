@@ -68,7 +68,7 @@ export class ProductsComponent extends BaseComponent implements OnInit {
       });
     this.products ? (this.preloadImg = true) : (this.preloadImg = false);
     await this.categoryService.getAllCategories().then((c) => {
-      this.categories = c.categories;
+      this.categories = c.data;
     });
     window.innerWidth > 1000 ? (this.isMobil = false) : (this.isMobil = true);
     this.productService._isHomePage.subscribe(async (a) => {

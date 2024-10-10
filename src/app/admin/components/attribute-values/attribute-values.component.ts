@@ -48,11 +48,16 @@ export class AttributeValuesComponent {
   breadCrumbItems: BreadcrumbItem[] = [];
   async ngOnInit(): Promise<void> {
     await this.getValuesByAttId();
+    this.activatedRouted.queryParams.subscribe(
+      (a) => (this.attributeName = a.name)
+    );
     this.activatedRouted.params.subscribe((params) => {
       const attributeId = params['id'];
+
       this.initializeFormFields(attributeId);
     });
   }
+  attributeName: string = '';
   private initializeFormFields(attributeId: string) {
     this.formFields = [
       {
@@ -90,14 +95,16 @@ export class AttributeValuesComponent {
         link: '/admin/attribute/',
       },
       {
-        label: 'Özellik Ürünleri',
+        label: `${this.attributeName} Değerleri`,
       },
     ]);
   }
   async getValuesByAttId() {
     await this.productService
       .getValuesByAttributeId(this.activatedRouted.snapshot.params.id)
-      .then((c) => (this.values = c.values));
+      .then((c) => {
+        this.values = c.data;
+      });
   }
   handleItemSelected(item: AttributeValue) {
     console.log(item); // Child bileşeninden gelen öğeyi işleyin.
@@ -138,7 +145,7 @@ export class AttributeValuesComponent {
       await this.productService
         .createAttributeValue(this.activatedRouted.snapshot.params.id, value)
         .then(async (r) => {
-          if (r.succeeded) {
+          if (r.isSuccessful) {
             await this.getValuesByAttId().then(() => (this.value = ''));
           }
         });

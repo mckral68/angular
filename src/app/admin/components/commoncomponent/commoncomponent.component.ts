@@ -95,6 +95,7 @@ export class CommoncomponentComponent implements OnInit {
     }
   }
   private initializeFormControls(): void {
+    this.form = this.fb.group({});
     this.formFields.forEach((field) => {
       this.form.addControl(
         field.name,
@@ -168,8 +169,7 @@ export class CommoncomponentComponent implements OnInit {
     this.itemoptions.objectName.length > 0
       ? { [this.itemoptions.objectName]: this.form.value }
       : this.form.value;
-    console.log(this.form.value, 'value');
-    console.log(this.form.valid);
+
     if (this.form.valid) {
       if (this.editMode) {
         this._commonService
@@ -179,14 +179,14 @@ export class CommoncomponentComponent implements OnInit {
               ? { [this.itemoptions.objectName]: this.form.value }
               : this.form.value
           )
-          .subscribe((a) => (a.succeeded ? this.callBack() : ''));
+          .subscribe((a) => (a.isSuccessful ? this.callBack() : ''));
       } else {
         this._commonService
           .add(
             this.itemoptions.controller + '/' + this.itemoptions.addAction,
             this.form.value
           )
-          .subscribe((a) => (a.succeeded ? this.callBack() : ''));
+          .subscribe((a) => (a.isSuccessful ? this.callBack() : ''));
       }
     }
   }
@@ -209,18 +209,23 @@ export class CommoncomponentComponent implements OnInit {
       .update(this.itemoptions.controller + '/' + this.itemoptions.updAction, {
         [this.itemoptions.objectName]: a,
       })
-      .subscribe();
+      .subscribe((a) =>
+        a.isSuccessful ? this.callBack() : console.log(a.error)
+      );
   }
   activeState() {
-    this._commonService
-      .add(
-        `${this.itemoptions.controller + '/' + this.itemoptions.updateStatus}`,
-        { ids: this.idList }
-      )
-      .subscribe((a) => (a.succeeded ? this.callBack() : ''));
-    // this.productService
-    //   .updateAttributeList(this.idList)
-    //   .then(async () => await this.getAllAttributes());
+    if (this.idList.length > 0) {
+      this._commonService
+        .add(
+          `${
+            this.itemoptions.controller + '/' + this.itemoptions.updateStatus
+          }`,
+          { ids: this.idList }
+        )
+        .subscribe((a) =>
+          a.isSuccessful ? this.callBack() : console.log(a.error)
+        );
+    }
   }
 }
 export interface Itemoptions {

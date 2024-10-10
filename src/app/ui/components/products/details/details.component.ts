@@ -162,7 +162,7 @@ export class DetailsComponent implements OnInit {
   async getSize(event: any) {
     await this.productService
       .getValuesByAttributeId(this.id)
-      .then((a) => (this.values = a.values));
+      .then((a) => (this.values = a.data));
   }
   async getColor() {
     await this.productService

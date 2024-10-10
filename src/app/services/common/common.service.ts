@@ -22,17 +22,24 @@ export class CommonService<T> {
   }
 
   // Yeni öğe ekleme
-  add(endpoint: string, item: T): Observable<T> {
-    return this.http.post<T>(`${this.baseUrl}/${endpoint}`, item);
+  add(endpoint: string, item: T): Observable<ResponseDTO> {
+    return this.http.post<ResponseDTO>(`${this.baseUrl}/${endpoint}`, item);
   }
 
   // Öğeyi güncelleme
-  update(endpoint: string, item: T): Observable<T> {
-    return this.http.put<T>(`${this.baseUrl}/${endpoint}`, item);
+  update(endpoint: string, item: T): Observable<ResponseDTO> {
+    return this.http.put<ResponseDTO>(`${this.baseUrl}/${endpoint}`, item);
   }
 
   // Öğeyi silme
   delete(endpoint: string, id: number): Observable<void> {
     return this.http.delete<void>(`${this.baseUrl}/${endpoint}/${id}`);
   }
+}
+export class ResponseDTO {
+  data: object[];
+  error: object;
+  isSuccessful: boolean;
+  message: string;
+  statusCode: number;
 }

@@ -80,14 +80,13 @@ export class ProductVariationComponent implements OnInit {
     this.dataService.updatebreadCrumbItems([
       {
         label: 'Ürün Özellikleri',
-        link: '/admin/attribute/',
       },
     ]);
   }
   async getAllAttributes() {
     await this.productService
       .getAllAttributes()
-      .then((c) => (this.attributes = c.attributes));
+      .then((c) => (this.attributes = c.data.attributes));
   }
   async changeStatus(a: Attribute) {
     a.status = !a.status;
@@ -103,7 +102,7 @@ export class ProductVariationComponent implements OnInit {
   }
   async createAttribute(v: string) {
     await this.productService.createAttribute(v).then(async (r) => {
-      if (r.succeeded) {
+      if (r.isSuccessful) {
         await this.getAllAttributes().then(() => (this.value = ''));
       }
     });

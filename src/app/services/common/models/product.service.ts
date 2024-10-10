@@ -191,7 +191,7 @@ export class ProductService {
       { name }
     );
     const promiseData = firstValueFrom(observable);
-    return (await promiseData) as { succeeded: boolean };
+    return (await promiseData) as { isSuccessful: boolean };
   }
 
   async createAttributeValue(attributeId: string, value: string) {
@@ -203,16 +203,17 @@ export class ProductService {
       { attributeId, value }
     );
     const promiseData = firstValueFrom(observable);
-    return (await promiseData) as { succeeded: boolean };
+    return (await promiseData) as { isSuccessful: boolean };
   }
   async getAllAttributes(
     successCallBack?: () => void
-  ): Promise<{ attributes: Attribute[] }> {
-    const observable: Observable<{ attributes: Attribute[] }> =
-      this.httpClientService.get({
-        action: 'GetAllAttributes',
-        controller: 'Variation',
-      });
+  ): Promise<{ data: { attributes: Attribute[]; total: number } }> {
+    const observable: Observable<{
+      data: { attributes: Attribute[]; total: number };
+    }> = this.httpClientService.get({
+      action: 'GetAllAttributes',
+      controller: 'Variation',
+    });
     const promiseData = firstValueFrom(observable);
     return await promiseData;
   }
@@ -228,8 +229,8 @@ export class ProductService {
     return await promiseData;
   }
   async getValuesByAttributeId(productId: string) {
-    const observable: Observable<{ values: AttributeValue[] }> =
-      this.httpClientService.get<{ values: AttributeValue[] }>({
+    const observable: Observable<{ data: AttributeValue[] }> =
+      this.httpClientService.get<{ data: AttributeValue[] }>({
         controller: 'Variation',
         action: 'GetAtttributeValueById',
         queryString: `id=${productId}`,

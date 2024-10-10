@@ -64,12 +64,12 @@ export class CreateComponent extends BaseComponent implements OnInit {
   async getValues() {
     await this.productService
       .getAllAttributes()
-      .then((a) => (this.attributes = a.attributes));
+      .then((a) => (this.attributes = a.data.attributes));
   }
   async getCategories() {
     await this.categoryService
       .getAllCategories()
-      .then((a) => (this.categories = a.categories));
+      .then((a) => (this.categories = a.data));
   }
 
   onAttributeChange(event: Event, attributeIndex: number) {

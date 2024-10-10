@@ -13,10 +13,10 @@ export class CategoryService {
     const observable: Observable<any> = this.httpClientService.post(
       {
         controller: 'category',
-        action:"CreateCategory",
-        queryString:`pid=${category.pid}&name=${category.name} `
+        action: 'CreateCategory',
+        queryString: `pid=${category.pid}&name=${category.name} `,
       },
-    category.file
+      category.file
     );
     const promiseData = firstValueFrom(observable);
     promiseData.then(successCallBack);
@@ -25,23 +25,24 @@ export class CategoryService {
   async getAllCategories(
     successCallBack?: () => void,
     errorCallBack?: (errorMessage: string) => void
-  ): Promise<{ categories: Category[] }> {
-    const observable: Observable<{ categories: Category[] }> =
+  ): Promise<{ data: Category[] }> {
+    const observable: Observable<{ data: Category[] }> =
       this.httpClientService.get({
         controller: 'category',
         action: 'getAllCats',
       });
     return await firstValueFrom(observable);
   }
-  async update(id: string, name: string,successCallBack?: () => void) {
-    const observable:Observable<any> = this.httpClientService.put(
+  async update(id: string, name: string, successCallBack?: () => void) {
+    const observable: Observable<any> = this.httpClientService.put(
       {
         controller: 'category',
       },
       {
-      category:{
-        id,name
-      }
+        category: {
+          id,
+          name,
+        },
       }
     );
     const promiseData = firstValueFrom(observable);

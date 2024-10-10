@@ -26,6 +26,7 @@ import {
   Itemoptions,
 } from '../commoncomponent/commoncomponent.component';
 import { DataService } from 'app/services/admin/data.service';
+import { BreadcrumbItem } from 'app/admin/utils/breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-category',
@@ -112,7 +113,13 @@ export class CategoryComponent implements OnInit {
       },
     ];
     this.dataService.updateFormFields(this.formFields);
+    this.dataService.updatebreadCrumbItems([
+      {
+        label: 'Kategori İşlemleri',
+      },
+    ]);
   }
+
   handleFileInput(files: FileList) {
     this.fileToUpload = files.item(0);
     const fileData: FormData = new FormData();
@@ -123,7 +130,7 @@ export class CategoryComponent implements OnInit {
   async getAllCat() {
     await this.categoryService
       .getAllCategories()
-      .then((res) => (this.categories = res.categories));
+      .then((res) => (this.categories = res.data));
   }
 
   activeState() {
