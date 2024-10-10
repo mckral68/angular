@@ -71,15 +71,18 @@ export class CommoncomponentComponent implements OnInit {
     this.form = this.fb.group({});
   }
   async ngOnInit(): Promise<void> {
+    this.dataService.breadCrumbItems$.subscribe(
+      (b) => (this.breadcrumbItems = b)
+    );
+    await this.formFieldInitialize();
+  }
+  async formFieldInitialize() {
     this.dataService.formFields$.subscribe((fields) => {
       this.formFields = fields; // Form alanlarını al
       this.initializeFormControls(); // Kontrolleri oluştur
     });
-    this.dataService.breadCrumbItems$.subscribe(
-      (b) => (this.breadcrumbItems = b)
-    );
   }
-  ngOnChanges() {
+  async ngOnChanges() {
     if (this.paginatedItems) {
       // Paginated items'ın bir dizi olduğunu kontrol edin
       if (this.paginatedItems.length > 0) {
@@ -90,7 +93,6 @@ export class CommoncomponentComponent implements OnInit {
         this.generatePageNumbers();
       }
     }
-    this.initializeFormControls();
   }
   private initializeFormControls(): void {
     this.formFields.forEach((field) => {
@@ -162,20 +164,40 @@ export class CommoncomponentComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.form.value);
+    this.form.value.id === '' ? (this.form.value.id = 1) : '';
+    this.itemoptions.objectName.length > 0
+      ? { [this.itemoptions.objectName]: this.form.value }
+      : this.form.value;
+    console.log(this.form.value, 'value');
+    console.log(this.form.valid);
     if (this.form.valid) {
-      this._commonService
-        .add(this.itemoptions.controller + '/' + this.itemoptions.addAction, {
-          Category: this.form.value,
-        })
-        .subscribe((a) => (a.succeeded ? this.callBack() : ''));
+      if (this.editMode) {
+        this._commonService
+          .update(
+            this.itemoptions.controller + '/' + this.itemoptions.updAction,
+            this.itemoptions.objectName.length > 0
+              ? { [this.itemoptions.objectName]: this.form.value }
+              : this.form.value
+          )
+          .subscribe((a) => (a.succeeded ? this.callBack() : ''));
+      } else {
+        this._commonService
+          .add(
+            this.itemoptions.controller + '/' + this.itemoptions.addAction,
+            this.form.value
+          )
+          .subscribe((a) => (a.succeeded ? this.callBack() : ''));
+      }
     }
   }
   changeMode(m: boolean, item?: ItemType) {
     this.editMode = m;
-    const patchObject = {};
-    if (this.editMode) {
-      this.initializeFormControls();
+    if (m && item) {
+      const patchData = Object.keys(item).reduce((acc, key) => {
+        acc[key] = item[key];
+        return acc;
+      }, {});
+      this.form.patchValue(patchData);
     } else {
       this.initializeFormControls();
     }

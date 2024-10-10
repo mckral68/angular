@@ -84,7 +84,6 @@ export class ProductVariationComponent implements OnInit {
       },
     ]);
   }
-
   async getAllAttributes() {
     await this.productService
       .getAllAttributes()
