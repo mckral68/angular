@@ -43,6 +43,7 @@ export class AttributeValuesComponent {
     controller: 'variation',
     updateStatus: 'UpdateAttributeValues',
     objectName: 'attributeValue',
+    isOption: false,
   };
   formFields: object[] = [];
   breadCrumbItems: BreadcrumbItem[] = [];

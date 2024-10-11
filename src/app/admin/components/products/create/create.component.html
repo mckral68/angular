@@ -1,217 +1,450 @@
-<div class="container mt-5">
+<div class="container mt-5" id="create-form">
   <h2 class="text-center mb-4">Yeni Ürün Oluştur</h2>
   <form
     [formGroup]="productForm"
     (ngSubmit)="onSubmit()"
     class="bg-light p-4 rounded shadow-sm"
   >
-    <div class="mb-3">
-      <label for="categoryId" class="form-label">Kategori</label>
-      <select
-        id="categoryId"
-        formControlName="categoryId"
-        class="form-select"
-        required
-      >
-        <option value="" disabled selected>Kategori Seçin</option>
-        <option *ngFor="let category of categories" [value]="category.id">
-          {{
-            category.parentName
-              ? category.parentName + "/" + category.name
-              : category.name
-          }}
-        </option>
-      </select>
-      <div
-        *ngIf="
-          productForm.get('categoryId')?.invalid &&
-          productForm.get('categoryId')?.touched
-        "
-        class="text-danger"
-      >
-        Kategori gerekli
+    <div class="accordion" id="productFormAccordion">
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingCategory">
+          <button
+            class="accordion-button"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapseCategory"
+            aria-expanded="true"
+            aria-controls="collapseCategory"
+          >
+            Kategori
+          </button>
+        </h2>
+        <div
+          id="collapseCategory"
+          class="accordion-collapse collapse show"
+          aria-labelledby="headingCategory"
+          data-bs-parent="#productFormAccordion"
+        >
+          <div class="accordion-body">
+            <select
+              id="categoryId"
+              formControlName="categoryId"
+              class="form-select"
+              required
+            >
+              <option value="" disabled selected>Kategori Seçin</option>
+              <option *ngFor="let category of categories" [value]="category.id">
+                {{
+                  category.parentName
+                    ? category.parentName + "/" + category.name
+                    : category.name
+                }}
+              </option>
+            </select>
+            <div
+              *ngIf="
+                productForm.get('categoryId')?.invalid &&
+                productForm.get('categoryId')?.touched
+              "
+              class="text-danger"
+            >
+              Kategori gerekli
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <div class="mb-3">
-      <label for="name" class="form-label">Ürün Adı</label>
-      <input
-        type="text"
-        id="name"
-        formControlName="name"
-        class="form-control"
-        required
-      />
-      <div
-        *ngIf="
-          productForm.get('name')?.invalid && productForm.get('name')?.touched
-        "
-        class="text-danger"
-      >
-        Ürün adı gerekli
-      </div>
-    </div>
-
-    <div class="mb-3">
-      <label for="description" class="form-label">Açıklama</label>
-      <textarea
-        id="description"
-        formControlName="description"
-        class="form-control"
-        rows="3"
-      ></textarea>
-    </div>
-
-    <div class="mb-3 form-check form-check-inline">
-      <input
-        type="checkbox"
-        id="isStock"
-        formControlName="isStock"
-        class="form-check-input"
-      />
-      <label for="isStock" class="form-check-label">Stokta Var</label>
-    </div>
-
-    <div class="mb-3 form-check form-check-inline">
-      <input
-        type="checkbox"
-        id="isHome"
-        formControlName="isHome"
-        class="form-check-input"
-      />
-      <label for="isHome" class="form-check-label">Ana Sayfada Göster</label>
-    </div>
-    <div class="mb-3 form-check form-check-inline">
-      <input
-        type="checkbox"
-        id="status"
-        formControlName="status"
-        class="form-check-input"
-      />
-      <label for="status" class="form-check-label">Durum</label>
-    </div>
-    <div class="mb-3">
-      <label for="sku" class="form-label">SKU</label>
-      <input
-        type="text"
-        id="sku"
-        formControlName="sku"
-        class="form-control"
-        required
-      />
-      <div
-        *ngIf="
-          productForm.get('sku')?.invalid && productForm.get('sku')?.touched
-        "
-        class="text-danger"
-      >
-        SKU gerekli
-      </div>
-    </div>
-
-    <div class="mb-3">
-      <label for="salePrice" class="form-label">Satış Fiyatı</label>
-      <input
-        type="number"
-        id="salePrice"
-        formControlName="salePrice"
-        class="form-control"
-        required
-      />
-      <div
-        *ngIf="
-          productForm.get('salePrice')?.invalid &&
-          productForm.get('salePrice')?.touched
-        "
-        class="text-danger"
-      >
-        Satış fiyatı gerekli ve 0'dan büyük olmalı
-      </div>
-    </div>
-
-    <div class="mb-3">
-      <label for="regularPrice" class="form-label">Normal Fiyatı</label>
-      <input
-        type="number"
-        id="regularPrice"
-        formControlName="regularPrice"
-        class="form-control"
-        required
-      />
-      <div
-        *ngIf="
-          productForm.get('regularPrice')?.invalid &&
-          productForm.get('regularPrice')?.touched
-        "
-        class="text-danger"
-      >
-        Normal fiyatı gerekli ve 0'dan büyük olmalı
-      </div>
-    </div>
-    <div class="mb-3">
-      <div>
-        <h5>Özellikler</h5>
-        <div *ngFor="let attribute of attributes; let j = index">
-          <h6>{{ attribute.name }}</h6>
-          <div *ngFor="let value of attribute.attributeValues">
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingName">
+          <button
+            class="accordion-button"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapseName"
+            aria-expanded="false"
+            aria-controls="collapseName"
+          >
+            Ürün Adı
+          </button>
+        </h2>
+        <div
+          id="collapseName"
+          class="accordion-collapse collapse"
+          aria-labelledby="headingName"
+          data-bs-parent="#productFormAccordion"
+        >
+          <div class="accordion-body">
             <input
-              type="checkbox"
-              [value]="value.id"
-              (change)="onAttributeChange($event, j)"
+              type="text"
+              id="name"
+              formControlName="name"
+              class="form-control"
+              required
             />
-            {{ value.value }}
+            <div
+              *ngIf="
+                productForm.get('name')?.invalid &&
+                productForm.get('name')?.touched
+              "
+              class="text-danger"
+            >
+              Ürün adı gerekli
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingType">
+          <button
+            class="accordion-button"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#productType"
+            aria-expanded="false"
+            aria-controls="productType"
+          >
+            Ürün Tipi
+          </button>
+        </h2>
+        <div
+          id="productType"
+          class="accordion-collapse collapse"
+          data-bs-parent="#productFormAccordion"
+        >
+          <div class="accordion-body">
+            <div class="mb-3">
+              <label for="productType" class="form-label">Ürün Tipi</label>
+              <select
+                id="productType"
+                (change)="onProductTypeChange($event)"
+                class="form-select"
+                formControlName="productType"
+              >
+                <option [value]="false">Simple Product</option>
+                <option [value]="true">Variable Product</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingDescription">
+          <button
+            class="accordion-button"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapseDescription"
+            aria-expanded="false"
+            aria-controls="collapseDescription"
+          >
+            Açıklama
+          </button>
+        </h2>
+        <div
+          id="collapseDescription"
+          class="accordion-collapse collapse"
+          aria-labelledby="headingDescription"
+          data-bs-parent="#productFormAccordion"
+        >
+          <div class="accordion-body">
+            <textarea
+              id="description"
+              formControlName="description"
+              class="form-control"
+              rows="3"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingStock">
+          <button
+            class="accordion-button"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapseStock"
+            aria-expanded="false"
+            aria-controls="collapseStock"
+          >
+            Stok - Ana sayfa - Durum
+          </button>
+        </h2>
+        <div
+          id="collapseStock"
+          class="accordion-collapse collapse"
+          aria-labelledby="headingStock"
+          data-bs-parent="#productFormAccordion"
+        >
+          <div class="accordion-body">
+            <div class="form-check form-check-inline">
+              <input
+                type="checkbox"
+                id="isStock"
+                formControlName="isStock"
+                class="form-check-input"
+              />
+              <label for="isStock" class="form-check-label">Stokta Var</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input
+                type="checkbox"
+                id="isHome"
+                formControlName="isHome"
+                class="form-check-input"
+              />
+              <label for="isHome" class="form-check-label"
+                >Ana Sayfada Göster</label
+              >
+            </div>
+            <div class="form-check form-check-inline">
+              <input
+                type="checkbox"
+                id="status"
+                formControlName="status"
+                class="form-check-input"
+              />
+              <label for="status" class="form-check-label">Durum</label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingPrice">
+          <button
+            class="accordion-button"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapsePrice"
+            aria-expanded="false"
+            aria-controls="collapsePrice"
+          >
+            Fiyat Bilgileri
+          </button>
+        </h2>
+        <div
+          id="collapsePrice"
+          class="accordion-collapse collapse"
+          aria-labelledby="headingPrice"
+          data-bs-parent="#productFormAccordion"
+        >
+          <div class="accordion-body">
+            <div class="mb-3">
+              <label for="sku" class="form-label">SKU</label>
+              <input
+                type="text"
+                id="sku"
+                formControlName="sku"
+                class="form-control"
+                required
+              />
+              <div
+                *ngIf="
+                  productForm.get('sku')?.invalid &&
+                  productForm.get('sku')?.touched
+                "
+                class="text-danger"
+              >
+                SKU gerekli
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="salePrice" class="form-label">Satış Fiyatı</label>
+              <input
+                type="number"
+                id="salePrice"
+                formControlName="salePrice"
+                class="form-control"
+                required
+              />
+              <div
+                *ngIf="
+                  productForm.get('salePrice')?.invalid &&
+                  productForm.get('salePrice')?.touched
+                "
+                class="text-danger"
+              >
+                Satış fiyatı gerekli ve 0'dan büyük olmalı
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="regularPrice" class="form-label">Normal Fiyatı</label>
+              <input
+                type="number"
+                id="regularPrice"
+                formControlName="regularPrice"
+                class="form-control"
+                required
+              />
+              <div
+                *ngIf="
+                  productForm.get('regularPrice')?.invalid &&
+                  productForm.get('regularPrice')?.touched
+                "
+                class="text-danger"
+              >
+                Normal fiyatı gerekli ve 0'dan büyük olmalı
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item" *ngIf="isVariableProduct">
+        <h2 class="accordion-header" id="headingVariation">
+          <button
+            class="accordion-button"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#generateVar"
+            aria-expanded="false"
+            aria-controls="generateVar"
+          >
+            Varyasyon Oluştur
+          </button>
+        </h2>
+        <div
+          id="generateVar"
+          class="accordion-collapse collapse"
+          aria-labelledby="headingPrice"
+          data-bs-parent="#productFormAccordion"
+        >
+          <div class="accordion-body">
+            <div class="container mt-5" id="create-form">
+              <h2 class="text-center mb-4">Varyasyon Oluştur</h2>
+              <div *ngFor="let attribute of attributes">
+                <h5>{{ attribute.name }}</h5>
+                <div *ngFor="let value of attribute.attributeValues">
+                  <input
+                    type="checkbox"
+                    [id]="value.id"
+                    [checked]="isValueSelected(value)"
+                    (change)="onAttributeValueChange(value, attribute)"
+                  />
+                  <label [for]="value.id">{{ value.value }}</label>
+                </div>
+              </div>
+
+              <button
+                class="btn btn-primary mt-3"
+                (click)="generateCombinations()"
+              >
+                Kombinasyonları Oluştur
+              </button>
+
+              <div *ngIf="combinations.length > 0">
+                <h4 class="mt-4">Oluşturulan Kombinasyonlar:</h4>
+                <ul>
+                  <li *ngFor="let combination of combinations">
+                    <ng-container
+                      *ngFor="let value of combination.attributeValues"
+                    >
+                      {{ value.value
+                      }}<span
+                        *ngIf="!isLast(value, combination.attributeValues)"
+                      >
+                      </span>
+                    </ng-container>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="accordion-item" *ngIf="isVariableProduct">
+        <h2 class="accordion-header" id="headingVariations">
+          <button
+            class="accordion-button"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#collapseVariations"
+            aria-expanded="false"
+            aria-controls="collapseVariations"
+          >
+            Varyasyonlar
+          </button>
+        </h2>
+        <div
+          id="collapseVariations"
+          class="accordion-collapse collapse"
+          aria-labelledby="headingVariations"
+          data-bs-parent="#productFormAccordion"
+        >
+          <div formArrayName="variations">
+            <div
+              *ngFor="let variation of getControls(); let i = index"
+              [formGroupName]="i"
+              class="accordion mb-3"
+            >
+              <div class="accordion-item">
+                <h2 class="accordion-header" id="heading{{ i }}">
+                  <button
+                    class="accordion-button"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    [attr.data-bs-target]="'#collapse' + i"
+                    aria-expanded="true"
+                    [attr.aria-controls]="'collapse' + i"
+                  >
+                    <p
+                      *ngFor="
+                        let value of variation.get('attributeValues')?.value
+                      "
+                    >
+                      - {{ value?.value }}
+                    </p>
+                  </button>
+                </h2>
+                <div
+                  id="collapse{{ i }}"
+                  class="accordion-collapse collapse"
+                  [attr.labelledby]="'heading' + i"
+                >
+                  <div class="accordion-body">
+                    <label for="price">Fiyat:</label>
+                    <input
+                      class="form-control"
+                      id="price"
+                      formControlName="price"
+                    />
+
+                    <label for="stock">Stok:</label>
+                    <input
+                      class="form-control"
+                      id="stock"
+                      formControlName="stock"
+                    />
+                    <label for="sku">SKU:</label>
+                    <input
+                      class="form-control"
+                      id="sku"
+                      formControlName="sku"
+                    />
+                    <label for="imageUrl">Resim URL:</label>
+                    <input
+                      class="form-control"
+                      id="imageUrl"
+                      formControlName="imageUrl"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-    <div>
-      <div formArrayName="variations">
-        <h5>Varyasyon Oluştur</h5>
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th>Status</th>
-              <th>Selected Attribute</th>
-              <th>Price</th>
-              <th>Stock</th>
-              <th>Images</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let variation of variations.controls; let i = index">
-              <td>
-                <input type="checkbox" formControlName="status" />
-              </td>
-              <td>
-                {{ getSelectedAttributes(variation.value) }}
-              </td>
-              <td>
-                <input type="number" formControlName="price" />
-              </td>
-              <td>
-                <input type="number" formControlName="stock" />
-              </td>
-              <td>
-                <input
-                  type="file"
-                  (change)="onImageChange($event, variation)"
-                />
-              </td>
-            </tr>
-          </tbody>
-        </table>
-
-        <h5>Yeni Varyasyon Ekle</h5>
-        <button (click)="addVariation()">Varyasyon Ekle</button>
-      </div>
-    </div>
-
-    <button
-      type="submit"
-      class="btn btn-primary"
-      [disabled]="productForm.invalid"
-    >
-      Ürün Oluştur
-    </button>
   </form>
+  <button
+    type="submit"
+    class="btn btn-primary mt-3"
+    [disabled]="productForm.invalid"
+    (click)="onSubmit()"
+  >
+    Ürün Oluştur
+  </button>
 </div>

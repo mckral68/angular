@@ -75,6 +75,7 @@
       </td>
       <td class="text-center">
         <a
+          *ngIf="itemoptions.isOption"
           class="btn btn-outline-secondary btn-sm me-1"
           [routerLink]="item?.id"
           [queryParams]="{ name: item?.name }"

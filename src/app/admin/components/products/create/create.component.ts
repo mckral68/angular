@@ -2,7 +2,11 @@ import { Create_Product } from './../../../../contracts/create_product';
 import { CommonModule } from '@angular/common';
 import { EventEmitter, inject, ViewEncapsulation } from '@angular/core';
 import { Component, OnInit, Output } from '@angular/core';
-import { Attribute } from 'app/contracts/variable_option.model';
+import {
+  Attribute,
+  AttributeValue,
+  Variation,
+} from 'app/contracts/variable_option.model';
 import { Category } from 'app/services/common/models/category.model';
 import { CategoryService } from 'app/services/common/models/category.service';
 import { CustomToastrService } from 'app/services/ui/custom-toastr.service';
@@ -42,6 +46,7 @@ export class CreateComponent extends BaseComponent implements OnInit {
       description: [''],
       isStock: [true],
       isHome: [false],
+      productType: [false, Validators.required],
       status: [null],
       sku: ['', Validators.required],
       salePrice: [0, Validators.required],
@@ -49,14 +54,17 @@ export class CreateComponent extends BaseComponent implements OnInit {
       variations: this.fb.array([]),
     });
   }
-  get variations(): FormArray {
-    return this.productForm.get('variations') as FormArray;
-  }
+  // get variations(): FormArray {
+  //   return this.productForm.get('variations') as FormArray;
+  // }
   productForm: FormGroup;
   attributes: Attribute[];
   attributeValues: Attr[];
+  variations: Variation[] = [];
   categories: Category[];
-  selectedAttributeValues: { [key: number]: number[] } = {};
+  combinations: Variation[] = [];
+  isVariableProduct: boolean = false;
+  selectedValues: { [key: string]: Set<number> } = {};
   async ngOnInit() {
     await this.getCategories();
     await this.getValues();
@@ -65,83 +73,101 @@ export class CreateComponent extends BaseComponent implements OnInit {
     await this.productService
       .getAllAttributes()
       .then((a) => (this.attributes = a.data.attributes));
+    this.generateCombinations();
+  }
+  onAttributeValueChange(value: AttributeValue, attribute: Attribute) {
+    if (!this.selectedValues[attribute.name]) {
+      this.selectedValues[attribute.name] = new Set(); // Eğer attribute için seçim yoksa yeni bir Set oluştur
+    }
+
+    if (this.selectedValues[attribute.name].has(+value.id)) {
+      this.selectedValues[attribute.name].delete(+value.id); // Seçimi kaldır
+    } else {
+      this.selectedValues[attribute.name].add(+value.id); // Seçimi ekle
+    }
   }
   async getCategories() {
     await this.categoryService
       .getAllCategories()
       .then((a) => (this.categories = a.data));
   }
-
-  onAttributeChange(event: Event, attributeIndex: number) {
-    const checkbox = event.target as HTMLInputElement;
-    const variation = this.variations.at(attributeIndex) as FormGroup;
-
-    // Burada selectedAttributeValues kontrolü var mı diye kontrol ediyoruz
-    const selectedValues = variation.get(
-      'selectedAttributeValues'
-    ) as FormArray;
-
-    // Kontrolü sağlamak için daha önceden eklediğimiz `addVariation` fonksiyonunun çalıştığından emin olun
-    if (!selectedValues) {
-      console.error(
-        'selectedAttributeValues not found for variation at index',
-        attributeIndex
-      );
-      return; // Hata durumunda işlemi sonlandır
-    }
-
-    if (checkbox.checked) {
-      selectedValues.push(this.fb.control(checkbox.value));
-    } else {
-      const index = selectedValues.controls.findIndex(
-        (ctrl) => ctrl.value === checkbox.value
-      );
-      if (index >= 0) {
-        selectedValues.removeAt(index);
+  isLast(value: AttributeValue, values: AttributeValue[]): boolean {
+    return values[values.length - 1].id === value.id; // Son elemanı kontrol et
+  }
+  isValueSelected(value: AttributeValue): boolean {
+    for (const key in this.selectedValues) {
+      if (this.selectedValues[key].has(+value.id)) {
+        return true; // Eğer değer zaten seçilmişse
       }
     }
+    return false;
   }
-
-  addVariation() {
-    const variation = this.fb.group({
-      isActive: [false],
-      selectedAttributeValues: this.fb.array([]), // Seçilen attribute değerleri için FormArray
-      price: [null],
-      stock: [null],
-      images: [null],
-    });
-
-    this.variations.push(variation);
-  }
-
-  getSelectedAttributes(variation: FormGroup): string {
-    const selectedValues = variation.get(
-      'selectedAttributeValues'
-    ) as FormArray;
-
-    if (!selectedValues) {
-      console.error(
-        'selectedAttributeValues not found in the variation',
-        variation
-      );
-      return 'Hiçbir değer seçilmedi';
+  onProductTypeChange(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    this.isVariableProduct = selectElement.value === 'true'; // 1: Variable Product
+    if (!this.isVariableProduct) {
+      this.clearVariations(); // Simple Product seçildiğinde varyasyonları temizle
     }
+  }
+  clearVariations() {
+    const variationsArray = this.productForm.get('variations') as FormArray;
+    variationsArray.clear(); // Varyasyonları temizle
+    this.combinations = []; // Oluşturulan kombinasyonları sıfırla
+    this.selectedValues = {}; // Seçilen değerleri sıfırla
+  }
+  generateCombinations() {
+    const combinations: Variation[] = [];
+    // Tüm seçilen değerleri bir araya getir
+    const selectedAttributeValues = Object.keys(this.selectedValues).map(
+      (attributeName) => {
+        const selectedIds = Array.from(this.selectedValues[attributeName]);
+        return this.attributes
+          .find((attr) => attr.name === attributeName)
+          ?.attributeValues.filter((value) => selectedIds.includes(+value.id));
+      }
+    );
 
-    const selectedAttributes = selectedValues.value || [];
-    return selectedAttributes.length
-      ? selectedAttributes.join(', ')
-      : 'Hiçbir değer seçilmedi';
+    // Kombinasyonları oluştur
+    this.cartesianProduct(selectedAttributeValues).forEach((combination) => {
+      combinations.push({
+        id: combinations.length + 1,
+        price: 0,
+        stock: 0,
+        imageUrl: '',
+        attributeValues: combination,
+      });
+    });
+    const variationsArray = this.productForm.get('variations') as FormArray;
+    variationsArray.clear(); // Önceki varyasyonları temizle
+
+    combinations.forEach((combination) => {
+      variationsArray.push(
+        this.fb.group({
+          price: [combination.price, Validators.required],
+          stock: [combination.stock, Validators.required],
+          sku: [combination.sku, Validators.required],
+          imageUrl: [combination.imageUrl],
+          attributeValues: [combination.attributeValues],
+        })
+      );
+    });
+    // Kombinasyonları güncelle
+    this.combinations = combinations;
+  }
+  cartesianProduct(arrays: any[]): any[][] {
+    return arrays.reduce(
+      (acc, curr) => acc.flatMap((a) => curr.map((b) => [...a, b])),
+      [[]]
+    );
   }
 
-  onImageChange(event: any, variation: any) {
-    const files = event.target.files;
-    variation.images = Array.from(files);
+  createUniqueCombinations(selectedValues: any[]): any[][] {
+    // Benzersiz kombinasyonları döndür
+    return selectedValues.map((value) => [value]);
   }
-
-  removeVariation(index: number) {
-    this.variations.removeAt(index);
+  getControls() {
+    return (this.productForm.get('variations') as FormArray).controls;
   }
-
   onSubmit() {
     if (this.productForm.valid) {
       this.productService.createProduct(this.productForm.value).then(

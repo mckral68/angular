@@ -20,6 +20,7 @@ import {
   OnInit,
   Output,
   ViewChild,
+  ViewEncapsulation,
 } from '@angular/core';
 import {
   Create_Product,
@@ -32,6 +33,7 @@ declare var $: any;
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
+  encapsulation: ViewEncapsulation.None,
   styleUrls: ['./list.component.scss'],
   standalone: true,
   imports: [

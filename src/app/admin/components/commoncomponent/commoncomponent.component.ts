@@ -235,6 +235,7 @@ export interface Itemoptions {
   updAction?: string;
   objectName: string;
   updateStatus: string;
+  isOption: boolean;
 }
 export class ItemType {
   id?: string;

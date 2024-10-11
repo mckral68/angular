@@ -72,6 +72,7 @@ export class ProductVariationComponent implements OnInit {
     controller: 'variation',
     updateStatus: 'UpdateAttributes',
     objectName: 'attribute',
+    isOption: true,
   };
   allSelected: boolean = false;
   async ngOnInit() {

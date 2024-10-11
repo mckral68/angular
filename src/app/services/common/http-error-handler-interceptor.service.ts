@@ -34,61 +34,84 @@ export class HttpErrorHandlerInterceptorService implements HttpInterceptor {
   ): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
       catchError((error) => {
-        switch (error.status) {
-          case HttpStatusCode.Unauthorized:
-            this.router.navigateByUrl('/giris');
-            this.toastrService.message(
-              'Bu işlemi yapmaya yetkiniz bulunmamaktadır!',
-              'Yetkisiz işlem!',
-              {
-                messageType: ToastrMessageType.Warning,
-                position: ToastrPosition.BottomFullWidth,
-              }
-            );
-            break;
-          case HttpStatusCode.NoResponse:
-            this.toastrService.message(
-              'Sunucuya bağlanmaya çalışırken bir hata meydana geldi.',
-              'Bağlantı Hatası!',
-              {
-                messageType: ToastrMessageType.Error,
-                position: ToastrPosition.TopFullWidth,
-              }
-            );
-            break;
-          case HttpStatusCode.BadRequest:
-            this.toastrService.message(
-              'Geçersiz istek yapıldı!',
-              'Geçersiz istek!',
-              {
-                messageType: ToastrMessageType.Error,
-                position: ToastrPosition.TopFullWidth,
-              }
-            );
-            break;
-          case HttpStatusCode.NotFound:
-            this.toastrService.message(
-              'Sayfa bulunamadı!',
-              'Sayfa bulunamadı!',
-              {
-                messageType: ToastrMessageType.Warning,
-                position: ToastrPosition.TopFullWidth,
-              }
-            );
-            break;
-          case HttpStatusCode.InternalServerError:
-            this.toastrService.message(error.error.Message, 'Hata Alındı!', {
+        if (error.error instanceof ProgressEvent) {
+          this.toastrService.message(
+            'Sunucuya bağlanılamadı. Lütfen sunucunun çalıştığından emin olun.',
+            'Bağlantı Hatası!',
+            {
               messageType: ToastrMessageType.Error,
               position: ToastrPosition.TopFullWidth,
-            });
-            break;
-          default:
-            this.toastrService.message(error.error.Message, 'Hata!', {
-              messageType: ToastrMessageType.Warning,
-              position: ToastrPosition.TopFullWidth,
-            });
-            break;
+            }
+          );
+        } else {
+          switch (error.status) {
+            case HttpStatusCode.Unauthorized:
+              this.router.navigateByUrl('/giris');
+              this.toastrService.message(
+                'Bu işlemi yapmaya yetkiniz bulunmamaktadır!',
+                'Yetkisiz işlem!',
+                {
+                  messageType: ToastrMessageType.Warning,
+                  position: ToastrPosition.BottomFullWidth,
+                }
+              );
+              break;
+            case HttpStatusCode.NoResponse:
+              this.toastrService.message(
+                'Sunucuya bağlanmaya çalışırken bir hata meydana geldi.',
+                'Bağlantı Hatası!',
+                {
+                  messageType: ToastrMessageType.Error,
+                  position: ToastrPosition.TopFullWidth,
+                }
+              );
+              break;
+            case HttpStatusCode.BadRequest:
+              this.toastrService.message(
+                'Geçersiz istek yapıldı!',
+                'Geçersiz istek!',
+                {
+                  messageType: ToastrMessageType.Error,
+                  position: ToastrPosition.TopFullWidth,
+                }
+              );
+              break;
+            case HttpStatusCode.BadGateway: // Sunucuya bağlanamadı durumu
+            case HttpStatusCode.GatewayTimeout: // Zaman aşımı durumu
+              this.toastrService.message(
+                'Sunucuya bağlanmaya çalışırken bir hata meydana geldi.',
+                'Bağlantı Hatası!',
+                {
+                  messageType: ToastrMessageType.Error,
+                  position: ToastrPosition.TopFullWidth,
+                }
+              );
+              break;
+            case HttpStatusCode.NotFound:
+              this.toastrService.message(
+                'Sayfa bulunamadı!',
+                'Sayfa bulunamadı!',
+                {
+                  messageType: ToastrMessageType.Warning,
+                  position: ToastrPosition.TopFullWidth,
+                }
+              );
+              break;
+            case HttpStatusCode.InternalServerError:
+              this.toastrService.message(error.error.Message, 'Hata Alındı!', {
+                messageType: ToastrMessageType.Error,
+                position: ToastrPosition.TopFullWidth,
+              });
+              break;
+            default:
+              this.toastrService.message(error.error.Message, 'Hata!', {
+                messageType: ToastrMessageType.Warning,
+                position: ToastrPosition.TopFullWidth,
+              });
+              break;
+          }
         }
+
         this.spinner.hide(SpinnerType.BallAtom);
         return of(error);
       })

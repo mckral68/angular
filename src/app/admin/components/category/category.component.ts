@@ -77,6 +77,7 @@ export class CategoryComponent implements OnInit {
     controller: 'category',
     updAction: 'UpdateCategory',
     objectName: 'category',
+    isOption: false,
   };
   async ngOnInit() {
     await this.getAllCat();
