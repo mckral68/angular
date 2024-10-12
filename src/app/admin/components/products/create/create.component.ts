@@ -1,4 +1,7 @@
-import { Create_Product } from './../../../../contracts/create_product';
+import {
+  Create_Product,
+  ProductType,
+} from './../../../../contracts/create_product';
 import { CommonModule } from '@angular/common';
 import { EventEmitter, inject, ViewEncapsulation } from '@angular/core';
 import { Component, OnInit, Output } from '@angular/core';
@@ -37,6 +40,7 @@ export class CreateComponent extends BaseComponent implements OnInit {
   private categoryService = inject(CategoryService);
   @Output() createdProduct = new EventEmitter<Create_Product>();
   @Output() updatedProduct = new EventEmitter<Create_Product>();
+  ProductType = ProductType;
 
   constructor(spiner: NgxSpinnerService) {
     super(spiner);
@@ -46,10 +50,10 @@ export class CreateComponent extends BaseComponent implements OnInit {
       description: [''],
       isStock: [true],
       isHome: [false],
-      productType: [false, Validators.required],
       status: [null],
       sku: ['', Validators.required],
       salePrice: [0, Validators.required],
+      productType: [ProductType.SimpleProduct, Validators.required],
       regularPrice: [0, Validators.required],
       variations: this.fb.array([]),
     });
@@ -104,7 +108,7 @@ export class CreateComponent extends BaseComponent implements OnInit {
   }
   onProductTypeChange(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
-    this.isVariableProduct = selectElement.value === 'true'; // 1: Variable Product
+    this.isVariableProduct = selectElement.value === '1'; // 1: Variable Product
     if (!this.isVariableProduct) {
       this.clearVariations(); // Simple Product seçildiğinde varyasyonları temizle
     }
@@ -131,8 +135,8 @@ export class CreateComponent extends BaseComponent implements OnInit {
     this.cartesianProduct(selectedAttributeValues).forEach((combination) => {
       combinations.push({
         id: combinations.length + 1,
-        price: 0,
-        stock: 0,
+        salePrice: 0,
+        quantity: 0,
         imageUrl: '',
         attributeValues: combination,
       });
@@ -143,8 +147,8 @@ export class CreateComponent extends BaseComponent implements OnInit {
     combinations.forEach((combination) => {
       variationsArray.push(
         this.fb.group({
-          price: [combination.price, Validators.required],
-          stock: [combination.stock, Validators.required],
+          salePrice: [combination.salePrice, Validators.required],
+          quantity: [combination.quantity, Validators.required],
           sku: [combination.sku, Validators.required],
           imageUrl: [combination.imageUrl],
           attributeValues: [combination.attributeValues],
@@ -170,7 +174,11 @@ export class CreateComponent extends BaseComponent implements OnInit {
   }
   onSubmit() {
     if (this.productForm.valid) {
-      this.productService.createProduct(this.productForm.value).then(
+      const productData = {
+        ...this.productForm.value,
+        productType: Number(this.productForm.value.productType), // Enum değerini al
+      };
+      this.productService.createProduct(productData).then(
         (response) => {
           console.log('Ürün başarıyla oluşturuldu:', response);
           // Başarı mesajı göster, yönlendirme yap, vb.

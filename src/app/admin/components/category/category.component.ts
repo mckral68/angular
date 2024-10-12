@@ -112,6 +112,13 @@ export class CategoryComponent implements OnInit {
         label: 'Aktif mi',
         required: false,
       },
+      {
+        type: 'file',
+        name: 'file',
+        value: '',
+        label: 'Resim',
+        required: true,
+      },
     ];
     this.dataService.updateFormFields(this.formFields);
     this.dataService.updatebreadCrumbItems([
@@ -125,7 +132,8 @@ export class CategoryComponent implements OnInit {
     this.fileToUpload = files.item(0);
     const fileData: FormData = new FormData();
     fileData.append(this.fileToUpload.name, this.fileToUpload);
-    this.categoryForm.controls['file'].setValue(fileData);
+    return fileData;
+    // this.categoryForm.controls['file'].setValue(fileData);
   }
 
   async getAllCat() {

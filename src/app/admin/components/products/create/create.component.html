@@ -120,8 +120,12 @@
                 class="form-select"
                 formControlName="productType"
               >
-                <option [value]="false">Simple Product</option>
-                <option [value]="true">Variable Product</option>
+                <option [value]="ProductType.SimpleProduct">
+                  Simple Product
+                </option>
+                <option [value]="ProductType.VariableProduct">
+                  Variable Product
+                </option>
               </select>
             </div>
           </div>
@@ -405,18 +409,18 @@
                   [attr.labelledby]="'heading' + i"
                 >
                   <div class="accordion-body">
-                    <label for="price">Fiyat:</label>
+                    <label for="salePrice">Fiyat:</label>
                     <input
                       class="form-control"
-                      id="price"
-                      formControlName="price"
+                      id="salePrice"
+                      formControlName="salePrice"
                     />
 
-                    <label for="stock">Stok:</label>
+                    <label for="quantity">Stok:</label>
                     <input
                       class="form-control"
-                      id="stock"
-                      formControlName="stock"
+                      id="quantity"
+                      formControlName="quantity"
                     />
                     <label for="sku">SKU:</label>
                     <input

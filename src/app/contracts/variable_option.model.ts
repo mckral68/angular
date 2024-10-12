@@ -14,9 +14,9 @@ export class AttributeValue {
 }
 export interface Variation {
   id?: number;
-  price: number;
+  salePrice: number;
   sku?: string;
-  stock: number;
+  quantity: number;
   imageUrl?: string;
   attributeValues: AttributeValue[];
 }

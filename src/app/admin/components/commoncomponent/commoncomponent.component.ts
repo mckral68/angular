@@ -52,6 +52,7 @@ export class CommoncomponentComponent implements OnInit {
   @Output() itemUpdated = new EventEmitter<ItemType | any>();
   @Output() statusChanged = new EventEmitter<Attribute | AttributeValue>();
   @Output() callbackFunc = new EventEmitter<void>();
+  @Output() handleFileInput = new EventEmitter<any>();
   editMode: boolean = false;
   form: FormGroup;
   currentPage: number = 1;
@@ -75,6 +76,10 @@ export class CommoncomponentComponent implements OnInit {
       (b) => (this.breadcrumbItems = b)
     );
     await this.formFieldInitialize();
+  }
+  handleFileEmit(files: FileList) {
+    const filess = this.handleFileInput.emit(files);
+    this.form.controls['file'].setValue(filess);
   }
   async formFieldInitialize() {
     this.dataService.formFields$.subscribe((fields) => {

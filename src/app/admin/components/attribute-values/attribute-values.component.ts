@@ -88,6 +88,7 @@ export class AttributeValuesComponent {
         label: 'Aktif mi',
         required: false,
       },
+
     ];
     this.dataService.updateFormFields(this.formFields);
     this.dataService.updatebreadCrumbItems([

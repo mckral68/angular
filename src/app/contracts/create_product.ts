@@ -11,8 +11,14 @@ export class Create_Product {
   regularPrice: number;
   salePrice: number;
   isStock: boolean;
+  productType: ProductType;
   variations: SessionVarOptions[];
 }
+export enum ProductType {
+  SimpleProduct = 0,
+  VariableProduct = 1,
+}
+
 export class Create_Favorite {
   productId: string;
   userId: string;

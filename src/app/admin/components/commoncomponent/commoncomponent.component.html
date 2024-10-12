@@ -164,6 +164,13 @@
               [id]="field.name"
               class="form-check-input"
             />
+            <input
+              *ngIf="field.type === 'file'"
+              type="file"
+              [formControlName]="field.name"
+              [id]="field.name"
+              (change)="handleFileEmit($event.target.files)"
+            />
           </div>
           <!-- Diğer form elemanlarını burada ekleyebilirsiniz -->
           }@empty { }
