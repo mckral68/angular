@@ -1,14 +1,5 @@
 <div class="container">
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb">
-      <li class="breadcrumb-item">
-        <a [routerLink]="['/admin']"><i class="fa-solid fa-house"></i> </a>
-      </li>
-      <li class="breadcrumb-item active" aria-current="page">
-        Kategori İşlemleri
-      </li>
-    </ol>
-  </nav>
+  <app-breadcrumb [items]="[{ label: 'Kategori İşlemleri' }]"></app-breadcrumb>
   @if (!editMode) {
   <ng-container #name [ngTemplateOutlet]="modal"></ng-container>
   }
@@ -147,56 +138,61 @@
             aria-label="Close"
           ></button>
         </div>
-        <div class="modal-body" [formGroup]="categoryForm">
-          <div class="input-group mb-3">
-            <input
-              type="text"
-              placeholder="Kategori Adı Giriniz"
-              class="form-control"
-              formControlName="name"
-              aria-label="Attribute Value"
-              aria-describedby="basic-addon1"
-              [value]="editMode ? category?.name : ''"
-            />
-          </div>
-          <div class="input-group mb-3">
-            <select
-              formControlName="pid"
-              class="form-select"
-              aria-label="Parent Category"
-            >
-              <option selected value="0">Üst Kategori</option>
-              @for (c of categories; track $index) {
-              <option [value]="c.id">{{ c.name }}</option>
-              }
-            </select>
-          </div>
-          <div class="input-group mb-3">
-            <input
-              type="file"
-              multiple="true"
-              (change)="handleFileInput($event.target.files)"
-            />
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button
-            type="button"
-            class="btn btn-secondary"
-            data-bs-dismiss="modal"
-          >
-            Kapat
-          </button>
-          <button
-            (click)="
-              editMode ? updateCategory(att) : addValue(categoryForm.value)
-            "
-            type="button"
-            class="btn btn-primary"
-            data-bs-dismiss="modal"
-          >
-            {{ editMode ? "Güncelle" : "Ekle" }}
-          </button>
+        <div class="modal-body">
+          <form [formGroup]="categoryForm" enctype="multipart/form-data">
+            <div class="input-group mb-3">
+              <input
+                type="text"
+                placeholder="Kategori Adı Giriniz"
+                class="form-control"
+                formControlName="name"
+                aria-label="Attribute Value"
+                aria-describedby="basic-addon1"
+                [value]="editMode ? category?.name : ''"
+              />
+            </div>
+            <div class="input-group mb-3">
+              <select
+                formControlName="pid"
+                class="form-select"
+                aria-label="Parent Category"
+              >
+                <option selected value="0">Üst Kategori</option>
+                @for (c of categories; track $index) {
+                <option [value]="c.id">{{ c.name }}</option>
+                }
+              </select>
+            </div>
+            <div class="input-group mb-3">
+              <input
+                type="file"
+                name="file"
+                multiple="true"
+                (change)="handleFileInput($event.target.files)"
+              />
+            </div>
+            <div class="modal-footer">
+              <button
+                type="button"
+                class="btn btn-secondary"
+                data-bs-dismiss="modal"
+              >
+                Kapat
+              </button>
+              <button
+                (click)="
+                  editMode
+                    ? updateCategory(att)
+                    : submitCreateForm(categoryForm.value)
+                "
+                type="button"
+                class="btn btn-primary"
+                data-bs-dismiss="modal"
+              >
+                {{ editMode ? "Güncelle" : "Ekle" }}
+              </button>
+            </div>
+          </form>
         </div>
       </div>
     </div>

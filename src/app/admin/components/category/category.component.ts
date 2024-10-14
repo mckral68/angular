@@ -2,11 +2,8 @@ import { CommonModule, NgOptimizedImage } from '@angular/common';
 import {
   Component,
   inject,
-  Input,
   OnInit,
   Output,
-  TemplateRef,
-  ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
 import {
@@ -26,8 +23,10 @@ import {
   CommoncomponentComponent,
   Itemoptions,
 } from '../commoncomponent/commoncomponent.component';
-import { DataService } from 'app/services/admin/data.service';
-import { BreadcrumbItem } from 'app/admin/utils/breadcrumb/breadcrumb.component';
+import {
+  BreadcrumbItem,
+  BreadcrumbComponent,
+} from 'app/admin/utils/breadcrumb/breadcrumb.component';
 
 @Component({
   selector: 'app-category',
@@ -43,6 +42,7 @@ import { BreadcrumbItem } from 'app/admin/utils/breadcrumb/breadcrumb.component'
     NgOptimizedImage,
     DeleteDirective,
     CommoncomponentComponent,
+    BreadcrumbComponent,
   ],
   providers: [DialogService],
 })
@@ -57,22 +57,15 @@ export class CategoryComponent implements OnInit {
     });
   }
   private categoryService = inject(CategoryService);
-  private dataService = inject(DataService);
-
   private fb = inject(FormBuilder);
-  @ViewChild('modal') modal: TemplateRef<any>;
-  @ViewChild('image') image: TemplateRef<any>;
-
   categories: Category[] = [];
   editMode: boolean = false;
   isSelected: boolean = false;
   idList: number[] = [];
-  allSelected: boolean = false;
   path: string = '';
   category: Category;
   categoryForm: FormGroup;
-  fileToUpload: File | null = null;
-  formFields: any[] = [];
+  selectedFile: File | null = null;
   @Output() itemoptions: Partial<Itemoptions> = {
     addAction: 'CreateCategory',
     removeAction: 'Delete',
@@ -83,7 +76,6 @@ export class CategoryComponent implements OnInit {
   };
   async ngOnInit() {
     await this.getAllCat();
-    this.initializeFormFields();
   }
 
   async updateData() {
@@ -92,52 +84,12 @@ export class CategoryComponent implements OnInit {
   handleItemSelected(item: Category) {
     console.log(item); // Child bileşeninden gelen öğeyi işleyin.
   }
-  private initializeFormFields() {
-    this.formFields = [
-      {
-        type: 'hidden',
-        name: 'id',
-        value: '',
-        label: 'id',
-        required: false,
-      },
-      {
-        type: 'text',
-        name: 'name',
-        value: '',
-        label: 'Kategori Adı',
-        required: true,
-      },
-      {
-        type: 'checkbox',
-        name: 'status',
-        value: '',
-        label: 'Aktif mi',
-        required: false,
-      },
-      {
-        type: 'file',
-        name: 'file',
-        value: '',
-        label: 'Resim',
-        required: true,
-      },
-    ];
-    this.dataService.updateFormFields(this.formFields);
-    this.dataService.updatebreadCrumbItems([
-      {
-        label: 'Kategori İşlemleri',
-      },
-    ]);
-  }
 
-  handleFileInput(files: FileList) {
-    this.fileToUpload = files.item(0);
-    const fileData: FormData = new FormData();
-    fileData.append(this.fileToUpload.name, this.fileToUpload);
-    this.categoryForm.controls['file'].setValue(fileData);
+  handleFileInput(file: FileList) {
+    if (file && file.length > 0) {
+      this.selectedFile = file.item(0);
+    }
   }
-
   async getAllCat() {
     await this.categoryService
       .getAllCategories()
@@ -149,18 +101,36 @@ export class CategoryComponent implements OnInit {
       .getAllCategories()
       .then(async () => await this.getAllCat());
   }
-  async addValue(cat: Category) {
+  async submitCreateForm(cat: Category) {
     if (this.categoryForm.invalid) {
       return;
     } else {
-      await this.categoryService
-        .create(this.categoryForm.value)
-        .then(async (r) => {
-          if (r.succeeded) {
-            await this.getAllCat();
-          }
-        });
+      await this.categoryService.create(this.sendForm()).then(async (r) => {
+        if (r.isSuccessful) {
+          await this.getAllCat();
+        }
+      });
     }
+  }
+  sendForm(): FormData {
+    const formData = new FormData();
+    if (this.selectedFile) {
+      formData.append(
+        'Category.File',
+        this.selectedFile,
+        this.selectedFile.name
+      );
+    }
+    Object.keys(this.categoryForm.value).forEach((key) => {
+      const value = this.categoryForm.get(key)?.value;
+      if (value !== null && value !== undefined) {
+        formData.append(
+          `Category.${key.charAt(0).toUpperCase() + key.slice(1)}`,
+          value
+        );
+      }
+    });
+    return formData;
   }
   checkAll() {
     this.isSelected = !this.isSelected;
@@ -199,7 +169,7 @@ export class CategoryComponent implements OnInit {
     if (this.editMode) {
       this.category = a;
     }
-    await this.categoryService.update(a.id, a.name).then(async (r) => {
+    await this.categoryService.update(this.sendForm()).then(async (r) => {
       if (r.succeeded) {
         await this.getAllCat();
       }

@@ -9,18 +9,17 @@ import { Category } from './category.model';
 export class CategoryService {
   private httpClientService = inject(HttpClientService);
 
-  async create(category: Category, successCallBack?: () => void) {
+  async create(category: FormData, successCallBack?: () => void) {
     const observable: Observable<any> = this.httpClientService.post(
       {
         controller: 'category',
         action: 'CreateCategory',
-        queryString: `pid=${category.pid}&name=${category.name} `,
       },
-      category.file
+      category
     );
     const promiseData = firstValueFrom(observable);
     promiseData.then(successCallBack);
-    return (await promiseData) as { succeeded: boolean };
+    return (await promiseData) as { isSuccessful: boolean };
   }
   async getAllCategories(
     successCallBack?: () => void,
@@ -33,17 +32,12 @@ export class CategoryService {
       });
     return await firstValueFrom(observable);
   }
-  async update(id: string, name: string, successCallBack?: () => void) {
+  async update(category: FormData, successCallBack?: () => void) {
     const observable: Observable<any> = this.httpClientService.put(
       {
         controller: 'category',
       },
-      {
-        category: {
-          id,
-          name,
-        },
-      }
+      category
     );
     const promiseData = firstValueFrom(observable);
     promiseData.then(successCallBack);
