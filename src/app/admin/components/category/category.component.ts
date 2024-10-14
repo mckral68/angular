@@ -2,6 +2,7 @@ import { CommonModule, NgOptimizedImage } from '@angular/common';
 import {
   Component,
   inject,
+  Input,
   OnInit,
   Output,
   TemplateRef,
@@ -61,6 +62,7 @@ export class CategoryComponent implements OnInit {
   private fb = inject(FormBuilder);
   @ViewChild('modal') modal: TemplateRef<any>;
   @ViewChild('image') image: TemplateRef<any>;
+
   categories: Category[] = [];
   editMode: boolean = false;
   isSelected: boolean = false;
@@ -70,7 +72,7 @@ export class CategoryComponent implements OnInit {
   category: Category;
   categoryForm: FormGroup;
   fileToUpload: File | null = null;
-  formFields: object[] = [];
+  formFields: any[] = [];
   @Output() itemoptions: Partial<Itemoptions> = {
     addAction: 'CreateCategory',
     removeAction: 'Delete',
@@ -83,6 +85,7 @@ export class CategoryComponent implements OnInit {
     await this.getAllCat();
     this.initializeFormFields();
   }
+
   async updateData() {
     await this.categoryService.getAllCategories();
   }
@@ -132,8 +135,7 @@ export class CategoryComponent implements OnInit {
     this.fileToUpload = files.item(0);
     const fileData: FormData = new FormData();
     fileData.append(this.fileToUpload.name, this.fileToUpload);
-    return fileData;
-    // this.categoryForm.controls['file'].setValue(fileData);
+    this.categoryForm.controls['file'].setValue(fileData);
   }
 
   async getAllCat() {
